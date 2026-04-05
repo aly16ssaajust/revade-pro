@@ -43,6 +43,38 @@ const categoriesData = [
 
 const tousLesMessages = categoriesData.flatMap((c) => c.discussions);
 
+const NavBar = ({ actif }) => (
+  <nav style={{
+    background: "linear-gradient(135deg, #C8E6F0 0%, #A8D4E6 100%)",
+    padding: "16px 48px", display: "flex", alignItems: "center", justifyContent: "space-between",
+    boxShadow: "0 4px 12px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.6)",
+  }}>
+    <Image src="/logo.png" alt="Rêvade" width={130} height={48} />
+    <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+      {[
+        { href: "/dashboard", label: "FICHES PATIENTS", id: "dashboard" },
+        { href: "/forum", label: "FORUM", id: "forum" },
+        { href: "/profil", label: "PROFIL", id: "profil" },
+      ].map((item) => (
+        <Link key={item.href} href={item.href} style={{ textDecoration: "none" }}>
+          <div style={{
+            padding: "10px 20px", borderRadius: "10px",
+            fontSize: "13px", fontWeight: "700", letterSpacing: "0.5px",
+            color: actif === item.id ? "white" : "#1E3A4A",
+            background: actif === item.id
+              ? "linear-gradient(135deg, #004649 0%, #006B6F 100%)"
+              : "linear-gradient(135deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.2) 100%)",
+            boxShadow: actif === item.id
+              ? "0 4px 8px rgba(0,70,73,0.4), inset 0 1px 0 rgba(255,255,255,0.2)"
+              : "0 2px 4px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)",
+            border: "1px solid rgba(255,255,255,0.3)",
+          }}>{item.label}</div>
+        </Link>
+      ))}
+    </div>
+  </nav>
+);
+
 export default function Forum() {
   const [onglet, setOnglet] = useState("messages");
   const [categorieOuverte, setCategorieOuverte] = useState(null);
@@ -63,23 +95,27 @@ export default function Forum() {
         ...prev[discussionId],
         reponses: prev[discussionId].reponses + 1,
         messages: [...prev[discussionId].messages, {
-          auteur: "Dr. Martin",
-          date: "À l'instant",
-          contenu: nouveauMessage,
-          certifie: true,
+          auteur: "Dr. Martin", date: "À l'instant", contenu: nouveauMessage, certifie: true,
         }],
       },
     }));
     setNouveauMessage("");
   };
 
-  const renderDiscussion = (disc, retourLabel, retourAction) => (
+  const cardStyle = {
+    background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)",
+    borderRadius: "20px", padding: "32px",
+    boxShadow: "0 8px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)",
+    marginBottom: "20px",
+  };
+
+  const renderDiscussion = (disc, retourAction) => (
     <div>
       <button onClick={retourAction} style={{ background: "none", border: "none", color: "#1E3A4A", fontWeight: "600", fontSize: "15px", cursor: "pointer", marginBottom: "24px", display: "flex", alignItems: "center", gap: "8px" }}>
-        ← {retourLabel}
+        ← Retour
       </button>
 
-      <div style={{ backgroundColor: "white", borderRadius: "20px", padding: "32px", boxShadow: "0 1px 6px rgba(0,0,0,0.08)", marginBottom: "20px" }}>
+      <div style={cardStyle}>
         <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px" }}>
           {disc.epingle && <span>📌</span>}
           <p style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "17px" }}>{disc.titre}</p>
@@ -93,30 +129,39 @@ export default function Forum() {
       </div>
 
       {discussions[disc.id].messages.map((msg, i) => (
-        <div key={i} style={{ backgroundColor: msg.certifie ? "#F0F9F7" : "white", borderRadius: "16px", padding: "24px", boxShadow: "0 1px 4px rgba(0,0,0,0.06)", marginBottom: "12px", borderLeft: msg.certifie ? "4px solid #004649" : "none" }}>
+        <div key={i} style={{
+          background: msg.certifie ? "linear-gradient(135deg, #F0F9F7 0%, #E4F5F1 100%)" : "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)",
+          borderRadius: "16px", padding: "24px",
+          boxShadow: "0 4px 12px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.9)",
+          marginBottom: "12px",
+          borderLeft: msg.certifie ? "4px solid #004649" : "none",
+        }}>
           <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
             <span style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "14px" }}>{msg.auteur}</span>
-            {msg.certifie && <span style={{ backgroundColor: "#004649", color: "white", borderRadius: "999px", padding: "2px 10px", fontSize: "11px", fontWeight: "600" }}>✓ Professionnel certifié</span>}
+            {msg.certifie && (
+              <span style={{ background: "linear-gradient(135deg, #004649 0%, #006B6F 100%)", color: "white", borderRadius: "999px", padding: "2px 10px", fontSize: "11px", fontWeight: "600" }}>
+                ✓ Professionnel certifié
+              </span>
+            )}
             <span style={{ color: "#aaa", fontSize: "12px", marginLeft: "auto" }}>{msg.date}</span>
           </div>
           <p style={{ color: "#1E3A4A", fontSize: "14px", lineHeight: "1.6" }}>{msg.contenu}</p>
         </div>
       ))}
 
-      <div style={{ backgroundColor: "white", borderRadius: "20px", padding: "24px", boxShadow: "0 1px 6px rgba(0,0,0,0.08)", marginTop: "24px" }}>
+      {/* Zone réponse */}
+      <div style={{ ...cardStyle, marginTop: "24px" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "16px" }}>
           <span style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "14px" }}>Dr. Martin</span>
-          <span style={{ backgroundColor: "#004649", color: "white", borderRadius: "999px", padding: "2px 10px", fontSize: "11px", fontWeight: "600" }}>✓ Professionnel certifié</span>
+          <span style={{ background: "linear-gradient(135deg, #004649 0%, #006B6F 100%)", color: "white", borderRadius: "999px", padding: "2px 10px", fontSize: "11px", fontWeight: "600" }}>✓ Professionnel certifié</span>
         </div>
         <textarea
-          value={nouveauMessage}
-          onChange={(e) => setNouveauMessage(e.target.value)}
-          placeholder="Écrire un message..."
-          rows={4}
+          value={nouveauMessage} onChange={(e) => setNouveauMessage(e.target.value)}
+          placeholder="Écrire un message..." rows={4}
           style={{ width: "100%", border: "1px solid #B8D8E8", borderRadius: "12px", padding: "14px", fontSize: "14px", color: "#1E3A4A", outline: "none", resize: "none", backgroundColor: "#FAFAFA", boxSizing: "border-box" }}
         />
         <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "12px" }}>
-          <button onClick={() => envoyerMessage(disc.id)} style={{ backgroundColor: "#004649", color: "white", borderRadius: "12px", padding: "12px 32px", fontSize: "14px", fontWeight: "600", border: "none", cursor: "pointer" }}>
+          <button onClick={() => envoyerMessage(disc.id)} style={{ background: "linear-gradient(135deg, #004649 0%, #006B6F 100%)", color: "white", borderRadius: "12px", padding: "12px 32px", fontSize: "14px", fontWeight: "600", border: "none", cursor: "pointer", boxShadow: "0 4px 8px rgba(0,70,73,0.3)" }}>
             Envoyer
           </button>
         </div>
@@ -131,7 +176,12 @@ export default function Forum() {
       </button>
       <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
         {liste.map((msg) => (
-          <div key={msg.id} onClick={() => setDiscussionOuverte(msg.id)} style={{ backgroundColor: "#FDFAF4", borderRadius: "16px", padding: "24px 28px", boxShadow: "0 1px 4px rgba(0,0,0,0.08)", cursor: "pointer" }}>
+          <div key={msg.id} onClick={() => setDiscussionOuverte(msg.id)} style={{
+            background: "linear-gradient(135deg, #FDFAF4 0%, #F5F0E8 100%)",
+            borderRadius: "16px", padding: "24px 28px",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8)",
+            cursor: "pointer", border: "1px solid rgba(255,255,255,0.6)",
+          }}>
             <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
               {msg.epingle && <span style={{ fontSize: "14px" }}>📌</span>}
               <p style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "15px" }}>{msg.titre}</p>
@@ -150,34 +200,21 @@ export default function Forum() {
   );
 
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "#F5F5F5" }}>
-
-      {/* Navbar */}
-      <nav style={{ backgroundColor: "#B8D8E8", padding: "16px 48px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <Image src="/logo.png" alt="Rêvade" width={130} height={48} />
-        <div style={{ display: "flex", gap: "60px", alignItems: "center" }}>
-          <Link href="/dashboard" style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "14px", letterSpacing: "1px", textDecoration: "none" }}>FICHES PATIENTS</Link>
-          <Link href="/forum" style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "14px", letterSpacing: "1px", textDecoration: "none", borderBottom: "2px solid #1E3A4A", paddingBottom: "2px" }}>FORUM</Link>
-          <Link href="/profil" style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "14px", letterSpacing: "1px", textDecoration: "none" }}>PROFIL</Link>
-        </div>
-      </nav>
+    <div style={{ minHeight: "100vh", backgroundColor: "#F0F4F8" }}>
+      <NavBar actif="forum" />
 
       <div style={{ padding: "40px 80px", maxWidth: "1000px", margin: "0 auto" }}>
 
-        {/* Vue discussion */}
         {discussionOuverte !== null ? (
           renderDiscussion(
             tousLesMessages.find((m) => m.id === discussionOuverte),
-            categorieOuverte !== null ? "Retour à la catégorie" : "Retour au forum",
             () => setDiscussionOuverte(null)
           )
-
         ) : categorieOuverte !== null ? (
           renderListeDiscussions(
             categoriesData.find((c) => c.id === categorieOuverte).discussions,
             () => setCategorieOuverte(null)
           )
-
         ) : (
           <div>
             {/* Onglets */}
@@ -197,7 +234,13 @@ export default function Forum() {
             {onglet === "categories" && (
               <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                 {categoriesData.map((cat) => (
-                  <div key={cat.id} onClick={() => setCategorieOuverte(cat.id)} style={{ backgroundColor: "white", borderRadius: "16px", padding: "24px 32px", boxShadow: "0 1px 4px rgba(0,0,0,0.08)", display: "flex", alignItems: "center", justifyContent: "space-between", cursor: "pointer" }}>
+                  <div key={cat.id} onClick={() => setCategorieOuverte(cat.id)} style={{
+                    background: "linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%)",
+                    borderRadius: "16px", padding: "24px 32px",
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)",
+                    display: "flex", alignItems: "center", justifyContent: "space-between",
+                    cursor: "pointer", border: "1px solid rgba(255,255,255,0.6)",
+                  }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
                       <span style={{ fontSize: "28px" }}>{cat.icon}</span>
                       <span style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "15px" }}>{cat.nom}</span>
@@ -212,7 +255,12 @@ export default function Forum() {
             {onglet === "messages" && (
               <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                 {tousLesMessages.map((msg) => (
-                  <div key={msg.id} onClick={() => setDiscussionOuverte(msg.id)} style={{ backgroundColor: "#FDFAF4", borderRadius: "16px", padding: "24px 28px", boxShadow: "0 1px 4px rgba(0,0,0,0.08)", cursor: "pointer" }}>
+                  <div key={msg.id} onClick={() => setDiscussionOuverte(msg.id)} style={{
+                    background: "linear-gradient(135deg, #FDFAF4 0%, #F5F0E8 100%)",
+                    borderRadius: "16px", padding: "24px 28px",
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8)",
+                    cursor: "pointer", border: "1px solid rgba(255,255,255,0.6)",
+                  }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
                       {msg.epingle && <span style={{ fontSize: "14px" }}>📌</span>}
                       <p style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "15px" }}>{msg.titre}</p>
