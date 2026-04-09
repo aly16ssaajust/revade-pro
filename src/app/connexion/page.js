@@ -90,7 +90,7 @@ export default function Connexion() {
 
           {/* Bouton */}
           <div style={{ display: "flex", justifyContent: "center", marginTop: "8px" }}>
-            <Link href="/dashboard" style={{ textDecoration: "none" }}>
+            <Link href="/accueil" style={{ textDecoration: "none" }}>
               <button style={{
                 background: "linear-gradient(135deg, #004649 0%, #006B6F 100%)",
                 color: "white", fontWeight: "700", fontSize: "15px",
