@@ -12,6 +12,123 @@ const navItems = [
   { href: "/profil", label: "PROFIL", actif: false },
 ];
 
+const modeles = [
+  {
+    id: 1, nom: "Ordonnance Patch Nicotine", icon: "🩹",
+    contenu: `ORDONNANCE
+    
+Dr. Michel Martin
+Médecin généraliste - Addictologie
+Cabinet Médical du Parc
+12 rue des Lilas, 75010 Paris
+RPPS: 12345678901
+
+Patient : [NOM PRÉNOM]
+Date de naissance : [DATE]
+Date : [DATE DU JOUR]
+
+Je soussigné Dr. Michel Martin, prescris :
+
+- Patch nicotine [DOSAGE] mg/24h
+  Quantité : [NOMBRE] boîtes
+  Posologie : 1 patch par jour, à appliquer le matin
+  Durée : [DURÉE] semaines
+
+Renouvellement : Non autorisé
+
+Signature et cachet du médecin`,
+  },
+  {
+    id: 2, nom: "Ordonnance Gomme Nicotine", icon: "🟡",
+    contenu: `ORDONNANCE
+
+Dr. Michel Martin
+Médecin généraliste - Addictologie
+Cabinet Médical du Parc
+12 rue des Lilas, 75010 Paris
+RPPS: 12345678901
+
+Patient : [NOM PRÉNOM]
+Date de naissance : [DATE]
+Date : [DATE DU JOUR]
+
+Je soussigné Dr. Michel Martin, prescris :
+
+- Gomme à mâcher nicotine [DOSAGE] mg
+  Quantité : [NOMBRE] boîtes de 30 gommes
+  Posologie : 1 gomme lors de chaque envie de fumer
+  Maximum : 15 gommes par jour
+  Durée : [DURÉE] semaines
+
+Renouvellement : Non autorisé
+
+Signature et cachet du médecin`,
+  },
+  {
+    id: 3, nom: "Compte-rendu de consultation", icon: "📋",
+    contenu: `COMPTE-RENDU DE CONSULTATION
+
+Dr. Michel Martin
+Médecin généraliste - Addictologie
+Cabinet Médical du Parc - 75010 Paris
+
+Date : [DATE DU JOUR]
+Patient : [NOM PRÉNOM]
+Date de naissance : [DATE]
+
+MOTIF DE CONSULTATION :
+Suivi sevrage tabagique / vapotage
+
+ANAMNÈSE :
+[À compléter]
+
+BILAN DU SEVRAGE :
+- Statut actuel : [À compléter]
+- Score Fagerström : [SCORE]
+- Score GAD-4 : [SCORE]
+- Substituts en cours : [À compléter]
+
+ÉVOLUTION :
+[À compléter]
+
+PLAN DE TRAITEMENT :
+[À compléter]
+
+PROCHAIN RDV : [DATE]
+
+Signature du médecin`,
+  },
+  {
+    id: 4, nom: "Lettre d'orientation", icon: "📨",
+    contenu: `LETTRE D'ORIENTATION
+
+Dr. Michel Martin
+Médecin généraliste - Addictologie
+Cabinet Médical du Parc
+12 rue des Lilas, 75010 Paris
+
+Date : [DATE DU JOUR]
+
+Cher(e) Confrère/Consœur,
+
+Je me permets de vous adresser mon/ma patient(e) :
+
+Nom : [NOM PRÉNOM]
+Date de naissance : [DATE]
+
+Pour [MOTIF D'ORIENTATION].
+
+Contexte clinique :
+[À compléter]
+
+Je reste à votre disposition pour tout renseignement complémentaire.
+
+Confraternellement,
+
+Dr. Michel Martin`,
+  },
+];
+
 const tousLesPatients = [
   {
     id: 1, prenom: "Amina", nom: "Diallo", pseudo: "aminad", email: "amina.diallo@mail.fr", genre: "Femme", csp: "Employée", dateNaissance: "14/03/1990",
@@ -267,6 +384,8 @@ export default function FichePatient() {
   const [showNotes, setShowNotes] = useState(false);
   const [noteTexte, setNoteTexte] = useState("");
   const [showHistorique, setShowHistorique] = useState(false);
+  const [modeleOuvert, setModeleOuvert] = useState(null);
+  const [modeleTexte, setModeleTexte] = useState("");
   const fileInputRef = useRef(null);
 
   const handleImport = (e) => {
@@ -279,9 +398,27 @@ export default function FichePatient() {
   const enregistrerNote = () => {
     if (!noteTexte.trim()) return;
     const date = new Date().toLocaleDateString("fr-FR");
-    setDocuments((prev) => [...prev, { nom: `Note consultation ${date}.txt`, type: "note", contenu: noteTexte }]);
+    setDocuments((prev) => [...prev, { nom: `Note consultation ${date}.txt`, type: "note" }]);
     setNoteTexte("");
     setShowNotes(false);
+    setOnglet("documents");
+  };
+
+  const ouvrirModele = (modele) => {
+    const textePersonnalise = modele.contenu
+      .replace("[NOM PRÉNOM]", `${patient.prenom} ${patient.nom}`)
+      .replace("[DATE]", patient.dateNaissance)
+      .replace("[DATE DU JOUR]", new Date().toLocaleDateString("fr-FR"));
+    setModeleTexte(textePersonnalise);
+    setModeleOuvert(modele);
+  };
+
+  const enregistrerModele = () => {
+    if (!modeleTexte.trim()) return;
+    const date = new Date().toLocaleDateString("fr-FR");
+    setDocuments((prev) => [...prev, { nom: `${modeleOuvert.nom} - ${date}.txt`, type: "modele" }]);
+    setModeleOuvert(null);
+    setModeleTexte("");
     setOnglet("documents");
   };
 
@@ -290,6 +427,12 @@ export default function FichePatient() {
     if (type === "Moments") return { bg: "#EEF0FF", color: "#3F51B5" };
     if (type === "Questionnaire") return { bg: "#FDE8C8", color: "#F5A623" };
     return { bg: "#F0F0F0", color: "#888" };
+  };
+
+  const docIcon = (type) => {
+    if (type === "note") return "📝";
+    if (type === "modele") return "📋";
+    return "📄";
   };
 
   return (
@@ -328,7 +471,7 @@ export default function FichePatient() {
 
         {/* Flèche retour + boutons */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
-          <Link href="/dashboard" style={{ textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "8px", color: "#1E3A4A", fontWeight: "600", fontSize: "15px" }}>
+          <Link href="/accueil" style={{ textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "8px", color: "#1E3A4A", fontWeight: "600", fontSize: "15px" }}>
             ← {patient.prenom} {patient.nom}
           </Link>
           <div style={{ display: "flex", gap: "12px" }}>
@@ -338,18 +481,14 @@ export default function FichePatient() {
               fontSize: "13px", fontWeight: "600", border: "1.5px solid #B8D8E8", cursor: "pointer",
               display: "flex", alignItems: "center", gap: "8px",
               boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
-            }}>
-              🕐 Historique
-            </button>
+            }}>🕐 Historique</button>
             <button onClick={() => setShowNotes(true)} style={{
               background: "linear-gradient(135deg, #004649 0%, #006B6F 100%)",
               color: "white", borderRadius: "12px", padding: "10px 20px",
               fontSize: "13px", fontWeight: "600", border: "none", cursor: "pointer",
               boxShadow: "0 4px 8px rgba(0,70,73,0.3)",
               display: "flex", alignItems: "center", gap: "8px",
-            }}>
-              ✏️ Notes de consultation
-            </button>
+            }}>✏️ Notes de consultation</button>
           </div>
         </div>
 
@@ -460,7 +599,7 @@ export default function FichePatient() {
                   {patient.humeurs.length === 0 ? (
                     <p style={{ color: "#aaa", fontSize: "14px", fontStyle: "italic" }}>Aucune entrée d'humeur</p>
                   ) : patient.humeurs.map((h, i) => (
-                    <div key={i} style={{ border: "1px solid #F0F0F0", borderRadius: "16px", padding: "20px 24px", display: "flex", flexDirection: "column", gap: "10px", boxShadow: "0 2px 8px rgba(0,0,0,0.04)" }}>
+                    <div key={i} style={{ border: "1px solid #F0F0F0", borderRadius: "16px", padding: "20px 24px", display: "flex", flexDirection: "column", gap: "10px" }}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                         <span style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "15px" }}>{h.date}</span>
                         <span style={{ fontSize: "28px" }}>{h.emoji}</span>
@@ -510,7 +649,7 @@ export default function FichePatient() {
         {onglet === "parametres" && (
           <div style={{ background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)", borderRadius: "20px", padding: "40px", boxShadow: "0 8px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)" }}>
             <div style={{ display: "flex", gap: "60px", alignItems: "flex-start" }}>
-              <div style={{ background: "linear-gradient(135deg, #f0f0f0 0%, #e8e8e8 100%)", borderRadius: "16px", padding: "20px", width: "180px", minHeight: "220px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}>
+              <div style={{ background: "linear-gradient(135deg, #f0f0f0 0%, #e8e8e8 100%)", borderRadius: "16px", padding: "20px", width: "180px", minHeight: "220px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                 <Image src="/vape.png" alt="Vape" width={140} height={200} style={{ objectFit: "contain" }} />
               </div>
               <div style={{ flex: 1, display: "flex", gap: "60px" }}>
@@ -548,8 +687,6 @@ export default function FichePatient() {
         {/* RECOMMANDATIONS */}
         {onglet === "recommandations" && (
           <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-
-            {/* Substituts */}
             <div style={{ background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)", borderRadius: "20px", padding: "32px", boxShadow: "0 8px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)" }}>
               <p style={{ color: "#004649", fontWeight: "700", fontSize: "16px", marginBottom: "24px" }}>💊 Substituts nicotiniques recommandés</p>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px", marginBottom: "28px" }}>
@@ -565,14 +702,8 @@ export default function FichePatient() {
                   const selectionne = recommandations[cle];
                   const doseSelectionnee = recommandations[`dose_${sub.nom}`] || "";
                   return (
-                    <div key={sub.nom}
-                      onClick={() => setRecommandations(prev => ({ ...prev, [cle]: !prev[cle] }))}
-                      style={{
-                        background: selectionne ? "linear-gradient(135deg, #E8F5EF 0%, #D0EDE0 100%)" : "linear-gradient(135deg, #f8f9fa 0%, #f0f4f8 100%)",
-                        borderRadius: "16px", padding: "20px",
-                        border: selectionne ? "2px solid #004649" : "2px solid transparent",
-                        boxShadow: "0 2px 8px rgba(0,0,0,0.06)", cursor: "pointer", transition: "all 0.2s ease",
-                      }}>
+                    <div key={sub.nom} onClick={() => setRecommandations(prev => ({ ...prev, [cle]: !prev[cle] }))}
+                      style={{ background: selectionne ? "linear-gradient(135deg, #E8F5EF 0%, #D0EDE0 100%)" : "linear-gradient(135deg, #f8f9fa 0%, #f0f4f8 100%)", borderRadius: "16px", padding: "20px", border: selectionne ? "2px solid #004649" : "2px solid transparent", cursor: "pointer" }}>
                       <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px" }}>
                         <span style={{ fontSize: "22px" }}>{sub.icon}</span>
                         <span style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "14px" }}>{sub.nom}</span>
@@ -583,15 +714,8 @@ export default function FichePatient() {
                           <p style={{ color: "#888", fontSize: "12px", marginBottom: "8px" }}>Concentration :</p>
                           <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
                             {sub.doses.map((dose) => (
-                              <button key={dose}
-                                onClick={() => setRecommandations(prev => ({ ...prev, [`dose_${sub.nom}`]: dose }))}
-                                style={{
-                                  padding: "4px 12px", borderRadius: "999px", fontSize: "12px", fontWeight: "600",
-                                  border: "none", cursor: "pointer",
-                                  background: doseSelectionnee === dose ? "linear-gradient(135deg, #004649 0%, #006B6F 100%)" : "white",
-                                  color: doseSelectionnee === dose ? "white" : "#1E3A4A",
-                                  boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                                }}>
+                              <button key={dose} onClick={() => setRecommandations(prev => ({ ...prev, [`dose_${sub.nom}`]: dose }))}
+                                style={{ padding: "4px 12px", borderRadius: "999px", fontSize: "12px", fontWeight: "600", border: "none", cursor: "pointer", background: doseSelectionnee === dose ? "linear-gradient(135deg, #004649 0%, #006B6F 100%)" : "white", color: doseSelectionnee === dose ? "white" : "#1E3A4A" }}>
                                 {dose}
                               </button>
                             ))}
@@ -603,71 +727,46 @@ export default function FichePatient() {
                 })}
               </div>
               <div style={{ borderTop: "1px solid #F0F0F0", paddingTop: "24px" }}>
-                <p style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "14px", marginBottom: "12px" }}>📋 Posologie et instructions</p>
-                <textarea
-                  value={recommandations.posologie || ""}
-                  onChange={(e) => setRecommandations(prev => ({ ...prev, posologie: e.target.value }))}
-                  placeholder="Ex: 1 patch 21mg/jour pendant 6 semaines, puis 14mg/jour pendant 2 semaines..."
-                  rows={3}
-                  style={{ width: "100%", border: "1px solid #B8D8E8", borderRadius: "12px", padding: "14px", fontSize: "14px", color: "#1E3A4A", outline: "none", resize: "none", backgroundColor: "#FAFAFA", boxSizing: "border-box" }}
-                />
+                <p style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "14px", marginBottom: "12px" }}>📋 Posologie</p>
+                <textarea value={recommandations.posologie || ""} onChange={(e) => setRecommandations(prev => ({ ...prev, posologie: e.target.value }))}
+                  placeholder="Ex: 1 patch 21mg/jour pendant 6 semaines..." rows={3}
+                  style={{ width: "100%", border: "1px solid #B8D8E8", borderRadius: "12px", padding: "14px", fontSize: "14px", color: "#1E3A4A", outline: "none", resize: "none", backgroundColor: "#FAFAFA", boxSizing: "border-box" }} />
               </div>
             </div>
 
-            {/* Objectif sevrage */}
             <div style={{ background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)", borderRadius: "20px", padding: "32px", boxShadow: "0 8px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)" }}>
               <p style={{ color: "#004649", fontWeight: "700", fontSize: "16px", marginBottom: "24px" }}>📅 Objectif de sevrage</p>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "20px", marginBottom: "20px" }}>
                 <div>
                   <p style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "13px", marginBottom: "8px" }}>Date de début souhaitée</p>
-                  <input type="date" value={recommandations.dateDebut || ""}
-                    onChange={(e) => setRecommandations(prev => ({ ...prev, dateDebut: e.target.value }))}
+                  <input type="date" value={recommandations.dateDebut || ""} onChange={(e) => setRecommandations(prev => ({ ...prev, dateDebut: e.target.value }))}
                     style={{ width: "100%", border: "1px solid #B8D8E8", borderRadius: "12px", padding: "12px 16px", fontSize: "14px", outline: "none", color: "#1E3A4A", boxSizing: "border-box" }} />
                 </div>
                 <div>
                   <p style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "13px", marginBottom: "8px" }}>Durée du programme</p>
-                  <select value={recommandations.duree || ""}
-                    onChange={(e) => setRecommandations(prev => ({ ...prev, duree: e.target.value }))}
+                  <select value={recommandations.duree || ""} onChange={(e) => setRecommandations(prev => ({ ...prev, duree: e.target.value }))}
                     style={{ width: "100%", border: "1px solid #B8D8E8", borderRadius: "12px", padding: "12px 16px", fontSize: "14px", outline: "none", color: "#1E3A4A", backgroundColor: "white", boxSizing: "border-box" }}>
                     <option value="">Sélectionner</option>
-                    <option value="4 semaines">4 semaines</option>
-                    <option value="8 semaines">8 semaines</option>
-                    <option value="12 semaines">12 semaines</option>
-                    <option value="6 mois">6 mois</option>
-                    <option value="1 an">1 an</option>
+                    <option>4 semaines</option><option>8 semaines</option><option>12 semaines</option><option>6 mois</option><option>1 an</option>
                   </select>
                 </div>
               </div>
-              <p style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "13px", marginBottom: "12px" }}>Objectif de réduction nicotine (mg/ml)</p>
+              <p style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "13px", marginBottom: "12px" }}>Objectif réduction nicotine</p>
               <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
                 {["18 → 12", "12 → 9", "9 → 6", "6 → 3", "3 → 0"].map((obj) => (
-                  <button key={obj}
-                    onClick={() => setRecommandations(prev => ({ ...prev, objectifNicotine: obj }))}
-                    style={{
-                      padding: "8px 16px", borderRadius: "999px", fontSize: "13px", fontWeight: "600",
-                      border: "none", cursor: "pointer",
-                      background: recommandations.objectifNicotine === obj
-                        ? "linear-gradient(135deg, #004649 0%, #006B6F 100%)"
-                        : "linear-gradient(135deg, #f0f4f8 0%, #e8edf2 100%)",
-                      color: recommandations.objectifNicotine === obj ? "white" : "#1E3A4A",
-                      boxShadow: "0 2px 6px rgba(0,0,0,0.08)",
-                    }}>
+                  <button key={obj} onClick={() => setRecommandations(prev => ({ ...prev, objectifNicotine: obj }))}
+                    style={{ padding: "8px 16px", borderRadius: "999px", fontSize: "13px", fontWeight: "600", border: "none", cursor: "pointer", background: recommandations.objectifNicotine === obj ? "linear-gradient(135deg, #004649 0%, #006B6F 100%)" : "linear-gradient(135deg, #f0f4f8 0%, #e8edf2 100%)", color: recommandations.objectifNicotine === obj ? "white" : "#1E3A4A" }}>
                     {obj}
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* Notes */}
             <div style={{ background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)", borderRadius: "20px", padding: "32px", boxShadow: "0 8px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)" }}>
-              <p style={{ color: "#004649", fontWeight: "700", fontSize: "16px", marginBottom: "16px" }}>📝 Notes et conseils personnalisés</p>
-              <textarea
-                value={recommandations.notes || ""}
-                onChange={(e) => setRecommandations(prev => ({ ...prev, notes: e.target.value }))}
-                placeholder="Conseils personnalisés, points de vigilance, recommandations complémentaires..."
-                rows={4}
-                style={{ width: "100%", border: "1px solid #B8D8E8", borderRadius: "12px", padding: "14px", fontSize: "14px", color: "#1E3A4A", outline: "none", resize: "none", backgroundColor: "#FAFAFA", boxSizing: "border-box" }}
-              />
+              <p style={{ color: "#004649", fontWeight: "700", fontSize: "16px", marginBottom: "16px" }}>📝 Notes personnalisées</p>
+              <textarea value={recommandations.notes || ""} onChange={(e) => setRecommandations(prev => ({ ...prev, notes: e.target.value }))}
+                placeholder="Conseils, points de vigilance..." rows={4}
+                style={{ width: "100%", border: "1px solid #B8D8E8", borderRadius: "12px", padding: "14px", fontSize: "14px", color: "#1E3A4A", outline: "none", resize: "none", backgroundColor: "#FAFAFA", boxSizing: "border-box" }} />
             </div>
 
             <div style={{ display: "flex", justifyContent: "flex-end" }}>
@@ -680,33 +779,76 @@ export default function FichePatient() {
 
         {/* DOCUMENTS */}
         {onglet === "documents" && (
-          <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-            <div style={{ display: "flex", gap: "12px" }}>
-              <input type="file" ref={fileInputRef} onChange={handleImport} multiple style={{ display: "none" }} />
-              <button onClick={() => fileInputRef.current.click()} style={{ background: "linear-gradient(135deg, #004649 0%, #006B6F 100%)", color: "white", borderRadius: "999px", padding: "10px 24px", fontSize: "13px", fontWeight: "600", border: "none", cursor: "pointer", boxShadow: "0 4px 8px rgba(0,70,73,0.3)" }}>
-                + Importer un document
-              </button>
-              <button onClick={() => setShowNotes(true)} style={{ background: "linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%)", color: "#004649", borderRadius: "999px", padding: "10px 24px", fontSize: "13px", fontWeight: "600", border: "1.5px solid #004649", cursor: "pointer" }}>
-                ✏️ Nouvelle note
-              </button>
-            </div>
-            {documents.length === 0 ? (
-              <p style={{ color: "#aaa", fontSize: "14px", fontStyle: "italic" }}>Aucun document importé</p>
-            ) : (
-              <div style={{ display: "flex", gap: "24px", flexWrap: "wrap" }}>
-                {documents.map((doc, i) => (
-                  <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
-                    <div style={{ background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)", borderRadius: "8px", padding: "16px", boxShadow: "0 4px 12px rgba(0,0,0,0.1)", width: "80px", height: "80px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                      <span style={{ fontSize: "28px" }}>{doc.type === "note" ? "📝" : "📄"}</span>
-                    </div>
-                    <p style={{ color: "#1E3A4A", fontSize: "12px", textAlign: "center", maxWidth: "90px", wordBreak: "break-word" }}>{doc.nom}</p>
+          <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
+
+            {/* Modèles */}
+            <div style={{ background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)", borderRadius: "20px", padding: "28px", boxShadow: "0 8px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)" }}>
+              <p style={{ color: "#004649", fontWeight: "700", fontSize: "16px", marginBottom: "20px" }}>📋 Modèles de documents</p>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "16px" }}>
+                {modeles.map((modele) => (
+                  <div key={modele.id} onClick={() => ouvrirModele(modele)}
+                    style={{ background: "linear-gradient(135deg, #E8F5EF 0%, #D0EDE0 100%)", borderRadius: "14px", padding: "20px", cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: "10px", textAlign: "center", boxShadow: "0 2px 8px rgba(0,70,73,0.08)", border: "1px solid rgba(255,255,255,0.7)", transition: "all 0.2s ease" }}>
+                    <span style={{ fontSize: "28px" }}>{modele.icon}</span>
+                    <p style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "13px" }}>{modele.nom}</p>
+                    <span style={{ color: "#004649", fontSize: "12px", fontWeight: "600" }}>Utiliser →</span>
                   </div>
                 ))}
               </div>
-            )}
+            </div>
+
+            {/* Documents importés */}
+            <div>
+              <div style={{ display: "flex", gap: "12px", marginBottom: "20px" }}>
+                <input type="file" ref={fileInputRef} onChange={handleImport} multiple style={{ display: "none" }} />
+                <button onClick={() => fileInputRef.current.click()} style={{ background: "linear-gradient(135deg, #004649 0%, #006B6F 100%)", color: "white", borderRadius: "999px", padding: "10px 24px", fontSize: "13px", fontWeight: "600", border: "none", cursor: "pointer", boxShadow: "0 4px 8px rgba(0,70,73,0.3)" }}>
+                  + Importer un document
+                </button>
+                <button onClick={() => setShowNotes(true)} style={{ background: "linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%)", color: "#004649", borderRadius: "999px", padding: "10px 24px", fontSize: "13px", fontWeight: "600", border: "1.5px solid #004649", cursor: "pointer" }}>
+                  ✏️ Nouvelle note
+                </button>
+              </div>
+
+              {documents.length === 0 ? (
+                <p style={{ color: "#aaa", fontSize: "14px", fontStyle: "italic" }}>Aucun document importé</p>
+              ) : (
+                <div style={{ display: "flex", gap: "24px", flexWrap: "wrap" }}>
+                  {documents.map((doc, i) => (
+                    <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
+                      <div style={{ background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)", borderRadius: "8px", padding: "16px", boxShadow: "0 4px 12px rgba(0,0,0,0.1)", width: "80px", height: "80px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <span style={{ fontSize: "28px" }}>{docIcon(doc.type)}</span>
+                      </div>
+                      <p style={{ color: "#1E3A4A", fontSize: "12px", textAlign: "center", maxWidth: "90px", wordBreak: "break-word" }}>{doc.nom}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         )}
       </div>
+
+      {/* Modal modèle */}
+      {modeleOuvert && (
+        <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.3)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 50 }}>
+          <div style={{ background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)", borderRadius: "24px", padding: "40px", width: "640px", maxHeight: "85vh", overflow: "auto", display: "flex", flexDirection: "column", gap: "20px", boxShadow: "0 20px 60px rgba(0,0,0,0.2)" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <h2 style={{ color: "#004649", fontWeight: "700", fontSize: "18px" }}>{modeleOuvert.icon} {modeleOuvert.nom}</h2>
+              <button onClick={() => setModeleOuvert(null)} style={{ background: "none", border: "none", fontSize: "22px", cursor: "pointer", color: "#888" }}>×</button>
+            </div>
+            <p style={{ color: "#888", fontSize: "13px", marginTop: "-8px" }}>Personnalisez le document avant de l'enregistrer</p>
+            <textarea value={modeleTexte} onChange={(e) => setModeleTexte(e.target.value)} rows={18}
+              style={{ width: "100%", border: "1px solid #B8D8E8", borderRadius: "12px", padding: "16px", fontSize: "13px", color: "#1E3A4A", outline: "none", resize: "none", backgroundColor: "#FAFAFA", fontFamily: "monospace", lineHeight: "1.6", boxSizing: "border-box" }} />
+            <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end" }}>
+              <button onClick={() => setModeleOuvert(null)} style={{ padding: "12px 28px", borderRadius: "12px", border: "1px solid #B8D8E8", backgroundColor: "white", color: "#1E3A4A", fontWeight: "600", cursor: "pointer", fontSize: "14px" }}>
+                Annuler
+              </button>
+              <button onClick={enregistrerModele} style={{ padding: "12px 28px", borderRadius: "12px", border: "none", background: "linear-gradient(135deg, #004649 0%, #006B6F 100%)", color: "white", fontWeight: "600", cursor: "pointer", fontSize: "14px", boxShadow: "0 4px 8px rgba(0,70,73,0.3)" }}>
+                Enregistrer dans Documents
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Modal historique */}
       {showHistorique && (
@@ -720,7 +862,7 @@ export default function FichePatient() {
               {patient.historique.map((h, i) => {
                 const colors = typeHistoriqueColor(h.type);
                 return (
-                  <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: "16px", padding: "16px", background: "linear-gradient(135deg, #f8f9fa 0%, #f0f4f8 100%)", borderRadius: "14px", border: "1px solid rgba(255,255,255,0.8)" }}>
+                  <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: "16px", padding: "16px", background: "linear-gradient(135deg, #f8f9fa 0%, #f0f4f8 100%)", borderRadius: "14px" }}>
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px", flexShrink: 0 }}>
                       <div style={{ width: "10px", height: "10px", borderRadius: "50%", backgroundColor: colors.color }} />
                       {i < patient.historique.length - 1 && <div style={{ width: "2px", height: "24px", backgroundColor: "#E0E0E0" }} />}
@@ -744,18 +886,13 @@ export default function FichePatient() {
       {showNotes && (
         <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.3)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 50 }}>
           <div style={{ background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)", borderRadius: "24px", padding: "48px", width: "560px", display: "flex", flexDirection: "column", gap: "20px", boxShadow: "0 20px 60px rgba(0,0,0,0.2)" }}>
-            <h2 style={{ color: "#004649", fontWeight: "700", fontSize: "20px" }}>
-              ✏️ Notes de consultation — {patient.prenom} {patient.nom}
-            </h2>
+            <h2 style={{ color: "#004649", fontWeight: "700", fontSize: "20px" }}>✏️ Notes — {patient.prenom} {patient.nom}</h2>
             <p style={{ color: "#888", fontSize: "13px", marginTop: "-8px" }}>
               {new Date().toLocaleDateString("fr-FR", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}
             </p>
-            <textarea
-              value={noteTexte} onChange={(e) => setNoteTexte(e.target.value)}
-              placeholder="Rédigez vos notes de consultation ici..."
-              rows={10}
-              style={{ border: "1px solid #B8D8E8", borderRadius: "16px", padding: "16px", fontSize: "14px", color: "#1E3A4A", outline: "none", resize: "none", backgroundColor: "#FAFAFA", lineHeight: "1.6" }}
-            />
+            <textarea value={noteTexte} onChange={(e) => setNoteTexte(e.target.value)}
+              placeholder="Rédigez vos notes de consultation ici..." rows={10}
+              style={{ border: "1px solid #B8D8E8", borderRadius: "16px", padding: "16px", fontSize: "14px", color: "#1E3A4A", outline: "none", resize: "none", backgroundColor: "#FAFAFA", lineHeight: "1.6" }} />
             <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end" }}>
               <button onClick={() => { setShowNotes(false); setNoteTexte(""); }} style={{ padding: "12px 28px", borderRadius: "12px", border: "1px solid #B8D8E8", backgroundColor: "white", color: "#1E3A4A", fontWeight: "600", cursor: "pointer", fontSize: "14px" }}>
                 Annuler
