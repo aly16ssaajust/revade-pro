@@ -12,6 +12,14 @@ const patientsInitiaux = [
   { id: 6, nom: "Schmidt", prenom: "Lucas" },
 ];
 
+const navItems = [
+  { href: "/accueil", label: "ACCUEIL", actif: false },
+  { href: "/dashboard", label: "FICHES PATIENTS", actif: true },
+  { href: "/forum", label: "FORUM", actif: false },
+  { href: "/annuaire", label: "ANNUAIRE", actif: false },
+  { href: "/profil", label: "PROFIL", actif: false },
+];
+
 export default function Dashboard() {
   const [recherche, setRecherche] = useState("");
   const [patients, setPatients] = useState(patientsInitiaux);
@@ -34,26 +42,19 @@ export default function Dashboard() {
 
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "#F0F4F8" }}>
-
-      {/* Navbar 3D */}
       <nav style={{
         background: "linear-gradient(135deg, #C8E6F0 0%, #A8D4E6 100%)",
-        padding: "16px 48px",
-        display: "flex", alignItems: "center", justifyContent: "space-between",
+        padding: "16px 48px", display: "flex", alignItems: "center", justifyContent: "space-between",
         boxShadow: "0 4px 12px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.6)",
-        borderBottom: "1px solid rgba(255,255,255,0.4)",
       }}>
-        <Image src="/logo.png" alt="Rêvade" width={130} height={48} />
+        <Link href="/accueil" style={{ textDecoration: "none" }}>
+          <Image src="/logo.png" alt="Rêvade" width={130} height={48} />
+        </Link>
         <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
-          {[
-            { href: "/dashboard", label: "FICHES PATIENTS", actif: true },
-            { href: "/forum", label: "FORUM", actif: false },
-            { href: "/profil", label: "PROFIL", actif: false },
-          ].map((item) => (
+          {navItems.map((item) => (
             <Link key={item.href} href={item.href} style={{ textDecoration: "none" }}>
               <div style={{
-                padding: "10px 20px",
-                borderRadius: "10px",
+                padding: "10px 20px", borderRadius: "10px",
                 fontSize: "13px", fontWeight: "700", letterSpacing: "0.5px",
                 color: item.actif ? "white" : "#1E3A4A",
                 background: item.actif
@@ -63,18 +64,13 @@ export default function Dashboard() {
                   ? "0 4px 8px rgba(0,70,73,0.4), inset 0 1px 0 rgba(255,255,255,0.2)"
                   : "0 2px 4px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)",
                 border: "1px solid rgba(255,255,255,0.3)",
-              }}>
-                {item.label}
-              </div>
+              }}>{item.label}</div>
             </Link>
           ))}
         </div>
       </nav>
 
-      {/* Contenu */}
       <div style={{ padding: "40px 60px" }}>
-
-        {/* Barre de recherche */}
         <div style={{
           background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)",
           borderRadius: "16px", padding: "14px 20px", marginBottom: "32px",
@@ -88,7 +84,6 @@ export default function Dashboard() {
           />
         </div>
 
-        {/* Grille patients */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: "20px" }}>
           {patientsFiltres.map((p) => (
             <Link key={p.id} href={`/patients/${p.id}`} style={{ textDecoration: "none" }}>
@@ -114,7 +109,6 @@ export default function Dashboard() {
             </Link>
           ))}
 
-          {/* Bouton ajouter */}
           <div
             onClick={() => setShowModal(true)}
             onMouseEnter={() => setHovered("add")}
@@ -137,7 +131,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Modal */}
       {showModal && (
         <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.3)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 50 }}>
           <div style={{

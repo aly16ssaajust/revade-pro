@@ -26,19 +26,25 @@ const joursNoms = ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"];
 const patientsListe = ["Amina Diallo","Karim Benouli","Mei Chen","Léa Martin","Sofia Rodriguez","Lucas Schmidt"];
 const motifsList = ["Consultation sevrage","Suivi mensuel","Bilan 3 mois","Première consultation","Suivi hebdomadaire","Bilan mensuel"];
 
+const navItems = [
+  { href: "/accueil", label: "ACCUEIL", actif: false },
+  { href: "/dashboard", label: "FICHES PATIENTS", actif: false },
+  { href: "/forum", label: "FORUM", actif: false },
+  { href: "/annuaire", label: "ANNUAIRE", actif: false },
+  { href: "/profil", label: "PROFIL", actif: true },
+];
+
 const NavBar = () => (
   <nav style={{
     background: "linear-gradient(135deg, #C8E6F0 0%, #A8D4E6 100%)",
     padding: "16px 48px", display: "flex", alignItems: "center", justifyContent: "space-between",
     boxShadow: "0 4px 12px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.6)",
   }}>
-    <Image src="/logo.png" alt="Rêvade" width={130} height={48} />
+    <Link href="/accueil" style={{ textDecoration: "none" }}>
+      <Image src="/logo.png" alt="Rêvade" width={130} height={48} />
+    </Link>
     <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
-      {[
-        { href: "/dashboard", label: "FICHES PATIENTS", actif: false },
-        { href: "/forum", label: "FORUM", actif: false },
-        { href: "/profil", label: "PROFIL", actif: true },
-      ].map((item) => (
+      {navItems.map((item) => (
         <Link key={item.href} href={item.href} style={{ textDecoration: "none" }}>
           <div style={{
             padding: "10px 20px", borderRadius: "10px",
@@ -97,8 +103,9 @@ export default function Profil() {
     if (!nouveauRdv.date || !nouveauRdv.heure || !nouveauRdv.patient || !nouveauRdv.type) return;
     setRdvs((prev) => ({
       ...prev,
-      [nouveauRdv.date]: [...(prev[nouveauRdv.date] || []), { heure: nouveauRdv.heure, patient: nouveauRdv.patient, type: nouveauRdv.type }]
-        .sort((a, b) => a.heure.localeCompare(b.heure)),
+      [nouveauRdv.date]: [...(prev[nouveauRdv.date] || []), {
+        heure: nouveauRdv.heure, patient: nouveauRdv.patient, type: nouveauRdv.type
+      }].sort((a, b) => a.heure.localeCompare(b.heure)),
     }));
     setJourSelectionne(nouveauRdv.date);
     setShowModalRdv(false);
@@ -143,7 +150,11 @@ export default function Profil() {
                     {modeEdition ? "✓ Sauvegarder" : "✏️ Modifier"}
                   </button>
                 </div>
-                {[["Nom complet","nom"],["Titre","titre"],["Email professionnel","email"],["Téléphone","telephone"],["Cabinet","cabinet"],["Adresse","adresse"],["Spécialité","specialite"],["Numéro RPPS","rpps"]].map(([label, field]) => (
+                {[
+                  ["Nom complet","nom"],["Titre","titre"],["Email professionnel","email"],
+                  ["Téléphone","telephone"],["Cabinet","cabinet"],["Adresse","adresse"],
+                  ["Spécialité","specialite"],["Numéro RPPS","rpps"]
+                ].map(([label, field]) => (
                   <div key={field} style={{ display: "flex", alignItems: "center", padding: "16px 0", borderBottom: "1px solid #F0F0F0" }}>
                     <span style={{ color: "#1E3A4A", fontSize: "14px", fontWeight: "600", minWidth: "220px" }}>{label}</span>
                     {modeEdition ? (
@@ -183,85 +194,83 @@ export default function Profil() {
 
             {/* AGENDA */}
             {section === "agenda" && (
-              <div>
-                <div style={{ display: "flex", gap: "24px", alignItems: "flex-start" }}>
+              <div style={{ display: "flex", gap: "24px", alignItems: "flex-start" }}>
 
-                  {/* Calendrier */}
-                  <div style={{ ...cardStyle, padding: "32px", minWidth: "400px" }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
-                      <button onClick={moisPrecedent} style={{ background: "none", border: "none", color: "#1E3A4A", fontSize: "18px", cursor: "pointer" }}>◀</button>
-                      <span style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "16px" }}>{moisNoms[moisActuel]} {anneeActuelle}</span>
-                      <button onClick={moisSuivant} style={{ background: "none", border: "none", color: "#1E3A4A", fontSize: "18px", cursor: "pointer" }}>▶</button>
-                    </div>
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: "4px", marginBottom: "8px" }}>
-                      {joursNoms.map((j) => (
-                        <div key={j} style={{ textAlign: "center", color: "#888", fontSize: "12px", fontWeight: "600", padding: "4px" }}>{j}</div>
-                      ))}
-                    </div>
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: "4px" }}>
-                      {Array.from({ length: getPremierJourMois() }).map((_, i) => <div key={`e-${i}`} />)}
-                      {Array.from({ length: getNbJoursMois() }, (_, i) => i + 1).map((day) => {
-                        const key = formatKey(day);
-                        const aRdv = !!rdvs[key];
-                        const estSelectionne = jourSelectDate === day && moisSelectDate === moisActuel && anneeSelectDate === anneeActuelle;
-                        const estAujourdhui = day === today.getDate() && moisActuel === today.getMonth() && anneeActuelle === today.getFullYear();
-                        return (
-                          <div key={day} onClick={() => setJourSelectionne(key)} style={{
-                            textAlign: "center", padding: "10px 4px", borderRadius: "10px", cursor: "pointer",
-                            background: estSelectionne
-                              ? "linear-gradient(135deg, #004649 0%, #006B6F 100%)"
-                              : estAujourdhui ? "#DFF0EA" : "transparent",
-                            color: estSelectionne ? "white" : "#1E3A4A",
-                            fontWeight: estSelectionne || estAujourdhui ? "700" : "400",
-                            fontSize: "14px", position: "relative",
-                            boxShadow: estSelectionne ? "0 4px 8px rgba(0,70,73,0.3)" : "none",
-                          }}>
-                            {day}
-                            {aRdv && <div style={{ position: "absolute", bottom: "3px", left: "50%", transform: "translateX(-50%)", width: "5px", height: "5px", borderRadius: "50%", backgroundColor: estSelectionne ? "white" : "#004649" }} />}
-                          </div>
-                        );
-                      })}
-                    </div>
+                {/* Calendrier */}
+                <div style={{ ...cardStyle, padding: "32px", minWidth: "400px" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
+                    <button onClick={moisPrecedent} style={{ background: "none", border: "none", color: "#1E3A4A", fontSize: "18px", cursor: "pointer" }}>◀</button>
+                    <span style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "16px" }}>{moisNoms[moisActuel]} {anneeActuelle}</span>
+                    <button onClick={moisSuivant} style={{ background: "none", border: "none", color: "#1E3A4A", fontSize: "18px", cursor: "pointer" }}>▶</button>
+                  </div>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: "4px", marginBottom: "8px" }}>
+                    {joursNoms.map((j) => (
+                      <div key={j} style={{ textAlign: "center", color: "#888", fontSize: "12px", fontWeight: "600", padding: "4px" }}>{j}</div>
+                    ))}
+                  </div>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: "4px" }}>
+                    {Array.from({ length: getPremierJourMois() }).map((_, i) => <div key={`e-${i}`} />)}
+                    {Array.from({ length: getNbJoursMois() }, (_, i) => i + 1).map((day) => {
+                      const key = formatKey(day);
+                      const aRdv = !!rdvs[key];
+                      const estSelectionne = jourSelectDate === day && moisSelectDate === moisActuel && anneeSelectDate === anneeActuelle;
+                      const estAujourdhui = day === today.getDate() && moisActuel === today.getMonth() && anneeActuelle === today.getFullYear();
+                      return (
+                        <div key={day} onClick={() => setJourSelectionne(key)} style={{
+                          textAlign: "center", padding: "10px 4px", borderRadius: "10px", cursor: "pointer",
+                          background: estSelectionne
+                            ? "linear-gradient(135deg, #004649 0%, #006B6F 100%)"
+                            : estAujourdhui ? "#DFF0EA" : "transparent",
+                          color: estSelectionne ? "white" : "#1E3A4A",
+                          fontWeight: estSelectionne || estAujourdhui ? "700" : "400",
+                          fontSize: "14px", position: "relative",
+                          boxShadow: estSelectionne ? "0 4px 8px rgba(0,70,73,0.3)" : "none",
+                        }}>
+                          {day}
+                          {aRdv && <div style={{ position: "absolute", bottom: "3px", left: "50%", transform: "translateX(-50%)", width: "5px", height: "5px", borderRadius: "50%", backgroundColor: estSelectionne ? "white" : "#004649" }} />}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* RDV du jour */}
+                <div style={{ flex: 1, ...cardStyle, padding: "32px" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+                    <p style={{ color: "#004649", fontWeight: "700", fontSize: "16px" }}>
+                      📅 {jourSelectionne ? `${parseInt(jourSelectionne.split("-")[2])} ${moisNoms[parseInt(jourSelectionne.split("-")[1])-1]} ${jourSelectionne.split("-")[0]}` : "Sélectionnez un jour"}
+                    </p>
+                    <button
+                      onClick={() => { setNouveauRdv({ ...nouveauRdv, date: jourSelectionne }); setShowModalRdv(true); }}
+                      style={{ background: "linear-gradient(135deg, #004649 0%, #006B6F 100%)", color: "white", borderRadius: "10px", padding: "8px 16px", fontSize: "13px", fontWeight: "600", border: "none", cursor: "pointer", boxShadow: "0 4px 8px rgba(0,70,73,0.3)" }}>
+                      + Ajouter un RDV
+                    </button>
                   </div>
 
-                  {/* RDV du jour */}
-                  <div style={{ flex: 1, ...cardStyle, padding: "32px" }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
-                      <p style={{ color: "#004649", fontWeight: "700", fontSize: "16px" }}>
-                        📅 {jourSelectionne ? `${parseInt(jourSelectionne.split("-")[2])} ${moisNoms[parseInt(jourSelectionne.split("-")[1])-1]} ${jourSelectionne.split("-")[0]}` : "Sélectionnez un jour"}
-                      </p>
-                      <button
-                        onClick={() => { setNouveauRdv({ ...nouveauRdv, date: jourSelectionne }); setShowModalRdv(true); }}
-                        style={{ background: "linear-gradient(135deg, #004649 0%, #006B6F 100%)", color: "white", borderRadius: "10px", padding: "8px 16px", fontSize: "13px", fontWeight: "600", border: "none", cursor: "pointer", boxShadow: "0 4px 8px rgba(0,70,73,0.3)" }}>
-                        + Ajouter un RDV
-                      </button>
-                    </div>
-
-                    {rdvJour.length === 0 ? (
-                      <p style={{ color: "#aaa", fontSize: "14px", fontStyle: "italic" }}>Aucun rendez-vous ce jour</p>
-                    ) : rdvJour.map((rdv, i) => (
-                      <div key={i} style={{ display: "flex", alignItems: "center", gap: "20px", padding: "16px 20px", background: "linear-gradient(135deg, #F5F9F8 0%, #E8F5EF 100%)", borderRadius: "12px", marginBottom: "12px", borderLeft: "4px solid #004649", boxShadow: "0 2px 8px rgba(0,70,73,0.08)" }}>
-                        <span style={{ color: "#004649", fontWeight: "700", fontSize: "14px", minWidth: "60px" }}>{rdv.heure}</span>
-                        <div>
-                          <p style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "14px" }}>{rdv.patient}</p>
-                          <p style={{ color: "#888", fontSize: "13px" }}>{rdv.type}</p>
-                        </div>
+                  {rdvJour.length === 0 ? (
+                    <p style={{ color: "#aaa", fontSize: "14px", fontStyle: "italic" }}>Aucun rendez-vous ce jour</p>
+                  ) : rdvJour.map((rdv, i) => (
+                    <div key={i} style={{ display: "flex", alignItems: "center", gap: "20px", padding: "16px 20px", background: "linear-gradient(135deg, #F5F9F8 0%, #E8F5EF 100%)", borderRadius: "12px", marginBottom: "12px", borderLeft: "4px solid #004649", boxShadow: "0 2px 8px rgba(0,70,73,0.08)" }}>
+                      <span style={{ color: "#004649", fontWeight: "700", fontSize: "14px", minWidth: "60px" }}>{rdv.heure}</span>
+                      <div>
+                        <p style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "14px" }}>{rdv.patient}</p>
+                        <p style={{ color: "#888", fontSize: "13px" }}>{rdv.type}</p>
                       </div>
-                    ))}
-
-                    {/* Lien Doctolib */}
-                    <div style={{ marginTop: "24px", padding: "16px 20px", background: "linear-gradient(135deg, #f0f8ff 0%, #e8f4fd 100%)", borderRadius: "12px", border: "1px solid #B8D8E8", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                        <span style={{ fontSize: "22px" }}>🩺</span>
-                        <div>
-                          <p style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "14px" }}>Synchroniser avec Doctolib</p>
-                          <p style={{ color: "#888", fontSize: "12px" }}>Importez vos rendez-vous automatiquement</p>
-                        </div>
-                      </div>
-                      <a href="https://www.doctolib.fr" target="_blank" rel="noopener noreferrer" style={{ background: "linear-gradient(135deg, #0596DE 0%, #0476B0 100%)", color: "white", borderRadius: "10px", padding: "8px 16px", fontSize: "13px", fontWeight: "600", textDecoration: "none", boxShadow: "0 4px 8px rgba(5,150,222,0.3)" }}>
-                        Connecter
-                      </a>
                     </div>
+                  ))}
+
+                  {/* Lien Doctolib */}
+                  <div style={{ marginTop: "24px", padding: "16px 20px", background: "linear-gradient(135deg, #f0f8ff 0%, #e8f4fd 100%)", borderRadius: "12px", border: "1px solid #B8D8E8", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                      <span style={{ fontSize: "22px" }}>🩺</span>
+                      <div>
+                        <p style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "14px" }}>Synchroniser avec Doctolib</p>
+                        <p style={{ color: "#888", fontSize: "12px" }}>Importez vos rendez-vous automatiquement</p>
+                      </div>
+                    </div>
+                    <a href="https://www.doctolib.fr" target="_blank" rel="noopener noreferrer" style={{ background: "linear-gradient(135deg, #0596DE 0%, #0476B0 100%)", color: "white", borderRadius: "10px", padding: "8px 16px", fontSize: "13px", fontWeight: "600", textDecoration: "none", boxShadow: "0 4px 8px rgba(5,150,222,0.3)" }}>
+                      Connecter
+                    </a>
                   </div>
                 </div>
               </div>
@@ -269,16 +278,12 @@ export default function Profil() {
           </div>
 
         ) : (
-          /* VUE PRINCIPALE PROFIL */
           <div>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginBottom: "48px", position: "relative" }}>
-
-              {/* Bouton modifier */}
               <button onClick={() => setSection("annuaire")} style={{ position: "absolute", right: 0, top: 0, background: "linear-gradient(135deg, #004649 0%, #006B6F 100%)", color: "white", borderRadius: "12px", padding: "12px 24px", fontSize: "14px", fontWeight: "600", border: "none", cursor: "pointer", boxShadow: "0 4px 8px rgba(0,70,73,0.3)" }}>
                 ✏️ Modifier le profil
               </button>
 
-              {/* Avatar */}
               <div style={{ width: "100px", height: "100px", borderRadius: "50%", background: "linear-gradient(135deg, #DFF0EA 0%, #B8E0CE 100%)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "16px", boxShadow: "0 8px 20px rgba(0,70,73,0.15), inset 0 1px 0 rgba(255,255,255,0.8)" }}>
                 <svg width="50" height="50" viewBox="0 0 24 24" fill="#004649">
                   <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
@@ -293,10 +298,9 @@ export default function Profil() {
               </div>
             </div>
 
-            {/* Grille sections */}
             <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "20px", marginBottom: "20px" }}>
               {sections.map((s) => (
-                <div key={s.id} onClick={() => setSection(s.id)} style={{ background: "linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%)", borderRadius: "20px", padding: "36px 32px", boxShadow: "0 8px 20px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)", cursor: "pointer", display: "flex", alignItems: "center", gap: "16px", border: "1px solid rgba(255,255,255,0.6)", transition: "transform 0.2s" }}>
+                <div key={s.id} onClick={() => setSection(s.id)} style={{ background: "linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%)", borderRadius: "20px", padding: "36px 32px", boxShadow: "0 8px 20px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)", cursor: "pointer", display: "flex", alignItems: "center", gap: "16px", border: "1px solid rgba(255,255,255,0.6)" }}>
                   <span style={{ fontSize: "28px" }}>{s.icon}</span>
                   <span style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "15px" }}>{s.label}</span>
                 </div>

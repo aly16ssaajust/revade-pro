@@ -43,19 +43,25 @@ const categoriesData = [
 
 const tousLesMessages = categoriesData.flatMap((c) => c.discussions);
 
+const navItems = [
+  { href: "/accueil", label: "ACCUEIL", id: "accueil" },
+  { href: "/dashboard", label: "FICHES PATIENTS", id: "dashboard" },
+  { href: "/forum", label: "FORUM", id: "forum" },
+  { href: "/annuaire", label: "ANNUAIRE", id: "annuaire" },
+  { href: "/profil", label: "PROFIL", id: "profil" },
+];
+
 const NavBar = ({ actif }) => (
   <nav style={{
     background: "linear-gradient(135deg, #C8E6F0 0%, #A8D4E6 100%)",
     padding: "16px 48px", display: "flex", alignItems: "center", justifyContent: "space-between",
     boxShadow: "0 4px 12px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.6)",
   }}>
-    <Image src="/logo.png" alt="Rêvade" width={130} height={48} />
+    <Link href="/accueil" style={{ textDecoration: "none" }}>
+      <Image src="/logo.png" alt="Rêvade" width={130} height={48} />
+    </Link>
     <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
-      {[
-        { href: "/dashboard", label: "FICHES PATIENTS", id: "dashboard" },
-        { href: "/forum", label: "FORUM", id: "forum" },
-        { href: "/profil", label: "PROFIL", id: "profil" },
-      ].map((item) => (
+      {navItems.map((item) => (
         <Link key={item.href} href={item.href} style={{ textDecoration: "none" }}>
           <div style={{
             padding: "10px 20px", borderRadius: "10px",
@@ -114,7 +120,6 @@ export default function Forum() {
       <button onClick={retourAction} style={{ background: "none", border: "none", color: "#1E3A4A", fontWeight: "600", fontSize: "15px", cursor: "pointer", marginBottom: "24px", display: "flex", alignItems: "center", gap: "8px" }}>
         ← Retour
       </button>
-
       <div style={cardStyle}>
         <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px" }}>
           {disc.epingle && <span>📌</span>}
@@ -138,18 +143,13 @@ export default function Forum() {
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
             <span style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "14px" }}>{msg.auteur}</span>
-            {msg.certifie && (
-              <span style={{ background: "linear-gradient(135deg, #004649 0%, #006B6F 100%)", color: "white", borderRadius: "999px", padding: "2px 10px", fontSize: "11px", fontWeight: "600" }}>
-                ✓ Professionnel certifié
-              </span>
-            )}
+            {msg.certifie && <span style={{ background: "linear-gradient(135deg, #004649 0%, #006B6F 100%)", color: "white", borderRadius: "999px", padding: "2px 10px", fontSize: "11px", fontWeight: "600" }}>✓ Professionnel certifié</span>}
             <span style={{ color: "#aaa", fontSize: "12px", marginLeft: "auto" }}>{msg.date}</span>
           </div>
           <p style={{ color: "#1E3A4A", fontSize: "14px", lineHeight: "1.6" }}>{msg.contenu}</p>
         </div>
       ))}
 
-      {/* Zone réponse */}
       <div style={{ ...cardStyle, marginTop: "24px" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "16px" }}>
           <span style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "14px" }}>Dr. Martin</span>
@@ -202,22 +202,13 @@ export default function Forum() {
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "#F0F4F8" }}>
       <NavBar actif="forum" />
-
       <div style={{ padding: "40px 80px", maxWidth: "1000px", margin: "0 auto" }}>
-
         {discussionOuverte !== null ? (
-          renderDiscussion(
-            tousLesMessages.find((m) => m.id === discussionOuverte),
-            () => setDiscussionOuverte(null)
-          )
+          renderDiscussion(tousLesMessages.find((m) => m.id === discussionOuverte), () => setDiscussionOuverte(null))
         ) : categorieOuverte !== null ? (
-          renderListeDiscussions(
-            categoriesData.find((c) => c.id === categorieOuverte).discussions,
-            () => setCategorieOuverte(null)
-          )
+          renderListeDiscussions(categoriesData.find((c) => c.id === categorieOuverte).discussions, () => setCategorieOuverte(null))
         ) : (
           <div>
-            {/* Onglets */}
             <div style={{ display: "flex", borderBottom: "2px solid #DFF0EA", marginBottom: "32px", gap: "40px" }}>
               {["categories", "messages"].map((o) => {
                 const labels = { categories: "Catégories", messages: "Derniers messages" };
@@ -230,7 +221,6 @@ export default function Forum() {
               })}
             </div>
 
-            {/* CATÉGORIES */}
             {onglet === "categories" && (
               <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                 {categoriesData.map((cat) => (
@@ -251,7 +241,6 @@ export default function Forum() {
               </div>
             )}
 
-            {/* DERNIERS MESSAGES */}
             {onglet === "messages" && (
               <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                 {tousLesMessages.map((msg) => (
