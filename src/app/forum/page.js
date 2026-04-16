@@ -117,7 +117,7 @@ export default function Forum() {
 
   const renderDiscussion = (disc, retourAction) => (
     <div>
-      <button onClick={retourAction} style={{ background: "none", border: "none", color: "#1E3A4A", fontWeight: "600", fontSize: "15px", cursor: "pointer", marginBottom: "24px", display: "flex", alignItems: "center", gap: "8px" }}>
+      <button onClick={retourAction} style={{ background: "linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%)", border: "1px solid rgba(255,255,255,0.8)", color: "#1E3A4A", fontWeight: "600", fontSize: "15px", cursor: "pointer", marginBottom: "24px", display: "flex", alignItems: "center", gap: "8px", padding: "10px 20px", borderRadius: "12px", boxShadow: "0 2px 8px rgba(0,0,0,0.08)" }}>
         ← Retour
       </button>
       <div style={cardStyle}>
@@ -171,8 +171,8 @@ export default function Forum() {
 
   const renderListeDiscussions = (liste, retourAction) => (
     <div>
-      <button onClick={retourAction} style={{ background: "none", border: "none", color: "#1E3A4A", fontWeight: "600", fontSize: "15px", cursor: "pointer", marginBottom: "24px", display: "flex", alignItems: "center", gap: "8px" }}>
-        ← Retour aux catégories
+      <button onClick={retourAction} style={{ background: "linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%)", border: "1px solid rgba(255,255,255,0.8)", color: "#1E3A4A", fontWeight: "600", fontSize: "15px", cursor: "pointer", marginBottom: "24px", display: "flex", alignItems: "center", gap: "8px", padding: "10px 20px", borderRadius: "12px", boxShadow: "0 2px 8px rgba(0,0,0,0.08)" }}>
+      ← Retour aux catégories
       </button>
       <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
         {liste.map((msg) => (

@@ -132,7 +132,7 @@ export default function Profil() {
 
         {section !== null ? (
           <div>
-            <button onClick={() => setSection(null)} style={{ background: "none", border: "none", color: "#1E3A4A", fontWeight: "600", fontSize: "15px", cursor: "pointer", marginBottom: "32px", display: "flex", alignItems: "center", gap: "8px" }}>
+            <button onClick={() => setSection(null)} style={{ background: "linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%)", border: "1px solid rgba(255,255,255,0.8)", color: "#1E3A4A", fontWeight: "600", fontSize: "15px", cursor: "pointer", marginBottom: "32px", display: "flex", alignItems: "center", gap: "8px", padding: "10px 20px", borderRadius: "12px", boxShadow: "0 2px 8px rgba(0,0,0,0.08)" }}>
               ← Retour au profil
             </button>
 

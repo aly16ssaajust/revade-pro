@@ -471,7 +471,7 @@ export default function FichePatient() {
 
         {/* Flèche retour + boutons */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
-          <Link href="/accueil" style={{ textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "8px", color: "#1E3A4A", fontWeight: "600", fontSize: "15px" }}>
+          <Link href="/dashboard" style={{ textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "8px", color: "#1E3A4A", fontWeight: "600", fontSize: "15px" }}>
             ← {patient.prenom} {patient.nom}
           </Link>
           <div style={{ display: "flex", gap: "12px" }}>
