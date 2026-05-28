@@ -1,7 +1,12 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase";
+import { useProProfile } from "@/lib/useProProfile";
+import Navbar from "@/components/Navbar";
+import { showToast } from "@/lib/toast";
 
 const rdvData = {
   "2026-03-30": [
@@ -26,47 +31,20 @@ const joursNoms = ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"];
 const patientsListe = ["Amina Diallo","Karim Benouli","Mei Chen","Léa Martin","Sofia Rodriguez","Lucas Schmidt"];
 const motifsList = ["Consultation sevrage","Suivi mensuel","Bilan 3 mois","Première consultation","Suivi hebdomadaire","Bilan mensuel"];
 
-const navItems = [
-  { href: "/accueil", label: "ACCUEIL", actif: false },
-  { href: "/dashboard", label: "FICHES PATIENTS", actif: false },
-  { href: "/forum", label: "FORUM", actif: false },
-  { href: "/annuaire", label: "ANNUAIRE", actif: false },
-  { href: "/profil", label: "PROFIL", actif: true },
-];
-
-const NavBar = () => (
-  <nav style={{
-    background: "linear-gradient(135deg, #C8E6F0 0%, #A8D4E6 100%)",
-    padding: "16px 48px", display: "flex", alignItems: "center", justifyContent: "space-between",
-    boxShadow: "0 4px 12px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.6)",
-  }}>
-    <Link href="/accueil" style={{ textDecoration: "none" }}>
-      <Image src="/logo.png" alt="Rêvade" width={130} height={48} />
-    </Link>
-    <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
-      {navItems.map((item) => (
-        <Link key={item.href} href={item.href} style={{ textDecoration: "none" }}>
-          <div style={{
-            padding: "10px 20px", borderRadius: "10px",
-            fontSize: "13px", fontWeight: "700", letterSpacing: "0.5px",
-            color: item.actif ? "white" : "#1E3A4A",
-            background: item.actif
-              ? "linear-gradient(135deg, #004649 0%, #006B6F 100%)"
-              : "linear-gradient(135deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.2) 100%)",
-            boxShadow: item.actif
-              ? "0 4px 8px rgba(0,70,73,0.4), inset 0 1px 0 rgba(255,255,255,0.2)"
-              : "0 2px 4px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)",
-            border: "1px solid rgba(255,255,255,0.3)",
-          }}>{item.label}</div>
-        </Link>
-      ))}
-    </div>
-  </nav>
-);
 
 export default function Profil() {
+  const router = useRouter();
+  const { pro, setPro, loading } = useProProfile();
   const [modeEdition, setModeEdition] = useState(false);
   const [section, setSection] = useState(null);
+  const [saveLoading, setSaveLoading] = useState(false);
+  const [saveStatus, setSaveStatus] = useState(null); // 'ok' | 'error' | null
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordLoading, setPasswordLoading] = useState(false);
+  const [passwordStatus, setPasswordStatus] = useState(null); // 'ok' | 'error' | null
   const today = new Date();
   const [moisActuel, setMoisActuel] = useState(today.getMonth());
   const [anneeActuelle, setAnneeActuelle] = useState(today.getFullYear());
@@ -77,14 +55,72 @@ export default function Profil() {
   const [showModalRdv, setShowModalRdv] = useState(false);
   const [nouveauRdv, setNouveauRdv] = useState({ date: "", heure: "", patient: "", type: "" });
 
-  const [profil, setProfil] = useState({
-    nom: "Michel Martin", titre: "Médecin généraliste",
-    email: "michel.martin@cabinet.fr", telephone: "06 12 34 56 78",
-    cabinet: "Cabinet Médical du Parc", adresse: "12 rue des Lilas, 75010 Paris",
-    specialite: "Addictologie", rpps: "12345678901",
-  });
+  const handleChange = (field, value) => setPro((prev) => ({ ...prev, [field]: value }));
 
-  const handleChange = (field, value) => setProfil((prev) => ({ ...prev, [field]: value }));
+  async function handleSave() {
+    if (!pro) return;
+    setSaveLoading(true);
+    setSaveStatus(null);
+    const { error } = await supabase.from('professionals').update({
+      nom: pro.nom,
+      prenom: pro.prenom,
+      titre: pro.titre,
+      specialite: pro.specialite,
+      telephone: pro.telephone,
+      cabinet: pro.cabinet,
+      adresse: pro.adresse,
+      rpps: pro.rpps,
+      bio: pro.bio ?? '',
+      doctolib_url: pro.doctolib_url ?? '',
+      booking_email: pro.booking_email ?? '',
+      booking_phone: pro.booking_phone ?? '',
+      booking_revade: pro.booking_revade ?? false,
+      visible_annuaire: pro.visible_annuaire ?? true,
+    }).eq('id', pro.id);
+    setSaveLoading(false);
+    if (error) {
+      console.error('Supabase save error:', error.code, error.message, error.details);
+      setSaveStatus(error.message || 'error');
+    } else {
+      setSaveStatus('ok');
+      setModeEdition(false);
+      showToast("Profil mis à jour avec succès");
+      setTimeout(() => setSaveStatus(null), 3000);
+    }
+  }
+
+  async function handlePasswordChange() {
+    if (!newPassword || newPassword !== confirmPassword) {
+      setPasswordStatus('error');
+      return;
+    }
+    setPasswordLoading(true);
+    setPasswordStatus(null);
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+    setPasswordLoading(false);
+    if (error) {
+      setPasswordStatus('error');
+    } else {
+      setPasswordStatus('ok');
+      setNewPassword("");
+      setConfirmPassword("");
+      showToast("Mot de passe modifié avec succès");
+      setTimeout(() => { setShowPasswordModal(false); setPasswordStatus(null); }, 1500);
+    }
+  }
+
+  async function handleLogout() {
+    await supabase.auth.signOut();
+    router.push('/connexion');
+  }
+
+  async function handleDeleteAccount() {
+    try {
+      await supabase.rpc('delete_my_account');
+    } catch (_) {}
+    await supabase.auth.signOut();
+    router.push('/connexion');
+  }
 
   const getPremierJourMois = () => {
     const d = new Date(anneeActuelle, moisActuel, 1).getDay();
@@ -121,19 +157,24 @@ export default function Profil() {
   const sections = [
     { id: "annuaire", label: "Mes informations sur l'annuaire", icon: "📋" },
     { id: "parametres", label: "Paramètres du compte", icon: "⚙️" },
-    { id: "agenda", label: "Agenda", icon: "📅" },
   ];
 
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "#F0F4F8" }}>
-      <NavBar />
+      <Navbar proId={pro?.id} />
 
       <div style={{ padding: "40px 80px", maxWidth: "1100px", margin: "0 auto" }}>
 
         {section !== null ? (
           <div>
-            <button onClick={() => setSection(null)} style={{ background: "linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%)", border: "1px solid rgba(255,255,255,0.8)", color: "#1E3A4A", fontWeight: "600", fontSize: "15px", cursor: "pointer", marginBottom: "32px", display: "flex", alignItems: "center", gap: "8px", padding: "10px 20px", borderRadius: "12px", boxShadow: "0 2px 8px rgba(0,0,0,0.08)" }}>
-              ← Retour au profil
+            <button onClick={() => setSection(null)} style={{ background: "none", border: "none", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "10px", padding: 0, marginBottom: "32px" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", borderRadius: "10px", background: "white", border: "1.5px solid #B8D8E8", boxShadow: "0 2px 6px rgba(0,0,0,0.06)" }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1E3A4A" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
+              </div>
+              <div>
+                <p style={{ margin: 0, fontSize: "11px", color: "#90A4AE", fontWeight: "500", letterSpacing: "0.3px" }}>PROFIL</p>
+                <p style={{ margin: 0, fontSize: "15px", color: "#1E3A4A", fontWeight: "700" }}>{sections.find(s => s.id === section)?.label || "Retour"}</p>
+              </div>
             </button>
 
             {/* ANNUAIRE */}
@@ -141,15 +182,25 @@ export default function Profil() {
               <div style={cardStyle}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "32px" }}>
                   <h2 style={{ color: "#004649", fontWeight: "700", fontSize: "18px" }}>Mes informations sur l'annuaire</h2>
-                  <button onClick={() => setModeEdition(!modeEdition)} style={{
-                    background: modeEdition ? "linear-gradient(135deg, #004649 0%, #006B6F 100%)" : "white",
-                    color: modeEdition ? "white" : "#004649", border: "2px solid #004649",
-                    borderRadius: "12px", padding: "10px 24px", fontSize: "14px", fontWeight: "600", cursor: "pointer",
-                    boxShadow: modeEdition ? "0 4px 8px rgba(0,70,73,0.3)" : "0 2px 4px rgba(0,0,0,0.08)",
-                  }}>
-                    {modeEdition ? "✓ Sauvegarder" : "✏️ Modifier"}
-                  </button>
+                  <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                    {saveStatus === 'ok' && (
+                      <span style={{ color: "#004649", fontWeight: "600", fontSize: "13px" }}>✓ Sauvegardé</span>
+                    )}
+                    {saveStatus && saveStatus !== 'ok' && (
+                      <span style={{ color: "#E53935", fontWeight: "600", fontSize: "12px", maxWidth: "300px" }}>❌ {saveStatus}</span>
+                    )}
+                    <button onClick={() => modeEdition ? handleSave() : setModeEdition(true)} style={{
+                      background: modeEdition ? "linear-gradient(135deg, #004649 0%, #006B6F 100%)" : "white",
+                      color: modeEdition ? "white" : "#004649", border: "2px solid #004649",
+                      borderRadius: "12px", padding: "10px 24px", fontSize: "14px", fontWeight: "600", cursor: "pointer",
+                      boxShadow: modeEdition ? "0 4px 8px rgba(0,70,73,0.3)" : "0 2px 4px rgba(0,0,0,0.08)",
+                      opacity: saveLoading ? 0.7 : 1,
+                    }}>
+                      {modeEdition ? (saveLoading ? "Sauvegarde..." : "✓ Sauvegarder") : "✏️ Modifier"}
+                    </button>
+                  </div>
                 </div>
+                {/* Infos de base */}
                 {[
                   ["Nom complet","nom"],["Titre","titre"],["Email professionnel","email"],
                   ["Téléphone","telephone"],["Cabinet","cabinet"],["Adresse","adresse"],
@@ -158,13 +209,87 @@ export default function Profil() {
                   <div key={field} style={{ display: "flex", alignItems: "center", padding: "16px 0", borderBottom: "1px solid #F0F0F0" }}>
                     <span style={{ color: "#1E3A4A", fontSize: "14px", fontWeight: "600", minWidth: "220px" }}>{label}</span>
                     {modeEdition ? (
-                      <input value={profil[field]} onChange={(e) => handleChange(field, e.target.value)}
+                      <input value={pro?.[field] ?? ''} onChange={(e) => handleChange(field, e.target.value)}
                         style={{ flex: 1, border: "1px solid #B8D8E8", borderRadius: "8px", padding: "8px 14px", fontSize: "14px", color: "#1E3A4A", outline: "none" }} />
                     ) : (
-                      <span style={{ color: "#1E3A4A", fontSize: "14px" }}>{profil[field]}</span>
+                      <span style={{ color: "#1E3A4A", fontSize: "14px" }}>{pro?.[field] ?? ''}</span>
                     )}
                   </div>
                 ))}
+
+                {/* Bio */}
+                <div style={{ padding: "16px 0", borderBottom: "1px solid #F0F0F0" }}>
+                  <span style={{ color: "#1E3A4A", fontSize: "14px", fontWeight: "600", display: "block", marginBottom: "8px" }}>Bio / Présentation</span>
+                  {modeEdition ? (
+                    <textarea value={pro?.bio ?? ''} onChange={(e) => handleChange('bio', e.target.value)} rows={3}
+                      style={{ width: "100%", border: "1px solid #B8D8E8", borderRadius: "8px", padding: "8px 14px", fontSize: "14px", color: "#1E3A4A", outline: "none", resize: "vertical" }} />
+                  ) : (
+                    <span style={{ color: "#1E3A4A", fontSize: "14px" }}>{pro?.bio || <em style={{ color: "#aaa" }}>Non renseigné</em>}</span>
+                  )}
+                </div>
+
+                {/* Prise de RDV */}
+                <div style={{ padding: "20px 0 8px" }}>
+                  <p style={{ color: "#004649", fontSize: "14px", fontWeight: "700", marginBottom: "16px" }}>📅 Options de prise de rendez-vous</p>
+                  {[
+                    ["Email de réservation","booking_email","Affiché aux patients pour vous contacter par email"],
+                    ["Téléphone de réservation","booking_phone","Affiché aux patients pour vous appeler"],
+                    ["Lien Doctolib","doctolib_url","URL complète de votre profil Doctolib"],
+                  ].map(([label, field, hint]) => (
+                    <div key={field} style={{ display: "flex", alignItems: "center", padding: "12px 0", borderBottom: "1px solid #F8F8F8" }}>
+                      <div style={{ minWidth: "220px" }}>
+                        <span style={{ color: "#1E3A4A", fontSize: "14px", fontWeight: "600" }}>{label}</span>
+                        {modeEdition && <p style={{ color: "#aaa", fontSize: "11px", marginTop: "2px" }}>{hint}</p>}
+                      </div>
+                      {modeEdition ? (
+                        <input value={pro?.[field] ?? ''} onChange={(e) => handleChange(field, e.target.value)}
+                          placeholder={hint}
+                          style={{ flex: 1, border: "1px solid #B8D8E8", borderRadius: "8px", padding: "8px 14px", fontSize: "14px", color: "#1E3A4A", outline: "none" }} />
+                      ) : (
+                        <span style={{ color: "#1E3A4A", fontSize: "14px" }}>{pro?.[field] || <em style={{ color: "#aaa" }}>Non renseigné</em>}</span>
+                      )}
+                    </div>
+                  ))}
+                  <div style={{ display: "flex", alignItems: "center", padding: "12px 0", borderBottom: "1px solid #F8F8F8" }}>
+                    <div style={{ minWidth: "220px" }}>
+                      <span style={{ color: "#1E3A4A", fontSize: "14px", fontWeight: "600" }}>Prise de RDV via Rêvade</span>
+                      {modeEdition && <p style={{ color: "#aaa", fontSize: "11px", marginTop: "2px" }}>Les patients peuvent demander un créneau depuis l'app</p>}
+                    </div>
+                    {modeEdition ? (
+                      <label style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
+                        <input type="checkbox" checked={pro?.booking_revade ?? false} onChange={(e) => handleChange('booking_revade', e.target.checked)}
+                          style={{ width: "18px", height: "18px", accentColor: "#004649", cursor: "pointer" }} />
+                        <span style={{ fontSize: "14px", color: "#1E3A4A" }}>{pro?.booking_revade ? "Activé" : "Désactivé"}</span>
+                      </label>
+                    ) : (
+                      <span style={{ color: pro?.booking_revade ? "#004649" : "#aaa", fontSize: "14px", fontWeight: "600" }}>
+                        {pro?.booking_revade ? "✓ Activé" : "Désactivé"}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Visibilité annuaire */}
+                <div style={{ padding: "20px 0 8px", borderTop: "1px solid #F0F0F0", marginTop: "8px" }}>
+                  <p style={{ color: "#004649", fontSize: "14px", fontWeight: "700", marginBottom: "12px" }}>👁️ Visibilité</p>
+                  <div style={{ display: "flex", alignItems: "center", padding: "12px 0" }}>
+                    <div style={{ minWidth: "220px" }}>
+                      <span style={{ color: "#1E3A4A", fontSize: "14px", fontWeight: "600" }}>Apparaître dans l'annuaire</span>
+                      {modeEdition && <p style={{ color: "#aaa", fontSize: "11px", marginTop: "2px" }}>Les patients peuvent vous trouver dans la liste des professionnels Rêvade</p>}
+                    </div>
+                    {modeEdition ? (
+                      <label style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
+                        <input type="checkbox" checked={pro?.visible_annuaire ?? true} onChange={(e) => handleChange('visible_annuaire', e.target.checked)}
+                          style={{ width: "18px", height: "18px", accentColor: "#004649", cursor: "pointer" }} />
+                        <span style={{ fontSize: "14px", color: "#1E3A4A" }}>{(pro?.visible_annuaire ?? true) ? "Visible" : "Caché"}</span>
+                      </label>
+                    ) : (
+                      <span style={{ color: (pro?.visible_annuaire ?? true) ? "#004649" : "#aaa", fontSize: "14px", fontWeight: "600" }}>
+                        {(pro?.visible_annuaire ?? true) ? "✓ Visible dans l'annuaire" : "Non affiché dans l'annuaire"}
+                      </span>
+                    )}
+                  </div>
+                </div>
               </div>
             )}
 
@@ -172,9 +297,17 @@ export default function Profil() {
             {section === "parametres" && (
               <div style={cardStyle}>
                 <h2 style={{ color: "#004649", fontWeight: "700", fontSize: "18px", marginBottom: "32px" }}>Paramètres du compte</h2>
+                <div onClick={() => setShowPasswordModal(true)} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 0", borderBottom: "1px solid #F0F0F0", cursor: "pointer" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+                    <span style={{ fontSize: "22px" }}>🔒</span>
+                    <div>
+                      <p style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "14px" }}>Changer le mot de passe</p>
+                      <p style={{ color: "#aaa", fontSize: "13px", marginTop: "2px" }}>Modifier votre mot de passe de connexion</p>
+                    </div>
+                  </div>
+                  <span style={{ color: "#aaa", fontSize: "18px" }}>›</span>
+                </div>
                 {[
-                  { label: "Changer le mot de passe", desc: "Modifier votre mot de passe de connexion", icon: "🔒" },
-                  { label: "Notifications", desc: "Gérer vos préférences de notifications", icon: "🔔" },
                   { label: "Langue", desc: "Français", icon: "🌍" },
                   { label: "Confidentialité", desc: "Gérer vos données personnelles", icon: "🛡️" },
                 ].map((item, i) => (
@@ -284,40 +417,116 @@ export default function Profil() {
                 ✏️ Modifier le profil
               </button>
 
-              <div style={{ width: "100px", height: "100px", borderRadius: "50%", background: "linear-gradient(135deg, #DFF0EA 0%, #B8E0CE 100%)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "16px", boxShadow: "0 8px 20px rgba(0,70,73,0.15), inset 0 1px 0 rgba(255,255,255,0.8)" }}>
-                <svg width="50" height="50" viewBox="0 0 24 24" fill="#004649">
-                  <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
-                </svg>
+              <div style={{ width: "100px", height: "100px", borderRadius: "50%", background: "linear-gradient(135deg, #004649 0%, #006B6F 100%)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "16px", boxShadow: "0 8px 20px rgba(0,70,73,0.25), inset 0 1px 0 rgba(255,255,255,0.15)", flexShrink: 0 }}>
+                <span style={{ color: "white", fontWeight: "700", fontSize: "32px", letterSpacing: "1px" }}>
+                  {`${(pro?.prenom?.[0] ?? '').toUpperCase()}${(pro?.nom?.[0] ?? '').toUpperCase()}`}
+                </span>
               </div>
 
-              <p style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "20px", marginBottom: "4px" }}>{profil.nom}</p>
-              <p style={{ color: "#888", fontSize: "14px", marginBottom: "4px" }}>{profil.titre}</p>
-              <p style={{ color: "#888", fontSize: "14px" }}>{profil.specialite}</p>
+              <p style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "20px", marginBottom: "4px" }}>{pro?.prenom} {pro?.nom}</p>
+              <p style={{ color: "#888", fontSize: "14px", marginBottom: "4px" }}>{pro?.email}</p>
+              <p style={{ color: "#888", fontSize: "14px" }}>{pro?.specialite}</p>
               <div style={{ marginTop: "12px", background: "linear-gradient(135deg, #004649 0%, #006B6F 100%)", color: "white", borderRadius: "999px", padding: "6px 16px", fontSize: "13px", fontWeight: "600", boxShadow: "0 4px 8px rgba(0,70,73,0.3)" }}>
                 ✓ Professionnel certifié
               </div>
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "20px", marginBottom: "20px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "16px", marginBottom: "24px" }}>
               {sections.map((s) => (
-                <div key={s.id} onClick={() => setSection(s.id)} style={{ background: "linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%)", borderRadius: "20px", padding: "36px 32px", boxShadow: "0 8px 20px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)", cursor: "pointer", display: "flex", alignItems: "center", gap: "16px", border: "1px solid rgba(255,255,255,0.6)" }}>
-                  <span style={{ fontSize: "28px" }}>{s.icon}</span>
-                  <span style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "15px" }}>{s.label}</span>
+                <div key={s.id} onClick={() => setSection(s.id)} style={{ background: "white", borderRadius: "16px", padding: "28px 24px", boxShadow: "0 4px 12px rgba(0,0,0,0.06)", cursor: "pointer", display: "flex", alignItems: "center", gap: "16px", border: "1.5px solid #E8EEF2", transition: "all 0.15s ease" }}
+                  onMouseEnter={e => { e.currentTarget.style.border = "1.5px solid #A5C9B9"; e.currentTarget.style.boxShadow = "0 8px 20px rgba(0,70,73,0.1)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
+                  onMouseLeave={e => { e.currentTarget.style.border = "1.5px solid #E8EEF2"; e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.06)"; e.currentTarget.style.transform = "translateY(0)"; }}>
+                  <div style={{ width: "44px", height: "44px", borderRadius: "12px", background: "linear-gradient(135deg, #E8F5EF 0%, #C8E6D4 100%)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <span style={{ fontSize: "22px" }}>{s.icon}</span>
+                  </div>
+                  <span style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "14px", flex: 1 }}>{s.label}</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B0BEC5" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
                 </div>
               ))}
             </div>
 
-            {/* Bouton déconnexion */}
-            <div style={{ background: "linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%)", borderRadius: "20px", padding: "24px 32px", boxShadow: "0 4px 12px rgba(229,57,53,0.1), inset 0 1px 0 rgba(255,255,255,0.9)", cursor: "pointer", display: "flex", alignItems: "center", gap: "16px", border: "1px solid rgba(229,57,53,0.15)" }}>
-              <span style={{ fontSize: "24px" }}>🚪</span>
-              <div>
-                <p style={{ color: "#E53935", fontWeight: "700", fontSize: "15px" }}>Se déconnecter</p>
-                <p style={{ color: "#aaa", fontSize: "13px" }}>Fermer votre session</p>
-              </div>
+            {/* Déconnexion */}
+            <div style={{ background: "white", borderRadius: "16px", border: "1.5px solid #FFE0DE", padding: "8px 4px" }}>
+              <button onClick={handleLogout} style={{ width: "100%", background: "none", border: "none", display: "flex", alignItems: "center", gap: "14px", padding: "16px 20px", cursor: "pointer", borderRadius: "12px" }}
+                onMouseEnter={e => e.currentTarget.style.background = "#FFF5F4"}
+                onMouseLeave={e => e.currentTarget.style.background = "none"}>
+                <div style={{ width: "36px", height: "36px", borderRadius: "10px", background: "#FFF0EE", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E53935" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                </div>
+                <span style={{ color: "#E53935", fontWeight: "600", fontSize: "14px" }}>Se déconnecter</span>
+              </button>
+              <button onClick={() => setShowDeleteModal(true)} style={{ width: "100%", background: "none", border: "none", display: "flex", alignItems: "center", gap: "14px", padding: "12px 20px", cursor: "pointer", borderTop: "1px solid #FFF0EE" }}>
+                <span style={{ color: "#bbb", fontSize: "12px", paddingLeft: "50px" }}>Supprimer mon compte</span>
+              </button>
             </div>
           </div>
         )}
       </div>
+
+      {/* Modal changement de mot de passe */}
+      {showPasswordModal && (
+        <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.4)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 50 }}>
+          <div style={{ background: "white", borderRadius: "20px", padding: "40px", width: "420px", display: "flex", flexDirection: "column", gap: "16px", boxShadow: "0 20px 60px rgba(0,0,0,0.2)" }}>
+            <h2 style={{ color: "#004649", fontWeight: "700", fontSize: "18px", textAlign: "center" }}>🔒 Changer le mot de passe</h2>
+            <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+              <label style={{ color: "#1E3A4A", fontSize: "13px", fontWeight: "600" }}>Nouveau mot de passe</label>
+              <input
+                type="password" value={newPassword}
+                onChange={(e) => { setNewPassword(e.target.value); setPasswordStatus(null); }}
+                placeholder="Minimum 8 caractères"
+                style={{ border: "1px solid #B8D8E8", borderRadius: "12px", padding: "12px 16px", fontSize: "14px", outline: "none", color: "#1E3A4A" }}
+              />
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+              <label style={{ color: "#1E3A4A", fontSize: "13px", fontWeight: "600" }}>Confirmer le mot de passe</label>
+              <input
+                type="password" value={confirmPassword}
+                onChange={(e) => { setConfirmPassword(e.target.value); setPasswordStatus(null); }}
+                placeholder="Répétez le mot de passe"
+                style={{ border: `1px solid ${confirmPassword && confirmPassword !== newPassword ? "#E53935" : "#B8D8E8"}`, borderRadius: "12px", padding: "12px 16px", fontSize: "14px", outline: "none", color: "#1E3A4A" }}
+              />
+              {confirmPassword && confirmPassword !== newPassword && (
+                <p style={{ color: "#E53935", fontSize: "12px" }}>Les mots de passe ne correspondent pas</p>
+              )}
+            </div>
+            {passwordStatus === 'ok' && <p style={{ color: "#004649", fontWeight: "600", fontSize: "13px", textAlign: "center" }}>✓ Mot de passe modifié avec succès</p>}
+            {passwordStatus === 'error' && <p style={{ color: "#E53935", fontSize: "13px", textAlign: "center" }}>Erreur — vérifiez les champs et réessayez</p>}
+            <div style={{ display: "flex", gap: "12px", justifyContent: "center", marginTop: "8px" }}>
+              <button onClick={() => { setShowPasswordModal(false); setNewPassword(""); setConfirmPassword(""); setPasswordStatus(null); }}
+                style={{ padding: "12px 28px", borderRadius: "12px", border: "1px solid #B8D8E8", backgroundColor: "white", color: "#1E3A4A", fontWeight: "600", cursor: "pointer", fontSize: "14px" }}>
+                Annuler
+              </button>
+              <button onClick={handlePasswordChange} disabled={passwordLoading || !newPassword || newPassword !== confirmPassword}
+                style={{ padding: "12px 28px", borderRadius: "12px", border: "none",
+                  background: (passwordLoading || !newPassword || newPassword !== confirmPassword) ? "#90A4AE" : "linear-gradient(135deg, #004649 0%, #006B6F 100%)",
+                  color: "white", fontWeight: "600", cursor: (passwordLoading || !newPassword || newPassword !== confirmPassword) ? "not-allowed" : "pointer", fontSize: "14px" }}>
+                {passwordLoading ? "Modification..." : "Confirmer"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal suppression compte */}
+      {showDeleteModal && (
+        <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.4)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 50 }}>
+          <div style={{ background: "white", borderRadius: "20px", padding: "40px", width: "400px", display: "flex", flexDirection: "column", gap: "16px", boxShadow: "0 20px 60px rgba(0,0,0,0.2)", textAlign: "center" }}>
+            <p style={{ fontSize: "28px" }}>⚠️</p>
+            <h2 style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "18px" }}>Supprimer mon compte</h2>
+            <p style={{ color: "#666", fontSize: "14px", lineHeight: "1.6" }}>
+              Cette action est irréversible. Toutes vos données seront supprimées définitivement.
+            </p>
+            <div style={{ display: "flex", gap: "12px", justifyContent: "center", marginTop: "8px" }}>
+              <button onClick={() => setShowDeleteModal(false)} style={{ padding: "12px 28px", borderRadius: "12px", border: "1px solid #B8D8E8", backgroundColor: "white", color: "#1E3A4A", fontWeight: "600", cursor: "pointer", fontSize: "14px" }}>
+                Annuler
+              </button>
+              <button onClick={handleDeleteAccount} style={{ padding: "12px 28px", borderRadius: "12px", border: "none", background: "#E53935", color: "white", fontWeight: "600", cursor: "pointer", fontSize: "14px" }}>
+                Confirmer la suppression
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Modal ajout RDV */}
       {showModalRdv && (

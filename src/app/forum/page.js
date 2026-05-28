@@ -1,197 +1,375 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
+import { supabase } from "@/lib/supabase";
+import { useProProfile } from "@/lib/useProProfile";
+import Navbar from "@/components/Navbar";
 
-const categoriesData = [
-  {
-    id: 1, nom: "Témoignages", icon: "💬", nbSujets: 3,
-    discussions: [
-      { id: 101, titre: "Ce n'est pas linéaire... et c'est OK", auteur: "Yannis", date: "2 août à 21h02", contenu: "Cette semaine était plus difficile que la précédente. Je sens que je progresse, mais c'est irrégulier. J'apprends à l'accepter.", likes: 28, reponses: 12, epingle: true, messages: [{ auteur: "Dr. Martin", date: "3 août à 09h15", contenu: "C'est tout à fait normal Yannis, le sevrage n'est jamais une ligne droite. Continuez ainsi !", certifie: true }, { auteur: "Lucie", date: "3 août à 10h30", contenu: "Je ressens exactement la même chose. On est ensemble !", certifie: false }] },
-      { id: 102, titre: "J'ai réussi à ne pas vapoter pendant mon anxiété !", auteur: "Lucie", date: "6 août à 22h14", contenu: "Ce soir, j'ai eu une montée d'angoisse... mais j'ai respiré à la place. Rêvade m'a aidée à me recentrer.", likes: 12, reponses: 8, epingle: true, messages: [{ auteur: "Dr. Martin", date: "7 août à 08h00", contenu: "Bravo Lucie ! C'est une victoire importante.", certifie: true }] },
-      { id: 103, titre: "100 jours sans cigarette !", auteur: "Marc", date: "15 août à 10h00", contenu: "Je n'aurais jamais cru y arriver. Merci à toute la communauté Rêvade.", likes: 45, reponses: 20, epingle: false, messages: [] },
-    ]
-  },
-  {
-    id: 2, nom: "Conseils sevrage", icon: "🌿", nbSujets: 2,
-    discussions: [
-      { id: 201, titre: "Mes 5 astuces pour résister aux envies", auteur: "Dr. Martin", date: "1 août à 14h00", contenu: "Après des années d'accompagnement, voici les techniques qui fonctionnent le mieux : respiration, distraction, hydratation, marche et méditation.", likes: 52, reponses: 15, epingle: true, messages: [{ auteur: "Thomas", date: "2 août à 09h00", contenu: "Merci docteur, la respiration m'a vraiment aidé !", certifie: false }] },
-      { id: 202, titre: "Quand réduire le taux de nicotine ?", auteur: "Sophie", date: "5 août à 16h30", contenu: "Mon médecin m'a dit d'attendre 3 semaines avant de baisser. Qu'est-ce que vous en pensez ?", likes: 18, reponses: 9, epingle: false, messages: [{ auteur: "Dr. Martin", date: "5 août à 18h00", contenu: "3 semaines c'est une bonne règle générale. Mais écoutez votre corps avant tout.", certifie: true }] },
-    ]
-  },
-  {
-    id: 3, nom: "Gestion du stress", icon: "🧘", nbSujets: 2,
-    discussions: [
-      { id: 301, titre: "La méditation m'a changé la vie", auteur: "Emma", date: "8 août à 20h00", contenu: "Depuis que je médite 10 minutes par jour, mes envies de vapoter ont vraiment diminué.", likes: 33, reponses: 11, epingle: false, messages: [] },
-      { id: 302, titre: "Le sport comme alternative à la vape", auteur: "Julien", date: "11 août à 17h45", contenu: "J'ai remplacé mes pauses vape par des tours de marche rapide. Ça m'aide énormément.", likes: 27, reponses: 6, epingle: false, messages: [{ auteur: "Dr. Martin", date: "12 août à 08h30", contenu: "Excellent Julien ! L'activité physique libère des endorphines qui compensent naturellement le manque.", certifie: true }] },
-    ]
-  },
-  {
-    id: 4, nom: "Substituts nicotiniques", icon: "🧪", nbSujets: 1,
-    discussions: [
-      { id: 401, titre: "Gomme ou patch : lequel choisir ?", auteur: "Amina", date: "3 août à 11h00", contenu: "J'hésite entre les deux. Mon médecin m'a dit que ça dépend de mon mode de vie. Vos retours ?", likes: 21, reponses: 14, epingle: false, messages: [{ auteur: "Dr. Martin", date: "3 août à 13h00", contenu: "Le patch est idéal pour un fond constant, la gomme pour les envies ponctuelles. Les deux peuvent se combiner.", certifie: true }] },
-    ]
-  },
-  {
-    id: 5, nom: "Rechutes & reprises", icon: "🔄", nbSujets: 2,
-    discussions: [
-      { id: 501, titre: "J'ai rechuté... et je recommence", auteur: "Kevin", date: "9 août à 23h00", contenu: "J'ai tenu 3 semaines puis craqué lors d'une soirée. Je me sens nul. Mais je reprends demain.", likes: 38, reponses: 22, epingle: true, messages: [{ auteur: "Dr. Martin", date: "10 août à 07h30", contenu: "Kevin, une rechute ne signifie pas un échec. C'est une étape normale du sevrage. Vous avez le courage de recommencer, c'est l'essentiel.", certifie: true }, { auteur: "Yannis", date: "10 août à 09h00", contenu: "On est tous passés par là. Courage !", certifie: false }] },
-      { id: 502, titre: "Après 2 rechutes, j'y arrive enfin", auteur: "Nadia", date: "14 août à 15h20", contenu: "Troisième tentative. Cette fois j'utilise Rêvade depuis le début et ça fait vraiment la différence.", likes: 29, reponses: 10, epingle: false, messages: [] },
-    ]
-  },
-];
+const CATEGORIE_CONFIG = {
+  temoignages: { nom: "Témoignages", icon: "💬" },
+  conseils_sevrage: { nom: "Conseils sevrage", icon: "🌿" },
+  gestion_stress: { nom: "Gestion du stress", icon: "🧘" },
+  substituts: { nom: "Substituts nicotiniques", icon: "🧪" },
+  rechutes: { nom: "Rechutes & reprises", icon: "🔄" },
+  general: { nom: "Général", icon: "💬" },
+};
 
-const tousLesMessages = categoriesData.flatMap((c) => c.discussions);
+function categorieLabel(cat) {
+  return CATEGORIE_CONFIG[cat]?.nom || cat;
+}
+function categorieIcon(cat) {
+  return CATEGORIE_CONFIG[cat]?.icon || "💬";
+}
 
-const navItems = [
-  { href: "/accueil", label: "ACCUEIL", id: "accueil" },
-  { href: "/dashboard", label: "FICHES PATIENTS", id: "dashboard" },
-  { href: "/forum", label: "FORUM", id: "forum" },
-  { href: "/annuaire", label: "ANNUAIRE", id: "annuaire" },
-  { href: "/profil", label: "PROFIL", id: "profil" },
-];
+function formatDate(isoString) {
+  if (!isoString) return "";
+  const d = new Date(isoString);
+  return d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" }) +
+    " à " + d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+}
 
-const NavBar = ({ actif }) => (
-  <nav style={{
-    background: "linear-gradient(135deg, #C8E6F0 0%, #A8D4E6 100%)",
-    padding: "16px 48px", display: "flex", alignItems: "center", justifyContent: "space-between",
-    boxShadow: "0 4px 12px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.6)",
-  }}>
-    <Link href="/accueil" style={{ textDecoration: "none" }}>
-      <Image src="/logo.png" alt="Rêvade" width={130} height={48} />
-    </Link>
-    <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
-      {navItems.map((item) => (
-        <Link key={item.href} href={item.href} style={{ textDecoration: "none" }}>
-          <div style={{
-            padding: "10px 20px", borderRadius: "10px",
-            fontSize: "13px", fontWeight: "700", letterSpacing: "0.5px",
-            color: actif === item.id ? "white" : "#1E3A4A",
-            background: actif === item.id
-              ? "linear-gradient(135deg, #004649 0%, #006B6F 100%)"
-              : "linear-gradient(135deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.2) 100%)",
-            boxShadow: actif === item.id
-              ? "0 4px 8px rgba(0,70,73,0.4), inset 0 1px 0 rgba(255,255,255,0.2)"
-              : "0 2px 4px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)",
-            border: "1px solid rgba(255,255,255,0.3)",
-          }}>{item.label}</div>
-        </Link>
-      ))}
-    </div>
-  </nav>
-);
 
-export default function Forum() {
-  const [onglet, setOnglet] = useState("messages");
+const cardStyle = {
+  background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)",
+  borderRadius: "20px", padding: "32px",
+  boxShadow: "0 8px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)",
+  marginBottom: "20px",
+};
+
+function ForumContent() {
+  const { pro } = useProProfile();
+  const searchParams = useSearchParams();
+  const threadEndRef = useRef(null);
+
+  const [posts, setPosts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [onglet, setOnglet] = useState(searchParams.get("tab") === "messagerie" ? "messagerie" : "messages");
   const [categorieOuverte, setCategorieOuverte] = useState(null);
-  const [discussionOuverte, setDiscussionOuverte] = useState(null);
+  const [postOuvert, setPostOuvert] = useState(null);
+  const [commentaires, setCommentaires] = useState([]);
+  const [loadingComments, setLoadingComments] = useState(false);
   const [nouveauMessage, setNouveauMessage] = useState("");
-  const [discussions, setDiscussions] = useState(
-    categoriesData.reduce((acc, cat) => {
-      cat.discussions.forEach((d) => { acc[d.id] = d; });
-      return acc;
-    }, {})
-  );
+  const [envoi, setEnvoi] = useState(false);
 
-  const envoyerMessage = (discussionId) => {
-    if (!nouveauMessage.trim()) return;
-    setDiscussions((prev) => ({
-      ...prev,
-      [discussionId]: {
-        ...prev[discussionId],
-        reponses: prev[discussionId].reponses + 1,
-        messages: [...prev[discussionId].messages, {
-          auteur: "Dr. Martin", date: "À l'instant", contenu: nouveauMessage, certifie: true,
-        }],
-      },
-    }));
+  // ── Messagerie ──────────────────────────────────────────────────────────────
+  const [patientsMsg, setPatientsMsg] = useState([]);
+  const [patientSel, setPatientSel] = useState(null);
+  const [thread, setThread] = useState([]);
+  const [loadingThread, setLoadingThread] = useState(false);
+  const [msgContent, setMsgContent] = useState("");
+  const [sendingMsg, setSendingMsg] = useState(false);
+
+  useEffect(() => {
+    loadPosts();
+  }, []);
+
+  async function loadPosts() {
+    const [{ data: postsData }, { data: commentsData }] = await Promise.all([
+      supabase.from("forum_posts").select("*").order("created_at", { ascending: false }),
+      supabase.from("forum_comments").select("post_id"),
+    ]);
+
+    if (postsData) {
+      // Compute real counts from actual comments rows
+      const counts = {};
+      (commentsData || []).forEach((c) => {
+        counts[c.post_id] = (counts[c.post_id] || 0) + 1;
+      });
+      const merged = postsData.map((p) => ({
+        ...p,
+        comments_count: counts[p.id] ?? p.comments_count ?? 0,
+      }));
+      setPosts(merged);
+      const cats = Object.entries(CATEGORIE_CONFIG).map(([id, cfg]) => ({
+        id,
+        nom: cfg.nom,
+        icon: cfg.icon,
+        nbSujets: merged.filter((p) => p.categorie === id).length,
+      }));
+      setCategories(cats);
+    }
+    setLoading(false);
+  }
+
+  async function openPost(post) {
+    setLoadingComments(true);
+    const { data } = await supabase
+      .from("forum_comments")
+      .select("*")
+      .eq("post_id", post.id)
+      .order("created_at", { ascending: true });
+    const comments = data || [];
+    // Use real count from loaded comments
+    setPostOuvert({ ...post, comments_count: comments.length });
+    setCommentaires(comments);
+    setLoadingComments(false);
+  }
+
+  async function envoyerMessage() {
+    if (!nouveauMessage.trim() || !pro || !postOuvert) return;
+    setEnvoi(true);
+
+    const pseudo = `Dr. ${pro.prenom} ${pro.nom}${pro.specialite ? ` · ${pro.specialite}` : ""}`;
+
+    const { data: newComment } = await supabase
+      .from("forum_comments")
+      .insert({
+        post_id: postOuvert.id,
+        user_id: pro.id,
+        pseudo,
+        contenu: nouveauMessage,
+        is_pro: true,
+      })
+      .select()
+      .single();
+
+    if (newComment) {
+      setCommentaires((prev) => [...prev, newComment]);
+      const { data: updatedPost } = await supabase
+        .from("forum_posts")
+        .select("comments_count")
+        .eq("id", postOuvert.id)
+        .single();
+      const newCount = updatedPost?.comments_count ?? (postOuvert.comments_count || 0) + 1;
+      setPostOuvert((prev) => ({ ...prev, comments_count: newCount }));
+      setPosts((prev) =>
+        prev.map((p) => p.id === postOuvert.id ? { ...p, comments_count: newCount } : p)
+      );
+    }
+
     setNouveauMessage("");
-  };
+    setEnvoi(false);
+  }
 
-  const cardStyle = {
-    background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)",
-    borderRadius: "20px", padding: "32px",
-    boxShadow: "0 8px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)",
-    marginBottom: "20px",
-  };
+  // ── Messagerie: load patients list ──────────────────────────────────────────
+  useEffect(() => {
+    if (!pro) return;
+    loadPatientsMsg();
+  }, [pro]);
 
-  const renderDiscussion = (disc, retourAction) => (
-    <div>
-      <button onClick={retourAction} style={{ background: "linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%)", border: "1px solid rgba(255,255,255,0.8)", color: "#1E3A4A", fontWeight: "600", fontSize: "15px", cursor: "pointer", marginBottom: "24px", display: "flex", alignItems: "center", gap: "8px", padding: "10px 20px", borderRadius: "12px", boxShadow: "0 2px 8px rgba(0,0,0,0.08)" }}>
-        ← Retour
-      </button>
-      <div style={cardStyle}>
-        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px" }}>
-          {disc.epingle && <span>📌</span>}
-          <p style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "17px" }}>{disc.titre}</p>
-        </div>
-        <p style={{ color: "#888", fontSize: "13px", marginBottom: "16px" }}>par {disc.auteur}, le {disc.date}</p>
-        <p style={{ color: "#1E3A4A", fontSize: "14px", lineHeight: "1.6", fontStyle: "italic" }}>« {disc.contenu} »</p>
-        <div style={{ display: "flex", gap: "20px", marginTop: "16px" }}>
-          <span style={{ color: "#E07B39", fontSize: "13px" }}>❤️ {disc.likes}</span>
-          <span style={{ color: "#888", fontSize: "13px" }}>💬 {disc.reponses} réponses</span>
-        </div>
-      </div>
+  async function loadPatientsMsg() {
+    const { data: links } = await supabase
+      .from("patient_professional_links")
+      .select("patient_id")
+      .eq("professional_id", pro.id);
+    const patientIds = (links || []).map((l) => l.patient_id);
+    if (patientIds.length === 0) {
+      setPatientsMsg([]);
+      return;
+    }
+    const { data: profiles } = await supabase
+      .from("profiles")
+      .select("id, prenom, nom")
+      .in("id", patientIds);
+    const patients = profiles || [];
+    setPatientsMsg(patients);
 
-      {discussions[disc.id].messages.map((msg, i) => (
-        <div key={i} style={{
-          background: msg.certifie ? "linear-gradient(135deg, #F0F9F7 0%, #E4F5F1 100%)" : "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)",
-          borderRadius: "16px", padding: "24px",
-          boxShadow: "0 4px 12px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.9)",
-          marginBottom: "12px",
-          borderLeft: msg.certifie ? "4px solid #004649" : "none",
-        }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
-            <span style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "14px" }}>{msg.auteur}</span>
-            {msg.certifie && <span style={{ background: "linear-gradient(135deg, #004649 0%, #006B6F 100%)", color: "white", borderRadius: "999px", padding: "2px 10px", fontSize: "11px", fontWeight: "600" }}>✓ Professionnel certifié</span>}
-            <span style={{ color: "#aaa", fontSize: "12px", marginLeft: "auto" }}>{msg.date}</span>
-          </div>
-          <p style={{ color: "#1E3A4A", fontSize: "14px", lineHeight: "1.6" }}>{msg.contenu}</p>
-        </div>
-      ))}
+    // Auto-select from URL param
+    const pid = searchParams.get("patientId");
+    if (pid) {
+      const found = patients.find((p) => p.id === pid);
+      if (found) selectPatient(found);
+    }
+  }
 
-      <div style={{ ...cardStyle, marginTop: "24px" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "16px" }}>
-          <span style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "14px" }}>Dr. Martin</span>
-          <span style={{ background: "linear-gradient(135deg, #004649 0%, #006B6F 100%)", color: "white", borderRadius: "999px", padding: "2px 10px", fontSize: "11px", fontWeight: "600" }}>✓ Professionnel certifié</span>
-        </div>
-        <textarea
-          value={nouveauMessage} onChange={(e) => setNouveauMessage(e.target.value)}
-          placeholder="Écrire un message..." rows={4}
-          style={{ width: "100%", border: "1px solid #B8D8E8", borderRadius: "12px", padding: "14px", fontSize: "14px", color: "#1E3A4A", outline: "none", resize: "none", backgroundColor: "#FAFAFA", boxSizing: "border-box" }}
-        />
-        <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "12px" }}>
-          <button onClick={() => envoyerMessage(disc.id)} style={{ background: "linear-gradient(135deg, #004649 0%, #006B6F 100%)", color: "white", borderRadius: "12px", padding: "12px 32px", fontSize: "14px", fontWeight: "600", border: "none", cursor: "pointer", boxShadow: "0 4px 8px rgba(0,70,73,0.3)" }}>
-            Envoyer
-          </button>
-        </div>
-      </div>
-    </div>
+  async function selectPatient(patient) {
+    setPatientSel(patient);
+    setLoadingThread(true);
+    const { data } = await supabase
+      .from("pro_patient_messages")
+      .select("*")
+      .eq("pro_id", pro.id)
+      .eq("patient_id", patient.id)
+      .order("created_at", { ascending: true });
+    setThread(data || []);
+    setLoadingThread(false);
+    // Mark patient messages as read
+    await supabase
+      .from("pro_patient_messages")
+      .update({ read_at: new Date().toISOString() })
+      .eq("pro_id", pro.id)
+      .eq("patient_id", patient.id)
+      .eq("sender_type", "patient")
+      .is("read_at", null);
+    setTimeout(() => threadEndRef.current?.scrollIntoView({ behavior: "smooth" }), 100);
+  }
+
+  useEffect(() => {
+    if (!pro || !patientSel) return;
+    const channel = supabase
+      .channel(`msg_pro_${pro.id}_${patientSel.id}`)
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "pro_patient_messages",
+        filter: `pro_id=eq.${pro.id}` }, (payload) => {
+        if (payload.new?.patient_id === patientSel.id) {
+          setThread((prev) => [...prev, payload.new]);
+          setTimeout(() => threadEndRef.current?.scrollIntoView({ behavior: "smooth" }), 100);
+        }
+      })
+      .subscribe();
+    return () => supabase.removeChannel(channel);
+  }, [pro, patientSel]);
+
+  async function sendMsg() {
+    if (!msgContent.trim() || !pro || !patientSel || sendingMsg) return;
+    setSendingMsg(true);
+    const text = msgContent.trim();
+    setMsgContent("");
+    const { data: newMsg } = await supabase
+      .from("pro_patient_messages")
+      .insert({ pro_id: pro.id, patient_id: patientSel.id, sender_type: "pro", content: text })
+      .select().single();
+    if (newMsg) {
+      setThread((prev) => [...prev, newMsg]);
+      setTimeout(() => threadEndRef.current?.scrollIntoView({ behavior: "smooth" }), 100);
+    }
+    setSendingMsg(false);
+  }
+
+  function formatMsgTime(iso) {
+    if (!iso) return "";
+    const d = new Date(iso);
+    const now = new Date();
+    const isToday = d.toDateString() === now.toDateString();
+    if (isToday) return d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+    return d.toLocaleDateString("fr-FR", { day: "numeric", month: "short" }) + " " +
+      d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+  }
+
+  const postsInCategorie = categorieOuverte
+    ? posts.filter((p) => p.categorie === categorieOuverte)
+    : [];
+
+
+  const BadgePro = () => (
+    <span style={{
+      background: "linear-gradient(135deg, #004649 0%, #006B6F 100%)",
+      color: "white", borderRadius: "999px", padding: "2px 10px",
+      fontSize: "11px", fontWeight: "600",
+    }}>✓ Professionnel certifié</span>
   );
 
-  const renderListeDiscussions = (liste, retourAction) => (
+  const renderPost = () => {
+    if (!postOuvert) return null;
+    const pseudoPro = pro ? `Dr. ${pro.prenom} ${pro.nom}${pro.specialite ? ` · ${pro.specialite}` : ""}` : "";
+
+    return (
+      <div>
+        <button
+          onClick={() => { setPostOuvert(null); setCommentaires([]); }}
+          style={{ background: "none", border: "none", padding: 0, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "10px", marginBottom: "24px" }}
+        >
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", borderRadius: "10px", background: "white", border: "1.5px solid #B8D8E8", boxShadow: "0 2px 6px rgba(0,0,0,0.06)" }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1E3A4A" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+          </div>
+          <div>
+            <p style={{ margin: 0, fontSize: "11px", color: "#90A4AE", fontWeight: "500", letterSpacing: "0.3px" }}>DISCUSSIONS</p>
+            <p style={{ margin: 0, fontSize: "15px", color: "#1E3A4A", fontWeight: "700" }}>{postOuvert.titre}</p>
+          </div>
+        </button>
+
+        <div style={cardStyle}>
+          <p style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "17px", marginBottom: "8px" }}>{postOuvert.titre}</p>
+          <p style={{ color: "#888", fontSize: "13px", marginBottom: "16px" }}>
+            par {postOuvert.pseudo}, le {formatDate(postOuvert.created_at)}
+          </p>
+          <p style={{ color: "#1E3A4A", fontSize: "14px", lineHeight: "1.6", fontStyle: "italic" }}>
+            « {postOuvert.contenu} »
+          </p>
+          <div style={{ display: "flex", gap: "20px", marginTop: "16px" }}>
+            <span style={{ color: "#E07B39", fontSize: "13px" }}>❤️ {postOuvert.likes_count || 0}</span>
+            <span style={{ color: "#888", fontSize: "13px" }}>💬 {postOuvert.comments_count || 0} réponses</span>
+          </div>
+        </div>
+
+        {loadingComments ? (
+          <p style={{ color: "#888", fontSize: "14px" }}>Chargement des commentaires...</p>
+        ) : commentaires.map((msg, i) => (
+          <div key={i} style={{
+            background: msg.is_pro
+              ? "linear-gradient(135deg, #F0F9F7 0%, #E4F5F1 100%)"
+              : "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)",
+            borderRadius: "16px", padding: "24px",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.9)",
+            marginBottom: "12px",
+            borderLeft: msg.is_pro ? "4px solid #004649" : "none",
+          }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px", flexWrap: "wrap" }}>
+              <span style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "14px" }}>{msg.pseudo}</span>
+              {msg.is_pro && <BadgePro />}
+              <span style={{ color: "#aaa", fontSize: "12px", marginLeft: "auto" }}>{formatDate(msg.created_at)}</span>
+            </div>
+            <p style={{ color: "#1E3A4A", fontSize: "14px", lineHeight: "1.6" }}>{msg.contenu}</p>
+          </div>
+        ))}
+
+        <div style={{ ...cardStyle, marginTop: "24px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "16px", flexWrap: "wrap" }}>
+            <span style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "14px" }}>{pseudoPro}</span>
+            <BadgePro />
+          </div>
+          <textarea
+            value={nouveauMessage}
+            onChange={(e) => setNouveauMessage(e.target.value)}
+            placeholder="Écrire un message..."
+            rows={4}
+            style={{ width: "100%", border: "1px solid #B8D8E8", borderRadius: "12px", padding: "14px", fontSize: "14px", color: "#1E3A4A", outline: "none", resize: "none", backgroundColor: "#FAFAFA", boxSizing: "border-box" }}
+          />
+          <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "12px" }}>
+            <button
+              onClick={envoyerMessage}
+              disabled={envoi || !nouveauMessage.trim()}
+              style={{
+                background: (envoi || !nouveauMessage.trim()) ? "#90A4AE" : "linear-gradient(135deg, #004649 0%, #006B6F 100%)",
+                color: "white", borderRadius: "12px", padding: "12px 32px",
+                fontSize: "14px", fontWeight: "600", border: "none",
+                cursor: (envoi || !nouveauMessage.trim()) ? "not-allowed" : "pointer",
+                boxShadow: "0 4px 8px rgba(0,70,73,0.3)",
+              }}
+            >{envoi ? "Envoi..." : "Envoyer"}</button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderListeDiscussions = () => (
     <div>
-      <button onClick={retourAction} style={{ background: "linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%)", border: "1px solid rgba(255,255,255,0.8)", color: "#1E3A4A", fontWeight: "600", fontSize: "15px", cursor: "pointer", marginBottom: "24px", display: "flex", alignItems: "center", gap: "8px", padding: "10px 20px", borderRadius: "12px", boxShadow: "0 2px 8px rgba(0,0,0,0.08)" }}>
-      ← Retour aux catégories
+      <button
+        onClick={() => setCategorieOuverte(null)}
+        style={{ background: "none", border: "none", padding: 0, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "10px", marginBottom: "24px" }}
+      >
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", borderRadius: "10px", background: "white", border: "1.5px solid #B8D8E8", boxShadow: "0 2px 6px rgba(0,0,0,0.06)" }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1E3A4A" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+        </div>
+        <div>
+          <p style={{ margin: 0, fontSize: "11px", color: "#90A4AE", fontWeight: "500", letterSpacing: "0.3px" }}>CATÉGORIES</p>
+          <p style={{ margin: 0, fontSize: "15px", color: "#1E3A4A", fontWeight: "700" }}>{categorieIcon(categorieOuverte)} {categorieLabel(categorieOuverte)}</p>
+        </div>
       </button>
       <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-        {liste.map((msg) => (
-          <div key={msg.id} onClick={() => setDiscussionOuverte(msg.id)} style={{
+        {postsInCategorie.length === 0 ? (
+          <p style={{ color: "#aaa", fontSize: "14px", fontStyle: "italic" }}>Aucune discussion dans cette catégorie</p>
+        ) : postsInCategorie.map((post) => (
+          <div key={post.id} onClick={() => openPost(post)} style={{
             background: "linear-gradient(135deg, #FDFAF4 0%, #F5F0E8 100%)",
             borderRadius: "16px", padding: "24px 28px",
             boxShadow: "0 4px 12px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8)",
             cursor: "pointer", border: "1px solid rgba(255,255,255,0.6)",
           }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
-              {msg.epingle && <span style={{ fontSize: "14px" }}>📌</span>}
-              <p style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "15px" }}>{msg.titre}</p>
-            </div>
-            <p style={{ color: "#888", fontSize: "13px", marginBottom: "10px" }}>par {msg.auteur}, le {msg.date}</p>
-            <p style={{ color: "#555", fontSize: "13px", fontStyle: "italic", lineHeight: "1.5", marginBottom: "16px" }}>« {msg.contenu} »</p>
+            <p style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "15px", marginBottom: "6px" }}>{post.titre}</p>
+            <p style={{ color: "#888", fontSize: "13px", marginBottom: "10px" }}>par {post.pseudo}, le {formatDate(post.created_at)}</p>
+            <p style={{ color: "#555", fontSize: "13px", fontStyle: "italic", lineHeight: "1.5", marginBottom: "16px" }}>« {post.contenu} »</p>
             <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
-              <span style={{ color: "#E07B39", fontSize: "13px" }}>❤️ {msg.likes}</span>
-              <span style={{ color: "#888", fontSize: "13px" }}>💬 {msg.reponses} réponses</span>
-              <span style={{ color: "#004649", fontSize: "13px", fontWeight: "600" }}>✨ Ajouter une réponse</span>
+              <span style={{ color: "#E07B39", fontSize: "13px" }}>❤️ {post.likes_count || 0}</span>
+              <span style={{ color: "#888", fontSize: "13px" }}>💬 {post.comments_count || 0} réponses</span>
+              <span style={{ color: "#004649", fontSize: "13px", fontWeight: "600" }}>✨ Répondre</span>
             </div>
           </div>
         ))}
@@ -201,73 +379,161 @@ export default function Forum() {
 
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "#F0F4F8" }}>
-      <NavBar actif="forum" />
+      <Navbar proId={pro?.id} />
       <div style={{ padding: "40px 80px", maxWidth: "1000px", margin: "0 auto" }}>
-        {discussionOuverte !== null ? (
-          renderDiscussion(tousLesMessages.find((m) => m.id === discussionOuverte), () => setDiscussionOuverte(null))
-        ) : categorieOuverte !== null ? (
-          renderListeDiscussions(categoriesData.find((c) => c.id === categorieOuverte).discussions, () => setCategorieOuverte(null))
+        {postOuvert ? (
+          renderPost()
+        ) : categorieOuverte ? (
+          renderListeDiscussions()
         ) : (
           <div>
             <div style={{ display: "flex", borderBottom: "2px solid #DFF0EA", marginBottom: "32px", gap: "40px" }}>
-              {["categories", "messages"].map((o) => {
-                const labels = { categories: "Catégories", messages: "Derniers messages" };
+              {["categories", "messages", "messagerie"].map((o) => {
+                const labels = { categories: "Catégories", messages: "Derniers messages", messagerie: "💬 Messagerie patients" };
                 const actif = onglet === o;
                 return (
-                  <button key={o} onClick={() => setOnglet(o)} style={{ padding: "12px 0", fontSize: "15px", fontWeight: actif ? "700" : "400", color: "#1E3A4A", background: "none", border: "none", cursor: "pointer", borderBottom: actif ? "3px solid #004649" : "3px solid transparent", marginBottom: "-2px" }}>
+                  <button key={o} onClick={() => setOnglet(o)} style={{ padding: "12px 0", fontSize: "15px", fontWeight: actif ? "700" : "400", color: "#1E3A4A", background: "none", border: "none", cursor: "pointer", borderBottom: actif ? "3px solid #004649" : "3px solid transparent", marginBottom: "-2px", whiteSpace: "nowrap" }}>
                     {labels[o]}
                   </button>
                 );
               })}
             </div>
 
-            {onglet === "categories" && (
-              <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-                {categoriesData.map((cat) => (
-                  <div key={cat.id} onClick={() => setCategorieOuverte(cat.id)} style={{
-                    background: "linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%)",
-                    borderRadius: "16px", padding: "24px 32px",
-                    boxShadow: "0 4px 12px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)",
-                    display: "flex", alignItems: "center", justifyContent: "space-between",
-                    cursor: "pointer", border: "1px solid rgba(255,255,255,0.6)",
-                  }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-                      <span style={{ fontSize: "28px" }}>{cat.icon}</span>
-                      <span style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "15px" }}>{cat.nom}</span>
-                    </div>
-                    <span style={{ color: "#888", fontSize: "13px" }}>{cat.nbSujets} sujets →</span>
+            {loading ? (
+              <p style={{ color: "#888", fontSize: "14px" }}>Chargement du forum...</p>
+            ) : (
+              <>
+                {onglet === "categories" && (
+                  <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                    {categories.length === 0 ? (
+                      <p style={{ color: "#aaa", fontSize: "14px", fontStyle: "italic" }}>Aucune discussion pour le moment</p>
+                    ) : categories.map((cat) => (
+                      <div key={cat.id} onClick={() => setCategorieOuverte(cat.id)} style={{
+                        background: "linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%)",
+                        borderRadius: "16px", padding: "24px 32px",
+                        boxShadow: "0 4px 12px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)",
+                        display: "flex", alignItems: "center", justifyContent: "space-between",
+                        cursor: "pointer", border: "1px solid rgba(255,255,255,0.6)",
+                      }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+                          <span style={{ fontSize: "28px" }}>{cat.icon}</span>
+                          <span style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "15px" }}>{cat.nom}</span>
+                        </div>
+                        <span style={{ color: "#888", fontSize: "13px" }}>{cat.nbSujets} sujet{cat.nbSujets > 1 ? "s" : ""} →</span>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            )}
+                )}
 
-            {onglet === "messages" && (
-              <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-                {tousLesMessages.map((msg) => (
-                  <div key={msg.id} onClick={() => setDiscussionOuverte(msg.id)} style={{
-                    background: "linear-gradient(135deg, #FDFAF4 0%, #F5F0E8 100%)",
-                    borderRadius: "16px", padding: "24px 28px",
-                    boxShadow: "0 4px 12px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8)",
-                    cursor: "pointer", border: "1px solid rgba(255,255,255,0.6)",
-                  }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
-                      {msg.epingle && <span style={{ fontSize: "14px" }}>📌</span>}
-                      <p style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "15px" }}>{msg.titre}</p>
+                {onglet === "messages" && (
+                  <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                    {posts.length === 0 ? (
+                      <p style={{ color: "#aaa", fontSize: "14px", fontStyle: "italic" }}>Aucun message pour le moment</p>
+                    ) : posts.map((post) => (
+                      <div key={post.id} onClick={() => openPost(post)} style={{
+                        background: "linear-gradient(135deg, #FDFAF4 0%, #F5F0E8 100%)",
+                        borderRadius: "16px", padding: "24px 28px",
+                        boxShadow: "0 4px 12px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8)",
+                        cursor: "pointer", border: "1px solid rgba(255,255,255,0.6)",
+                      }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
+                          <span style={{ fontSize: "13px", color: "#888" }}>{categorieIcon(post.categorie)} {categorieLabel(post.categorie)}</span>
+                        </div>
+                        <p style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "15px", marginBottom: "6px" }}>{post.titre}</p>
+                        <p style={{ color: "#888", fontSize: "13px", marginBottom: "10px" }}>par {post.pseudo}, le {formatDate(post.created_at)}</p>
+                        <p style={{ color: "#555", fontSize: "13px", fontStyle: "italic", lineHeight: "1.5", marginBottom: "16px" }}>« {post.contenu} »</p>
+                        <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+                          <span style={{ color: "#E07B39", fontSize: "13px" }}>❤️ {post.likes_count || 0}</span>
+                          <span style={{ color: "#888", fontSize: "13px" }}>💬 {post.comments_count || 0} réponses</span>
+                          <span style={{ color: "#004649", fontSize: "13px", fontWeight: "600" }}>✨ Répondre</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {onglet === "messagerie" && (
+                  <div style={{ display: "flex", gap: "24px", minHeight: "520px" }}>
+                    {/* Patient list */}
+                    <div style={{ width: "220px", flexShrink: 0, display: "flex", flexDirection: "column", gap: "8px" }}>
+                      <p style={{ color: "#546E7A", fontSize: "12px", fontWeight: "700", letterSpacing: "0.5px", marginBottom: "4px", textTransform: "uppercase" }}>Mes patients</p>
+                      {patientsMsg.length === 0 ? (
+                        <p style={{ color: "#aaa", fontSize: "13px", fontStyle: "italic" }}>Aucun patient lié</p>
+                      ) : patientsMsg.map((p) => (
+                        <button key={p.id} onClick={() => selectPatient(p)} style={{ textAlign: "left", padding: "12px 14px", borderRadius: "12px", border: "none", cursor: "pointer", background: patientSel?.id === p.id ? "linear-gradient(135deg, #004649, #006B6F)" : "linear-gradient(135deg, #ffffff, #f0f4f8)", color: patientSel?.id === p.id ? "white" : "#1E3A4A", fontWeight: "600", fontSize: "14px", boxShadow: "0 2px 6px rgba(0,0,0,0.08)" }}>
+                          {p.prenom} {p.nom}
+                        </button>
+                      ))}
                     </div>
-                    <p style={{ color: "#888", fontSize: "13px", marginBottom: "10px" }}>par {msg.auteur}, le {msg.date}</p>
-                    <p style={{ color: "#555", fontSize: "13px", fontStyle: "italic", lineHeight: "1.5", marginBottom: "16px" }}>« {msg.contenu} »</p>
-                    <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
-                      <span style={{ color: "#E07B39", fontSize: "13px" }}>❤️ {msg.likes}</span>
-                      <span style={{ color: "#888", fontSize: "13px" }}>💬 {msg.reponses} réponses</span>
-                      <span style={{ color: "#004649", fontSize: "13px", fontWeight: "600" }}>✨ Ajouter une réponse</span>
+
+                    {/* Thread */}
+                    <div style={{ flex: 1, display: "flex", flexDirection: "column", background: "linear-gradient(135deg, #ffffff, #f8f9fa)", borderRadius: "16px", boxShadow: "0 4px 16px rgba(0,0,0,0.08)", overflow: "hidden" }}>
+                      {!patientSel ? (
+                        <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: "12px", color: "#aaa" }}>
+                          <span style={{ fontSize: "40px" }}>💬</span>
+                          <p style={{ fontSize: "14px" }}>Sélectionnez un patient pour démarrer la messagerie</p>
+                        </div>
+                      ) : (
+                        <>
+                          {/* Thread header */}
+                          <div style={{ padding: "16px 20px", borderBottom: "1px solid #F0F0F0", background: "linear-gradient(135deg, #F8FAFB, #F0F4F8)" }}>
+                            <p style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "15px" }}>{patientSel.prenom} {patientSel.nom}</p>
+                          </div>
+
+                          {/* Messages */}
+                          <div style={{ flex: 1, overflowY: "auto", padding: "20px", display: "flex", flexDirection: "column", gap: "10px", maxHeight: "340px" }}>
+                            {loadingThread ? (
+                              <p style={{ color: "#aaa", fontSize: "13px", textAlign: "center" }}>Chargement…</p>
+                            ) : thread.length === 0 ? (
+                              <p style={{ color: "#aaa", fontSize: "13px", textAlign: "center", marginTop: "40px" }}>Aucun message — commencez la conversation</p>
+                            ) : thread.map((msg) => {
+                              const isPro = msg.sender_type === "pro";
+                              return (
+                                <div key={msg.id} style={{ display: "flex", justifyContent: isPro ? "flex-end" : "flex-start" }}>
+                                  <div style={{ maxWidth: "70%", padding: "10px 14px", borderRadius: isPro ? "16px 16px 4px 16px" : "16px 16px 16px 4px", background: isPro ? "linear-gradient(135deg, #004649, #006B6F)" : "white", color: isPro ? "white" : "#1E3A4A", boxShadow: "0 2px 6px rgba(0,0,0,0.08)", fontSize: "14px", lineHeight: "1.5" }}>
+                                    <p style={{ margin: 0 }}>{msg.content}</p>
+                                    <p style={{ margin: "4px 0 0", fontSize: "11px", opacity: 0.7, textAlign: "right" }}>{formatMsgTime(msg.created_at)}</p>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                            <div ref={threadEndRef} />
+                          </div>
+
+                          {/* Input */}
+                          <div style={{ padding: "14px 20px", borderTop: "1px solid #F0F0F0", display: "flex", gap: "10px", alignItems: "flex-end" }}>
+                            <textarea
+                              value={msgContent}
+                              onChange={(e) => setMsgContent(e.target.value)}
+                              onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMsg(); } }}
+                              placeholder="Écrire un message…"
+                              rows={2}
+                              style={{ flex: 1, border: "1px solid #E0E0E0", borderRadius: "12px", padding: "10px 14px", fontSize: "14px", outline: "none", resize: "none", color: "#1E3A4A", fontFamily: "inherit", lineHeight: "1.5" }}
+                            />
+                            <button
+                              onClick={sendMsg}
+                              disabled={sendingMsg || !msgContent.trim()}
+                              style={{ background: sendingMsg || !msgContent.trim() ? "#B0BEC5" : "linear-gradient(135deg, #004649, #006B6F)", color: "white", border: "none", borderRadius: "10px", padding: "10px 20px", fontSize: "14px", fontWeight: "600", cursor: sendingMsg || !msgContent.trim() ? "default" : "pointer", whiteSpace: "nowrap" }}>
+                              {sendingMsg ? "…" : "Envoyer"}
+                            </button>
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
-                ))}
-              </div>
+                )}
+              </>
             )}
           </div>
         )}
       </div>
     </div>
+  );
+}
+
+export default function Forum() {
+  return (
+    <Suspense fallback={<div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "100vh" }}><p style={{ color: "#888" }}>Chargement...</p></div>}>
+      <ForumContent />
+    </Suspense>
   );
 }
