@@ -9,6 +9,7 @@ import Navbar from "@/components/Navbar";
 import { showToast } from "@/lib/toast";
 import DossierInitialModal from "@/components/DossierInitialModal";
 import OrdonTSNModal from "@/components/OrdonTSNModal";
+import TestResultModal from "@/components/TestResultModal";
 
 
 const QUESTION_LABELS = {
@@ -142,6 +143,7 @@ export default function FichePatient() {
   const [showOrdonTSN, setShowOrdonTSN] = useState(false);
   const [showDossierInitial, setShowDossierInitial] = useState(false);
   const [dossierInitialExiste, setDossierInitialExiste] = useState(true);
+  const [openedTest, setOpenedTest] = useState(null);
 
   async function deleteLink() {
     if (!pro) return;
@@ -282,14 +284,14 @@ export default function FichePatient() {
         supabase.from("patient_recommendations").select("*").eq("patient_id", id).eq("pro_id", pro.id).maybeSingle(),
         supabase.from("patient_documents").select("*").eq("patient_id", id).eq("pro_id", pro.id).order("created_at", { ascending: false }),
         supabase.from("patient_dossiers").select("updated_at").eq("patient_id", id).eq("pro_id", pro.id).eq("type", "initial").maybeSingle(),
-        supabase.from("patient_tests").select("id, type, created_at").eq("patient_id", id).eq("pro_id", pro.id).order("created_at", { ascending: false }),
+        supabase.from("patient_tests").select("id, type, created_at, data, scores").eq("patient_id", id).eq("pro_id", pro.id).order("created_at", { ascending: false }),
       ]);
       if (recoRes.data?.data) setRecommandations(recoRes.data.data);
       const docs = (docsRes.data || []).map(d => ({ id: d.id, nom: d.nom, type: d.type, file_url: d.file_url ?? null }));
       const TEST_LABELS = { had: "Test HAD", horn: "Test de Horn", beck: "Colonnes de Beck" };
       for (const t of (testsRes.data || [])) {
         const date = new Date(t.created_at).toLocaleDateString("fr-FR");
-        docs.push({ id: t.id, nom: `${TEST_LABELS[t.type] || "Test"} — ${date}`, type: `test_${t.type}`, file_url: null, source: "patient_tests" });
+        docs.push({ id: t.id, nom: `${TEST_LABELS[t.type] || "Test"} — ${date}`, type: `test_${t.type}`, file_url: null, source: "patient_tests", testType: t.type, testData: t.data, testScores: t.scores });
       }
       if (dossierRes.data) {
         const date = new Date(dossierRes.data.updated_at).toLocaleDateString("fr-FR");
@@ -996,6 +998,10 @@ export default function FichePatient() {
                       <button onClick={() => setShowDossierInitial(true)} style={{ color: "#004649", fontSize: "13px", fontWeight: "600", background: "#E8F5EF", borderRadius: "8px", padding: "6px 14px", border: "1px solid #A5C9B9", whiteSpace: "nowrap", flexShrink: 0, cursor: "pointer" }}>
                         Ouvrir ↗
                       </button>
+                    ) : doc.type?.startsWith("test_") ? (
+                      <button onClick={() => setOpenedTest({ type: doc.testType, nom: doc.nom, data: doc.testData, scores: doc.testScores })} style={{ color: "#004649", fontSize: "13px", fontWeight: "600", background: "#E8F5EF", borderRadius: "8px", padding: "6px 14px", border: "1px solid #A5C9B9", whiteSpace: "nowrap", flexShrink: 0, cursor: "pointer" }}>
+                        Ouvrir ↗
+                      </button>
                     ) : doc.file_url ? (
                       <a href={doc.file_url} target="_blank" rel="noopener noreferrer" style={{ color: "#004649", fontSize: "13px", fontWeight: "600", textDecoration: "none", background: "#E8F5EF", borderRadius: "8px", padding: "6px 14px", border: "1px solid #A5C9B9", whiteSpace: "nowrap", flexShrink: 0 }}>
                         Ouvrir ↗
@@ -1304,6 +1310,8 @@ export default function FichePatient() {
           });
         }}
       />
+
+      {openedTest && <TestResultModal test={openedTest} onClose={() => setOpenedTest(null)} />}
     </div>
   );
 }
