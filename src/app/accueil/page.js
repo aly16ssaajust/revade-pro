@@ -12,6 +12,8 @@ const tuiles = [
   { id: "agenda", label: "Agenda", icon: "📅", desc: "Gérez vos rendez-vous et votre planning", href: "/agenda", color: "linear-gradient(135deg, #E8F0F5 0%, #C8D8E6 100%)", shadow: "rgba(30,58,74,0.15)" },
   { id: "forum", label: "Messagerie", icon: "💬", desc: "Échangez avec vos patients en privé", href: "/forum?tab=messagerie", color: "linear-gradient(135deg, #F0EBF8 0%, #DDD0F0 100%)", shadow: "rgba(80,50,140,0.15)" },
   { id: "annuaire", label: "Annuaire", icon: "📞", desc: "Contacts utiles et ressources professionnelles", href: "/annuaire", color: "linear-gradient(135deg, #F5F0E8 0%, #E6D8C8 100%)", shadow: "rgba(180,120,0,0.15)" },
+  { id: "outils", label: "Outils", icon: "🛠", desc: "Tests cliniques HAD, Beck, Horn et formations MOOC", href: "/outils", color: "linear-gradient(135deg, #E8F4FD 0%, #C8DCF0 100%)", shadow: "rgba(21,101,192,0.15)" },
+  { id: "profil", label: "Profil", icon: "👤", desc: "Gérez vos informations et paramètres professionnels", href: "/profil", color: "linear-gradient(135deg, #FFF0F0 0%, #F0D8D8 100%)", shadow: "rgba(180,30,30,0.12)" },
 ];
 
 export default function Accueil() {
@@ -159,7 +161,7 @@ export default function Accueil() {
           <div style={{ flex: 1 }}>
             {/* Accès rapide */}
             <p style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "15px", marginBottom: "20px", letterSpacing: "0.5px" }}>ACCÈS RAPIDE</p>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "20px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px" }}>
               {tuiles.map((t) => (
                 <Link key={t.id} href={t.href} style={{ textDecoration: "none" }}>
                   <div onMouseEnter={() => setHovered(t.id)} onMouseLeave={() => setHovered(null)} style={{ background: t.color, borderRadius: "20px", padding: "32px 28px", cursor: "pointer", boxShadow: hovered === t.id ? `0 12px 30px ${t.shadow}` : `0 4px 12px ${t.shadow}`, border: "1px solid rgba(255,255,255,0.7)", transform: hovered === t.id ? "translateY(-4px)" : "translateY(0)", transition: "all 0.2s ease", display: "flex", flexDirection: "column", gap: "12px" }}>
