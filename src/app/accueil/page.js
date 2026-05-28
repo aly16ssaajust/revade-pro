@@ -29,6 +29,11 @@ export default function Accueil() {
   useEffect(() => {
     if (!pro) return;
     loadStats();
+    // Realtime : actualise le compteur dès qu'un lien patient est ajouté/supprimé
+    const ch = supabase.channel(`accueil_${pro.id}`)
+      .on("postgres_changes", { event: "*", schema: "public", table: "patient_professional_links", filter: `professional_id=eq.${pro.id}` }, () => loadStats())
+      .subscribe();
+    return () => supabase.removeChannel(ch);
   }, [pro]);
 
   async function loadStats() {
