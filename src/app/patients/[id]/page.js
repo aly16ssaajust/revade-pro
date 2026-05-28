@@ -278,13 +278,19 @@ export default function FichePatient() {
   useEffect(() => {
     if (!id || !pro) return;
     async function loadDocsAndReco() {
-      const [recoRes, docsRes, dossierRes] = await Promise.all([
+      const [recoRes, docsRes, dossierRes, testsRes] = await Promise.all([
         supabase.from("patient_recommendations").select("*").eq("patient_id", id).eq("pro_id", pro.id).maybeSingle(),
         supabase.from("patient_documents").select("*").eq("patient_id", id).eq("pro_id", pro.id).order("created_at", { ascending: false }),
         supabase.from("patient_dossiers").select("updated_at").eq("patient_id", id).eq("pro_id", pro.id).eq("type", "initial").maybeSingle(),
+        supabase.from("patient_tests").select("id, type, created_at").eq("patient_id", id).eq("pro_id", pro.id).order("created_at", { ascending: false }),
       ]);
       if (recoRes.data?.data) setRecommandations(recoRes.data.data);
       const docs = (docsRes.data || []).map(d => ({ id: d.id, nom: d.nom, type: d.type, file_url: d.file_url ?? null }));
+      const TEST_LABELS = { had: "Test HAD", horn: "Test de Horn", beck: "Colonnes de Beck" };
+      for (const t of (testsRes.data || [])) {
+        const date = new Date(t.created_at).toLocaleDateString("fr-FR");
+        docs.push({ id: t.id, nom: `${TEST_LABELS[t.type] || "Test"} — ${date}`, type: `test_${t.type}`, file_url: null, source: "patient_tests" });
+      }
       if (dossierRes.data) {
         const date = new Date(dossierRes.data.updated_at).toLocaleDateString("fr-FR");
         docs.unshift({ id: "dossier_initial", nom: `Dossier consultation initiale — ${date}`, type: "dossier_initial", file_url: null });
@@ -345,11 +351,15 @@ export default function FichePatient() {
   async function supprimerDocument(doc) {
     if (!doc.id) return;
     if (!confirm(`Supprimer "${doc.nom}" ?`)) return;
-    if (doc.file_url) {
-      const path = doc.file_url.split("/patient-documents/")[1];
-      if (path) await supabase.storage.from("patient-documents").remove([decodeURIComponent(path)]);
+    if (doc.source === "patient_tests") {
+      await supabase.from("patient_tests").delete().eq("id", doc.id);
+    } else {
+      if (doc.file_url) {
+        const path = doc.file_url.split("/patient-documents/")[1];
+        if (path) await supabase.storage.from("patient-documents").remove([decodeURIComponent(path)]);
+      }
+      await supabase.from("patient_documents").delete().eq("id", doc.id);
     }
-    await supabase.from("patient_documents").delete().eq("id", doc.id);
     setDocuments((prev) => prev.filter((d) => d.id !== doc.id));
   }
 
@@ -509,6 +519,10 @@ export default function FichePatient() {
     if (type === "note") return "📝";
     if (type === "ordonnance") return "📄";
     if (type === "dossier_initial") return "📋";
+    if (type === "test_had") return "🧠";
+    if (type === "test_horn") return "🚬";
+    if (type === "test_beck") return "📝";
+    if (type?.startsWith("test_")) return "📋";
     return "📄";
   };
 
