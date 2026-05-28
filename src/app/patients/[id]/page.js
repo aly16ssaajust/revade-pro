@@ -999,7 +999,7 @@ export default function FichePatient() {
                         Ouvrir ↗
                       </button>
                     ) : doc.type?.startsWith("test_") ? (
-                      <button onClick={() => setOpenedTest({ type: doc.testType, nom: doc.nom, data: doc.testData, scores: doc.testScores })} style={{ color: "#004649", fontSize: "13px", fontWeight: "600", background: "#E8F5EF", borderRadius: "8px", padding: "6px 14px", border: "1px solid #A5C9B9", whiteSpace: "nowrap", flexShrink: 0, cursor: "pointer" }}>
+                      <button onClick={() => setOpenedTest({ id: doc.id, type: doc.testType, nom: doc.nom })} style={{ color: "#004649", fontSize: "13px", fontWeight: "600", background: "#E8F5EF", borderRadius: "8px", padding: "6px 14px", border: "1px solid #A5C9B9", whiteSpace: "nowrap", flexShrink: 0, cursor: "pointer" }}>
                         Ouvrir ↗
                       </button>
                     ) : doc.file_url ? (

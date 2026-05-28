@@ -1,4 +1,6 @@
 "use client";
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabase";
 
 const HAD_QS = [
   { n: 1, t: "A", q: "Je me sens tendu(e) ou énervé(e)", opts: [["La plupart du temps","3"],["Souvent","2"],["De temps en temps","1"],["Jamais","0"]] },
@@ -27,7 +29,6 @@ const HORN_FACTORS = [
   { id: "E", label: "Craving psychologique", desc: "Besoin intense, conscience du manque", color: "#C62828", bg: "#FFEBEE" },
   { id: "F", label: "Habitude automatique", desc: "Fume automatiquement, sans y penser", color: "#546E7A", bg: "#ECEFF1" },
 ];
-const HORN_SCALE = [["Toujours","5"],["Souvent","4"],["Parfois","3"],["Rarement","2"],["Jamais","1"]];
 const HORN_QS = [
   { n: 1, f: "A" }, { n: 2, f: "B" }, { n: 3, f: "C" }, { n: 4, f: "D" }, { n: 5, f: "E" }, { n: 6, f: "F" },
   { n: 7, f: "A" }, { n: 8, f: "B" }, { n: 9, f: "C" }, { n: 10, f: "D" }, { n: 11, f: "E" }, { n: 12, f: "F" },
@@ -62,10 +63,10 @@ function HADView({ data, scores }) {
         </div>
       )}
       <p style={{ fontSize: "11px", color: "#90A4AE" }}>≤ 7 : absence &nbsp;•&nbsp; 8-10 : cas douteux &nbsp;•&nbsp; ≥ 11 : cas certain</p>
-      <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
         {HAD_QS.map(({ n, t, q, opts }) => {
-          const val = data?.[n];
-          const lbl = opts.find(o => o[1] === val)?.[0] ?? "—";
+          const val = String(data?.[n] ?? data?.[String(n)] ?? "");
+          const lbl = opts.find(o => String(o[1]) === val)?.[0] ?? "—";
           return (
             <div key={n} style={{ padding: "12px 16px", background: "#F8FAFC", borderRadius: "10px", borderLeft: `3px solid ${t === "A" ? "#1565C0" : "#E65100"}` }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "12px" }}>
@@ -75,7 +76,7 @@ function HADView({ data, scores }) {
                   </span>
                   <span style={{ color: "#546E7A", fontSize: "13px" }}>{q}</span>
                 </div>
-                <span style={{ color: "#004649", fontWeight: "700", fontSize: "13px", flexShrink: 0 }}>→ {lbl}</span>
+                <span style={{ color: lbl === "—" ? "#ccc" : "#004649", fontWeight: "700", fontSize: "13px", flexShrink: 0 }}>→ {lbl}</span>
               </div>
             </div>
           );
@@ -90,7 +91,12 @@ function HornView({ data, scores }) {
     <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
       <p style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "14px" }}>Profil motivationnel</p>
       {HORN_FACTORS.map(factor => {
-        const score = scores?.[factor.id] ?? HORN_QS.filter(q => q.f === factor.id).reduce((s, q) => s + parseInt(data?.[q.n] || "0"), 0);
+        const score = scores?.[factor.id] != null
+          ? Number(scores[factor.id])
+          : HORN_QS.filter(q => q.f === factor.id).reduce((s, q) => {
+              const v = data?.[q.n] ?? data?.[String(q.n)];
+              return s + (v != null ? parseInt(String(v), 10) : 0);
+            }, 0);
         const pct = Math.max(0, Math.min(100, ((score - 3) / 12) * 100));
         return (
           <div key={factor.id} style={{ background: factor.bg, borderRadius: "12px", padding: "14px 18px" }}>
@@ -135,9 +141,31 @@ function BeckView({ data }) {
   );
 }
 
+const TITLES = { had: "🧠 Test HAD", horn: "🚬 Test de Horn", beck: "📝 Colonnes de Beck" };
+const SUBTITLES = { had: "Hospital Anxiety and Depression Scale", horn: "Motivations pour fumer — 18 questions", beck: "Restructuration cognitive — 5 colonnes" };
+
 export default function TestResultModal({ test, onClose }) {
-  const TITLES = { had: "🧠 Test HAD", horn: "🚬 Test de Horn", beck: "📝 Colonnes de Beck" };
-  const SUBTITLES = { had: "Hospital Anxiety and Depression Scale", horn: "Motivations pour fumer — 18 questions", beck: "Restructuration cognitive — 5 colonnes" };
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState(null);
+  const [scores, setScores] = useState(null);
+
+  useEffect(() => {
+    async function fetchTest() {
+      setLoading(true);
+      const { data: row } = await supabase
+        .from("patient_tests")
+        .select("data, scores")
+        .eq("id", test.id)
+        .single();
+      if (row) {
+        setData(row.data);
+        setScores(row.scores);
+      }
+      setLoading(false);
+    }
+    fetchTest();
+  }, [test.id]);
+
   return (
     <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.4)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 50, padding: "20px" }}>
       <div style={{ background: "white", borderRadius: "24px", padding: "36px", width: "680px", maxHeight: "90vh", overflowY: "auto", display: "flex", flexDirection: "column", gap: "20px", boxShadow: "0 24px 64px rgba(0,0,0,0.2)" }}>
@@ -148,9 +176,18 @@ export default function TestResultModal({ test, onClose }) {
           </div>
           <button onClick={onClose} style={{ background: "none", border: "none", fontSize: "24px", cursor: "pointer", color: "#888" }}>×</button>
         </div>
-        {test.type === "had" && <HADView data={test.data} scores={test.scores} />}
-        {test.type === "horn" && <HornView data={test.data} scores={test.scores} />}
-        {test.type === "beck" && <BeckView data={test.data} />}
+
+        {loading ? (
+          <p style={{ color: "#90A4AE", textAlign: "center", fontSize: "14px" }}>Chargement…</p>
+        ) : !data ? (
+          <p style={{ color: "#C62828", textAlign: "center", fontSize: "14px" }}>Impossible de charger les données du test.</p>
+        ) : (
+          <>
+            {test.type === "had" && <HADView data={data} scores={scores} />}
+            {test.type === "horn" && <HornView data={data} scores={scores} />}
+            {test.type === "beck" && <BeckView data={data} />}
+          </>
+        )}
       </div>
     </div>
   );
