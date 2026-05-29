@@ -13,7 +13,6 @@ const CATEGORIE_CONFIG = {
   gestion_stress: { nom: "Gestion du stress", icon: "🧘" },
   substituts: { nom: "Substituts nicotiniques", icon: "🧪" },
   rechutes: { nom: "Rechutes & reprises", icon: "🔄" },
-  general: { nom: "Général", icon: "💬" },
 };
 
 function categorieLabel(cat) {
