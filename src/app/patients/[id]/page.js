@@ -892,10 +892,9 @@ export default function FichePatient() {
             { id: "patch_24h", nom: "Patch 24h", icon: "🩹", doses: ["7 mg/24h", "14 mg/24h", "21 mg/24h"] },
             { id: "patch_16h", nom: "Patch 16h", icon: "🩹", doses: ["10 mg/16h", "15 mg/16h", "25 mg/16h"] },
             { id: "gomme", nom: "Gomme à mâcher", icon: "🟡", doses: ["2 mg", "4 mg"] },
-            { id: "inhaleur", nom: "Inhaleur buccal", icon: "💨", doses: ["10 mg"] },
             { id: "subl", nom: "Comprimés sublinguaux", icon: "💊", doses: ["2 mg"] },
             { id: "sucer", nom: "Comprimés à sucer", icon: "⚪", doses: ["1,5 mg", "4 mg"] },
-            { id: "spray", nom: "Spray buccal", icon: "🌬️", doses: ["1 mg/dose"] },
+            { id: "spray", nom: "Spray", icon: "🌬️", doses: ["1 mg/dose"] },
             { id: "pastille", nom: "Pastilles", icon: "🔵", doses: ["1 mg", "2 mg", "4 mg"] },
           ];
           return (
