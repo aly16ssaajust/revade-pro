@@ -393,10 +393,25 @@ export default function FichePatient() {
   const enregistrerRecommandations = async () => {
     if (!pro) return;
     setSavingReco(true);
-    await supabase.from("patient_recommendations").upsert(
+    const { error } = await supabase.from("patient_recommendations").upsert(
       { patient_id: id, pro_id: pro.id, data: recommandations, updated_at: new Date().toISOString() },
       { onConflict: "patient_id,pro_id" }
     );
+    if (!error) {
+      try {
+        await supabase.functions.invoke('send-push', {
+          body: {
+            user_id: id,
+            title: '📋 Recommandations mises à jour',
+            body: `${pro.prenom ?? 'Votre professionnel'} a mis à jour vos recommandations de suivi`,
+            data: { type: 'recommendations_updated' },
+          }
+        });
+      } catch (_) {}
+      showToast("Recommandations enregistrées et envoyées au patient");
+    } else {
+      showToast("Erreur lors de l'enregistrement", 'error');
+    }
     setSavingReco(false);
   };
 
@@ -872,86 +887,83 @@ export default function FichePatient() {
         )}
 
         {/* RECOMMANDATIONS */}
-        {onglet === "recommandations" && (
+        {onglet === "recommandations" && (() => {
+          const TSN = [
+            { id: "patch_24h", nom: "Patch 24h", icon: "🩹", doses: ["7 mg/24h", "14 mg/24h", "21 mg/24h"] },
+            { id: "patch_16h", nom: "Patch 16h", icon: "🩹", doses: ["10 mg/16h", "15 mg/16h", "25 mg/16h"] },
+            { id: "gomme", nom: "Gomme à mâcher", icon: "🟡", doses: ["2 mg", "4 mg"] },
+            { id: "inhaleur", nom: "Inhaleur buccal", icon: "💨", doses: ["10 mg"] },
+            { id: "subl", nom: "Comprimés sublinguaux", icon: "💊", doses: ["2 mg"] },
+            { id: "sucer", nom: "Comprimés à sucer", icon: "⚪", doses: ["1,5 mg", "4 mg"] },
+            { id: "spray", nom: "Spray buccal", icon: "🌬️", doses: ["1 mg/dose"] },
+            { id: "pastille", nom: "Pastilles", icon: "🔵", doses: ["1 mg", "2 mg", "4 mg"] },
+          ];
+          return (
           <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+
+            {/* Recommandations libres */}
             <div style={{ background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)", borderRadius: "20px", padding: "32px", boxShadow: "0 8px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)" }}>
-              <p style={{ color: "#004649", fontWeight: "700", fontSize: "16px", marginBottom: "24px" }}>💊 Substituts nicotiniques recommandés</p>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px", marginBottom: "28px" }}>
-                {[
-                  { nom: "Patch", icon: "🩹", doses: ["10 mg/16h", "15 mg/16h", "25 mg/16h"] },
-                  { nom: "Gomme", icon: "🟡", doses: ["2 mg", "4 mg"] },
-                  { nom: "Comprimés à sucer", icon: "⚪", doses: ["1 mg", "1,5 mg", "2 mg", "2,5 mg"] },
-                  { nom: "Spray buccal", icon: "🌬️", doses: ["1 mg"] },
-                  { nom: "Comprimés sublinguaux", icon: "💊", doses: ["2 mg", "4 mg"] },
-                ].map((sub) => {
-                  const cle = `sub_${sub.nom}`;
-                  const selectionne = recommandations[cle];
-                  const doseSelectionnee = recommandations[`dose_${sub.nom}`] || "";
+              <p style={{ color: "#004649", fontWeight: "700", fontSize: "16px", marginBottom: "8px" }}>📝 Recommandations thérapeutiques</p>
+              <p style={{ color: "#90A4AE", fontSize: "13px", marginBottom: "16px" }}>Rédigez librement vos recommandations, conseils, plan de soins et points de vigilance.</p>
+              <textarea value={recommandations.notes || ""} onChange={(e) => setRecommandations(prev => ({ ...prev, notes: e.target.value }))}
+                placeholder={"Ex : Arrêt total recommandé dès le 15/06. Initier substitution nicotinique en bithérapie (patch + forme orale). Revoir dans 4 semaines. Orienter vers soutien psychologique si besoin."}
+                rows={6}
+                style={{ width: "100%", border: "1px solid #B8D8E8", borderRadius: "12px", padding: "16px", fontSize: "14px", color: "#1E3A4A", outline: "none", resize: "vertical", backgroundColor: "#FAFAFA", boxSizing: "border-box", lineHeight: "1.7" }} />
+            </div>
+
+            {/* Plan TSN */}
+            <div style={{ background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)", borderRadius: "20px", padding: "32px", boxShadow: "0 8px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)" }}>
+              <p style={{ color: "#004649", fontWeight: "700", fontSize: "16px", marginBottom: "6px" }}>💊 Plan de substitution nicotinique (TSN)</p>
+              <p style={{ color: "#90A4AE", fontSize: "13px", marginBottom: "20px" }}>Cochez les produits prescrits et sélectionnez la dose. Plusieurs produits peuvent être combinés (bithérapie).</p>
+              <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                {TSN.map(p => {
+                  const actif = !!recommandations[`tsn_${p.id}`];
+                  const dose = recommandations[`tsn_dose_${p.id}`] || "";
                   return (
-                    <div key={sub.nom} onClick={() => setRecommandations(prev => ({ ...prev, [cle]: !prev[cle] }))}
-                      style={{ background: selectionne ? "linear-gradient(135deg, #E8F5EF 0%, #D0EDE0 100%)" : "linear-gradient(135deg, #f8f9fa 0%, #f0f4f8 100%)", borderRadius: "16px", padding: "20px", border: selectionne ? "2px solid #004649" : "2px solid transparent", cursor: "pointer" }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px" }}>
-                        <span style={{ fontSize: "22px" }}>{sub.icon}</span>
-                        <span style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "14px" }}>{sub.nom}</span>
-                        {selectionne && <span style={{ marginLeft: "auto", color: "#004649", fontSize: "18px" }}>✓</span>}
-                      </div>
-                      {selectionne && (
-                        <div onClick={(e) => e.stopPropagation()}>
-                          <p style={{ color: "#888", fontSize: "12px", marginBottom: "8px" }}>Concentration :</p>
-                          <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
-                            {sub.doses.map((dose) => (
-                              <button key={dose} onClick={() => setRecommandations(prev => ({ ...prev, [`dose_${sub.nom}`]: dose }))}
-                                style={{ padding: "4px 12px", borderRadius: "999px", fontSize: "12px", fontWeight: "600", border: "none", cursor: "pointer", background: doseSelectionnee === dose ? "linear-gradient(135deg, #004649 0%, #006B6F 100%)" : "white", color: doseSelectionnee === dose ? "white" : "#1E3A4A" }}>
-                                {dose}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
+                    <div key={p.id} style={{ display: "flex", alignItems: "center", gap: "14px", padding: "14px 18px", background: actif ? "linear-gradient(135deg, #E8F5EF, #D4EDE0)" : "#F8FAFC", borderRadius: "14px", border: `1.5px solid ${actif ? "#004649" : "#E4ECF2"}`, transition: "all 0.15s" }}>
+                      <input type="checkbox" checked={actif}
+                        onChange={() => setRecommandations(prev => ({ ...prev, [`tsn_${p.id}`]: !actif, [`tsn_dose_${p.id}`]: !actif ? "" : prev[`tsn_dose_${p.id}`] }))}
+                        style={{ width: "18px", height: "18px", accentColor: "#004649", flexShrink: 0, cursor: "pointer" }} />
+                      <span style={{ fontSize: "20px", flexShrink: 0 }}>{p.icon}</span>
+                      <span style={{ color: "#1E3A4A", fontWeight: actif ? "700" : "500", fontSize: "14px", flex: 1 }}>{p.nom}</span>
+                      <select value={dose}
+                        onChange={e => setRecommandations(prev => ({ ...prev, [`tsn_dose_${p.id}`]: e.target.value }))}
+                        disabled={!actif}
+                        style={{ border: "1px solid #B8D8E8", borderRadius: "8px", padding: "6px 10px", fontSize: "13px", color: actif ? "#004649" : "#B0BEC5", backgroundColor: actif ? "white" : "#F0F0F0", outline: "none", cursor: actif ? "pointer" : "not-allowed", minWidth: "130px" }}>
+                        <option value="">— Dose —</option>
+                        {p.doses.map(d => <option key={d} value={d}>{d}</option>)}
+                      </select>
                     </div>
                   );
                 })}
               </div>
-              <div style={{ borderTop: "1px solid #F0F0F0", paddingTop: "24px" }}>
-                <p style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "14px", marginBottom: "12px" }}>📋 Posologie</p>
+              <div style={{ marginTop: "20px" }}>
+                <p style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "13px", marginBottom: "8px" }}>Précisions posologiques</p>
                 <textarea value={recommandations.posologie || ""} onChange={(e) => setRecommandations(prev => ({ ...prev, posologie: e.target.value }))}
-                  placeholder="Ex: 1 patch 21mg/jour pendant 6 semaines..." rows={3}
-                  style={{ width: "100%", border: "1px solid #B8D8E8", borderRadius: "12px", padding: "14px", fontSize: "14px", color: "#1E3A4A", outline: "none", resize: "none", backgroundColor: "#FAFAFA", boxSizing: "border-box" }} />
+                  placeholder="Ex : 1 patch 21mg/24h le matin + gomme 4mg à la demande (max 15/jour) — durée 12 semaines puis décroissance"
+                  rows={3}
+                  style={{ width: "100%", border: "1px solid #B8D8E8", borderRadius: "12px", padding: "14px", fontSize: "14px", color: "#1E3A4A", outline: "none", resize: "vertical", backgroundColor: "#FAFAFA", boxSizing: "border-box" }} />
               </div>
             </div>
 
+            {/* Suivi */}
             <div style={{ background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)", borderRadius: "20px", padding: "32px", boxShadow: "0 8px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)" }}>
-              <p style={{ color: "#004649", fontWeight: "700", fontSize: "16px", marginBottom: "24px" }}>📅 Objectif de sevrage</p>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "20px", marginBottom: "20px" }}>
+              <p style={{ color: "#004649", fontWeight: "700", fontSize: "16px", marginBottom: "20px" }}>🗓️ Suivi du traitement</p>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
                 <div>
-                  <p style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "13px", marginBottom: "8px" }}>Date de début souhaitée</p>
-                  <input type="date" value={recommandations.dateDebut || ""} onChange={(e) => setRecommandations(prev => ({ ...prev, dateDebut: e.target.value }))}
-                    style={{ width: "100%", border: "1px solid #B8D8E8", borderRadius: "12px", padding: "12px 16px", fontSize: "14px", outline: "none", color: "#1E3A4A", boxSizing: "border-box" }} />
-                </div>
-                <div>
-                  <p style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "13px", marginBottom: "8px" }}>Durée du programme</p>
+                  <p style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "13px", marginBottom: "8px" }}>Durée prévue du traitement</p>
                   <select value={recommandations.duree || ""} onChange={(e) => setRecommandations(prev => ({ ...prev, duree: e.target.value }))}
                     style={{ width: "100%", border: "1px solid #B8D8E8", borderRadius: "12px", padding: "12px 16px", fontSize: "14px", outline: "none", color: "#1E3A4A", backgroundColor: "white", boxSizing: "border-box" }}>
                     <option value="">Sélectionner</option>
                     <option>4 semaines</option><option>8 semaines</option><option>12 semaines</option><option>6 mois</option><option>1 an</option>
                   </select>
                 </div>
+                <div>
+                  <p style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "13px", marginBottom: "8px" }}>Date du prochain contrôle</p>
+                  <input type="date" value={recommandations.dateControle || ""} onChange={(e) => setRecommandations(prev => ({ ...prev, dateControle: e.target.value }))}
+                    style={{ width: "100%", border: "1px solid #B8D8E8", borderRadius: "12px", padding: "12px 16px", fontSize: "14px", outline: "none", color: "#1E3A4A", boxSizing: "border-box" }} />
+                </div>
               </div>
-              <p style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "13px", marginBottom: "4px" }}>Objectif réduction nicotine <span style={{ color: "#90A4AE", fontWeight: "400" }}>(vapoteuse uniquement)</span></p>
-              <input
-                type="text"
-                value={recommandations.objectifNicotine || ""}
-                onChange={(e) => setRecommandations(prev => ({ ...prev, objectifNicotine: e.target.value }))}
-                placeholder="Par exemple : pas pour le moment"
-                style={{ width: "100%", border: "1px solid #B8D8E8", borderRadius: "12px", padding: "11px 16px", fontSize: "14px", color: "#1E3A4A", outline: "none", backgroundColor: "#FAFAFA", boxSizing: "border-box" }}
-              />
-            </div>
-
-            <div style={{ background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)", borderRadius: "20px", padding: "32px", boxShadow: "0 8px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)" }}>
-              <p style={{ color: "#004649", fontWeight: "700", fontSize: "16px", marginBottom: "16px" }}>📝 Notes personnalisées</p>
-              <textarea value={recommandations.notes || ""} onChange={(e) => setRecommandations(prev => ({ ...prev, notes: e.target.value }))}
-                placeholder="Conseils, points de vigilance..." rows={4}
-                style={{ width: "100%", border: "1px solid #B8D8E8", borderRadius: "12px", padding: "14px", fontSize: "14px", color: "#1E3A4A", outline: "none", resize: "none", backgroundColor: "#FAFAFA", boxSizing: "border-box" }} />
             </div>
 
             <div style={{ display: "flex", justifyContent: "flex-end" }}>
@@ -960,7 +972,8 @@ export default function FichePatient() {
               </button>
             </div>
           </div>
-        )}
+          );
+        })()}
 
         {/* DOCUMENTS */}
         {onglet === "documents" && (
