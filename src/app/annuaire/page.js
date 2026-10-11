@@ -67,6 +67,9 @@ export default function Annuaire() {
   const [categorieActive, setCategorieActive] = useState(null);
   const [hovered, setHovered] = useState(null);
   const [professionals, setProfessionals] = useState([]);
+  const [onglet, setOnglet] = useState("pros");
+  const [recherchePro, setRecherchePro] = useState("");
+  const [specialiteActive, setSpecialiteActive] = useState(null);
 
   useEffect(() => {
     supabase.from("professionals")
@@ -86,6 +89,20 @@ export default function Annuaire() {
     c.categorie.toLowerCase().includes(recherche.toLowerCase())
   );
 
+  const specialites = [...new Set(professionals.map((p) => p.specialite).filter(Boolean))].sort();
+  const prosFiltres = professionals.filter((p) => {
+    const q = recherchePro.trim().toLowerCase();
+    const texte = `${p.prenom || ""} ${p.nom || ""} ${p.specialite || ""} ${p.cabinet || ""} ${p.adresse || ""}`.toLowerCase();
+    return (!q || texte.includes(q)) && (!specialiteActive || p.specialite === specialiteActive);
+  });
+  const nbRessources = categories.reduce((n, c) => n + c.contacts.length, 0);
+
+  const chip = (on) => ({
+    padding: "8px 16px", borderRadius: "999px", fontSize: "13px", fontWeight: "600", cursor: "pointer",
+    background: on ? "#004649" : "#FFFFFF", color: on ? "#F4EDE4" : "#004649",
+    border: on ? "1px solid #004649" : "1px solid rgba(0,70,73,0.12)",
+  });
+
   const categoriesAffichees = recherche
     ? null
     : categorieActive !== null
@@ -100,24 +117,75 @@ export default function Annuaire() {
       <div style={{ padding: "40px 48px 72px", maxWidth: "1280px", margin: "0 auto" }}>
 
         {/* En-tête */}
-        <PageHeader eyebrow="Réseau" title="Annuaire professionnel" subtitle="Professionnels Rêvade et ressources utiles pour accompagner vos patients" />
+        <PageHeader eyebrow="Réseau" title="Annuaire" subtitle="Trouvez un professionnel Rêvade ou une ressource utile pour accompagner vos patients" />
 
-        {/* Professionnels Rêvade */}
-        {professionals.length > 0 && (
-          <div style={{ marginBottom: "40px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "16px" }}>
-              <h2 style={{ color: "#004649", fontWeight: "500", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase" }}>Professionnels certifiés Rêvade</h2>
-              <span style={{ background: "linear-gradient(135deg, #004649, #00363A)", color: "#F4EDE4", borderRadius: "999px", padding: "2px 10px", fontSize: "11px", fontWeight: "600" }}>✓ Certifiés</span>
+        {/* Deux espaces : professionnels / ressources */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "16px", marginBottom: "32px" }}>
+          {[
+            { id: "pros", icon: "🩺", titre: "Professionnels Rêvade", desc: "Pros de santé certifiés du réseau, pour orienter vos patients", nb: professionals.length, tint: "#DCEEE6" },
+            { id: "ressources", icon: "📚", titre: "Ressources & contacts utiles", desc: "Lignes d'écoute, associations et documents de référence", nb: nbRessources, tint: "#F4EDE4" },
+          ].map((e) => {
+            const on = onglet === e.id;
+            return (
+              <button key={e.id} onClick={() => setOnglet(e.id)} style={{
+                position: "relative", overflow: "hidden", textAlign: "left", cursor: "pointer",
+                display: "flex", alignItems: "center", gap: "18px", padding: "22px 24px", borderRadius: "24px",
+                background: on ? "#004649" : "#FFFFFF",
+                border: on ? "1px solid #004649" : "1px solid rgba(0,70,73,0.10)",
+                boxShadow: on ? "0 20px 50px rgba(0,70,73,0.20)" : "0 8px 24px rgba(0,70,73,0.05)",
+                transition: "all 0.2s ease",
+              }}>
+                {on && <span aria-hidden="true" style={{ position: "absolute", inset: 0, pointerEvents: "none", background: "radial-gradient(circle at 90% 0%, rgba(183,215,232,0.25), transparent 50%)" }} />}
+                <span style={{ position: "relative", width: "56px", height: "56px", borderRadius: "18px", flexShrink: 0, background: on ? "rgba(244,237,228,0.12)" : e.tint, border: on ? "1px solid rgba(244,237,228,0.18)" : "none", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "26px" }}>{e.icon}</span>
+                <span style={{ position: "relative", flex: 1, minWidth: 0 }}>
+                  <span style={{ display: "block", color: on ? "#F4EDE4" : "#004649", fontWeight: "600", fontSize: "18px" }}>{e.titre}</span>
+                  <span style={{ display: "block", color: on ? "rgba(244,237,228,0.75)" : "#5A6B72", fontSize: "13px", marginTop: "4px", lineHeight: 1.5 }}>{e.desc}</span>
+                </span>
+                <span style={{ position: "relative", flexShrink: 0, borderRadius: "50px", padding: "7px 14px", fontSize: "12px", fontWeight: "600", background: on ? "#A5C9B9" : "#EAF3F8", color: "#004649", whiteSpace: "nowrap" }}>{e.nb}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* ═══ PROFESSIONNELS ═══ */}
+        {onglet === "pros" && (
+          <div>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px", background: "#FFFFFF", borderRadius: "50px", padding: "12px 22px", marginBottom: "18px", border: "1px solid rgba(0,70,73,0.10)", boxShadow: "0 8px 24px rgba(0,70,73,0.05)" }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5A6B72" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
+              <input value={recherchePro} onChange={(e) => setRecherchePro(e.target.value)} placeholder="Rechercher un pro par nom, spécialité, ville…"
+                style={{ flex: 1, outline: "none", border: "none", fontSize: "14px", color: "#2A3F4F", backgroundColor: "transparent" }} />
+              {recherchePro && <button onClick={() => setRecherchePro("")} style={{ background: "none", border: "none", color: "#5A6B72", cursor: "pointer", fontSize: "18px" }}>×</button>}
             </div>
+
+            {specialites.length > 1 && (
+              <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginBottom: "24px" }}>
+                <button onClick={() => setSpecialiteActive(null)} style={chip(specialiteActive === null)}>Toutes les spécialités</button>
+                {specialites.map((sp) => (
+                  <button key={sp} onClick={() => setSpecialiteActive(specialiteActive === sp ? null : sp)} style={chip(specialiteActive === sp)}>{sp}</button>
+                ))}
+              </div>
+            )}
+
+            <p style={{ color: "#5A6B72", fontSize: "13px", marginBottom: "16px" }}>
+              {prosFiltres.length} professionnel{prosFiltres.length > 1 ? "s" : ""} certifié{prosFiltres.length > 1 ? "s" : ""}
+            </p>
+
+            {prosFiltres.length === 0 ? (
+              <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "40px", textAlign: "center", border: "1px solid rgba(0,70,73,0.08)" }}>
+                <div style={{ fontSize: "30px", marginBottom: "8px" }}>🩺</div>
+                <p style={{ color: "#5A6B72", fontSize: "14px" }}>
+                  {professionals.length === 0 ? "Aucun professionnel visible dans l'annuaire pour le moment" : "Aucun professionnel ne correspond à votre recherche"}
+                </p>
+              </div>
+            ) : (
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "16px" }}>
-              {professionals.map((pro) => (
-                <div key={pro.id} style={{ background: "#FFFFFF", borderRadius: "24px", padding: "24px", border: "1px solid rgba(0,70,73,0.08)", boxShadow: "0 8px 24px rgba(0,70,73,0.05)" }}>
+              {prosFiltres.map((pro) => (                <div key={pro.id} style={{ background: "#FFFFFF", borderRadius: "24px", padding: "24px", border: "1px solid rgba(0,70,73,0.08)", boxShadow: "0 8px 24px rgba(0,70,73,0.05)" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "14px", marginBottom: "12px" }}>
                     <div style={{ width: "52px", height: "52px", borderRadius: "18px", background: "linear-gradient(135deg, #A5C9B9 0%, #B7D7E8 100%)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                       <span style={{ color: "#004649", fontWeight: "700", fontSize: "18px" }}>{(pro.prenom?.[0] ?? "D").toUpperCase()}</span>
                     </div>
                     <div>
-                      <p style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "15px" }}>Dr. {pro.prenom} {pro.nom}</p>
+                      <p style={{ color: "#004649", fontWeight: "600", fontSize: "15px" }}>Dr. {pro.prenom} {pro.nom}</p>
                       {pro.specialite && <p style={{ color: "#004649", fontSize: "13px", fontWeight: "500" }}>{pro.specialite}</p>}
                       {pro.cabinet && <p style={{ color: "#5A6B72", fontSize: "12px" }}>{pro.cabinet}{pro.adresse ? ` — ${pro.adresse}` : ""}</p>}
                     </div>
@@ -142,13 +210,13 @@ export default function Annuaire() {
                 </div>
               ))}
             </div>
+            )}
           </div>
         )}
 
-        <div style={{ paddingTop: "16px", marginBottom: "16px" }}>
-          <h2 style={{ color: "#004649", fontWeight: "500", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: "16px" }}>Ressources et contacts utiles</h2>
-        </div>
-
+        {/* ═══ RESSOURCES ═══ */}
+        {onglet === "ressources" && (
+          <div>
         {/* Barre de recherche */}
         <div style={{
           background: "#FFFFFF",
@@ -234,6 +302,8 @@ export default function Annuaire() {
                 </div>
               </div>
             ))}
+          </div>
+        )}
           </div>
         )}
       </div>
