@@ -6,6 +6,7 @@ import { supabase } from "@/lib/supabase";
 import { useProProfile } from "@/lib/useProProfile";
 import Navbar from "@/components/Navbar";
 import PageHeader from "@/components/PageHeader";
+import EchangesSwitch from "@/components/EchangesSwitch";
 
 const CATEGORIE_CONFIG = {
   temoignages: { nom: "Témoignages", icon: "💬" },
@@ -280,11 +281,8 @@ function ForumContent() {
           renderListeDiscussions()
         ) : (
           <div>
-            <PageHeader eyebrow="Communauté" title="Forum" subtitle="Discussions publiques de la communauté Rêvade : répondez aux patients en tant que professionnel certifié">
-              <Link href="/messagerie" style={{ textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "8px", background: "#FFFFFF", border: "1px solid rgba(0,70,73,0.12)", borderRadius: "50px", padding: "10px 18px", color: "#004649", fontSize: "13px", fontWeight: "600" }}>
-                🔒 Messages privés patients →
-              </Link>
-            </PageHeader>
+            <PageHeader eyebrow="Échanges" title="Forum communauté" subtitle="Discussions publiques : répondez aux patients en tant que professionnel certifié" />
+            <EchangesSwitch actif="forum" proId={pro?.id} />
             <div style={{ display: "inline-flex", flexWrap: "wrap", gap: "4px", padding: "6px", background: "#FFFFFF", borderRadius: "50px", border: "1px solid rgba(0,70,73,0.08)", boxShadow: "0 8px 24px rgba(0,70,73,0.05)", marginBottom: "28px" }}>
               {["messages", "categories"].map((o) => {
                 const labels = { categories: "Catégories", messages: "Dernières discussions" };

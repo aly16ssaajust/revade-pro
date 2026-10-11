@@ -10,7 +10,7 @@ const NAV_ITEMS = [
   { href: "/accueil", label: "Accueil" },
   { href: "/dashboard", label: "Fiches patients" },
   { href: "/agenda", label: "Agenda" },
-  { href: "/messagerie", label: "Messagerie", msgBadge: true },
+  { href: "/messagerie", label: "Messages privés", msgBadge: true },
   { href: "/forum", label: "Forum" },
   { href: "/annuaire", label: "Annuaire" },
   { href: "/outils", label: "Outils" },

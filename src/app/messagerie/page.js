@@ -6,6 +6,7 @@ import { supabase } from "@/lib/supabase";
 import { useProProfile } from "@/lib/useProProfile";
 import Navbar from "@/components/Navbar";
 import PageHeader from "@/components/PageHeader";
+import EchangesSwitch from "@/components/EchangesSwitch";
 
 function initiales(p) {
   return `${(p?.prenom || "")[0] || ""}${(p?.nom || "")[0] || ""}`.toUpperCase();
@@ -148,11 +149,8 @@ function MessagerieContent() {
     <div style={{ minHeight: "100vh", backgroundColor: "#EAF3F8" }}>
       <Navbar proId={pro?.id} />
       <div style={{ padding: "40px 48px 72px", maxWidth: "1280px", margin: "0 auto" }}>
-        <PageHeader eyebrow="Privé & sécurisé" title="Messagerie patients" subtitle="Échanges confidentiels avec vos patients, visibles uniquement dans leur application Rêvade">
-          <span style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: "#FFFFFF", border: "1px solid rgba(0,70,73,0.12)", borderRadius: "50px", padding: "9px 16px", color: "#004649", fontSize: "13px", fontWeight: "600" }}>
-            🔒 Conversations privées
-          </span>
-        </PageHeader>
+        <PageHeader eyebrow="Échanges" title="Messages privés" subtitle="Échanges confidentiels avec vos patients, visibles uniquement dans leur application Rêvade" />
+        <EchangesSwitch actif="prive" proId={pro?.id} />
 
         <div style={{ display: "grid", gridTemplateColumns: "320px 1fr", height: "640px", background: "#FFFFFF", borderRadius: "24px", border: "1px solid rgba(0,70,73,0.08)", boxShadow: "0 8px 24px rgba(0,70,73,0.05)", overflow: "hidden" }}>
 
