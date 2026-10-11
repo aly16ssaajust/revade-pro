@@ -459,7 +459,7 @@ export default function Profil() {
 
       {/* Modal changement de mot de passe */}
       {showPasswordModal && (
-        <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.4)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 50 }}>
+        <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.4)", display: "flex", alignItems: "safe center", justifyContent: "center", zIndex: 400, overflowY: "auto", padding: "24px" }}>
           <div style={{ background: "white", borderRadius: "24px", padding: "40px", width: "420px", display: "flex", flexDirection: "column", gap: "16px", boxShadow: "0 20px 60px rgba(0,0,0,0.2)" }}>
             <h2 style={{ color: "#004649", fontWeight: "700", fontSize: "18px", textAlign: "center" }}>🔒 Changer le mot de passe</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
@@ -503,7 +503,7 @@ export default function Profil() {
 
       {/* Modal suppression compte */}
       {showDeleteModal && (
-        <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.4)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 50 }}>
+        <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.4)", display: "flex", alignItems: "safe center", justifyContent: "center", zIndex: 400, overflowY: "auto", padding: "24px" }}>
           <div style={{ background: "white", borderRadius: "24px", padding: "40px", width: "400px", display: "flex", flexDirection: "column", gap: "16px", boxShadow: "0 20px 60px rgba(0,0,0,0.2)", textAlign: "center" }}>
             <p style={{ fontSize: "28px" }}>⚠️</p>
             <h2 style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "18px" }}>Supprimer mon compte</h2>
@@ -524,7 +524,7 @@ export default function Profil() {
 
       {/* Modal ajout RDV */}
       {showModalRdv && (
-        <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.3)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 50 }}>
+        <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.3)", display: "flex", alignItems: "safe center", justifyContent: "center", zIndex: 400, overflowY: "auto", padding: "24px" }}>
           <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "48px", width: "460px", display: "flex", flexDirection: "column", gap: "20px", boxShadow: "0 20px 60px rgba(0,0,0,0.2)" }}>
             <h2 style={{ color: "#004649", fontWeight: "700", fontSize: "20px", textAlign: "center" }}>Nouveau rendez-vous</h2>
 

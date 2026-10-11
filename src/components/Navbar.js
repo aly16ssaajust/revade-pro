@@ -403,7 +403,7 @@ export default function Navbar({ proId }) {
 
       {/* Modal refus avec message au patient */}
       {cancelModal && (
-        <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.4)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 300 }}>
+        <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.4)", display: "flex", alignItems: "safe center", justifyContent: "center", zIndex: 400, overflowY: "auto", padding: "24px" }}>
           <div style={{ background: "white", borderRadius: "20px", padding: "36px", width: "440px", display: "flex", flexDirection: "column", gap: "18px", boxShadow: "0 24px 64px rgba(0,0,0,0.2)" }}>
             <div style={{ textAlign: "center" }}>
               <div style={{ fontSize: "36px", marginBottom: "10px" }}>❌</div>

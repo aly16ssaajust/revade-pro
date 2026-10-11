@@ -397,7 +397,7 @@ function TestCard({ icon, title, subtitle, desc, tags, onOpen }) {
 
 function Modal({ title, subtitle, children, onClose }) {
   return (
-    <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.4)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 50, padding: "20px" }}>
+    <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.4)", display: "flex", alignItems: "safe center", justifyContent: "center", zIndex: 400, overflowY: "auto", padding: "24px" }}>
       <div style={{ background: "white", borderRadius: "24px", padding: "36px", width: "720px", maxHeight: "90vh", overflowY: "auto", display: "flex", flexDirection: "column", gap: "22px", boxShadow: "0 24px 64px rgba(0,0,0,0.2)" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
           <div>

@@ -292,7 +292,7 @@ export default function DossierInitialModal({ open, onClose, patient, pro, patie
   if (!open) return null;
 
   return (
-    <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.45)", display: "flex", alignItems: "stretch", justifyContent: "center", zIndex: 100, padding: "20px" }}>
+    <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.45)", display: "flex", alignItems: "stretch", justifyContent: "center", zIndex: 400, padding: "20px" }}>
       <div style={{ background: "white", borderRadius: "24px", width: "100%", maxWidth: "920px", display: "flex", flexDirection: "column", overflow: "hidden", boxShadow: "0 24px 80px rgba(0,0,0,0.2)", maxHeight: "100%" }}>
 
         {/* Header */}

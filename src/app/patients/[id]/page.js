@@ -1232,7 +1232,7 @@ export default function FichePatient() {
 
       {/* Modal ordonnance */}
       {showOrdonnance && (
-        <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.35)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 50, padding: "20px" }}>
+        <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.35)", display: "flex", alignItems: "safe center", justifyContent: "center", zIndex: 400, overflowY: "auto", padding: "24px" }}>
           <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "40px", width: "620px", maxHeight: "92vh", overflowY: "auto", display: "flex", flexDirection: "column", gap: "20px", boxShadow: "0 20px 60px rgba(0,0,0,0.2)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <h2 style={{ color: "#004649", fontWeight: "700", fontSize: "20px" }}>📄 Créer une ordonnance</h2>
@@ -1314,7 +1314,7 @@ export default function FichePatient() {
 
       {/* Modal historique */}
       {showHistorique && (
-        <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.3)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 50 }}>
+        <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.3)", display: "flex", alignItems: "safe center", justifyContent: "center", zIndex: 400, overflowY: "auto", padding: "24px" }}>
           <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "40px", width: "560px", maxHeight: "80vh", overflow: "auto", display: "flex", flexDirection: "column", gap: "20px", boxShadow: "0 20px 60px rgba(0,0,0,0.2)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <h2 style={{ color: "#004649", fontWeight: "700", fontSize: "20px" }}>🕐 Historique — {nomComplet}</h2>
@@ -1350,7 +1350,7 @@ export default function FichePatient() {
 
       {/* Modal notes */}
       {showNotes && (
-        <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.3)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 50 }}>
+        <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.3)", display: "flex", alignItems: "safe center", justifyContent: "center", zIndex: 400, overflowY: "auto", padding: "24px" }}>
           <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "48px", width: "560px", display: "flex", flexDirection: "column", gap: "20px", boxShadow: "0 20px 60px rgba(0,0,0,0.2)" }}>
             <h2 style={{ color: "#004649", fontWeight: "700", fontSize: "20px" }}>✏️ Notes — {nomComplet}</h2>
             <p style={{ color: "#5A6B72", fontSize: "13px", marginTop: "-8px" }}>
@@ -1373,7 +1373,7 @@ export default function FichePatient() {
 
       {/* Modal suppression fiche */}
       {showDeleteModal && (
-        <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.4)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100 }}>
+        <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.4)", display: "flex", alignItems: "safe center", justifyContent: "center", zIndex: 400, overflowY: "auto", padding: "24px" }}>
           <div style={{ background: "white", borderRadius: "24px", padding: "36px", width: "420px", display: "flex", flexDirection: "column", gap: "20px", boxShadow: "0 24px 64px rgba(0,0,0,0.2)" }}>
             <div style={{ textAlign: "center" }}>
               <div style={{ fontSize: "36px", marginBottom: "10px" }}>🗑️</div>
