@@ -134,7 +134,7 @@ export default function Dashboard() {
         {loadingPatients ? (
           <p style={{ color: "#5A6B72", fontSize: "14px" }}>Chargement des patients...</p>
         ) : (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "18px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "18px" }}>
             {patientsFiltres.map((p) => {
               const initiales = `${(p.prenom || "")[0] || ""}${(p.nom || "")[0] || ""}`.toUpperCase();
               const h = hovered === p.id;
@@ -160,7 +160,7 @@ export default function Dashboard() {
                       <span style={{ color: "#004649", fontWeight: "700", fontSize: "16px" }}>{initiales}</span>
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <p style={{ margin: 0, color: "#004649", fontWeight: "600", fontSize: "15px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{p.prenom} {p.nom}</p>
+                      <p style={{ margin: 0, color: "#004649", fontWeight: "600", fontSize: "15px", lineHeight: 1.35, overflowWrap: "anywhere" }}>{p.prenom} {p.nom}</p>
                       <p style={{ margin: "3px 0 0", color: "#5A6B72", fontSize: "12px" }}>Voir la fiche</p>
                     </div>
                     <div style={{

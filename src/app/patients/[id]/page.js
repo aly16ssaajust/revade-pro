@@ -579,53 +579,88 @@ export default function FichePatient() {
 
       <div style={{ padding: "40px 48px 72px", maxWidth: "1280px", margin: "0 auto" }}>
 
-        {/* Flèche retour + boutons */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
-          <Link href="/dashboard" style={{ textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "10px" }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", borderRadius: "10px", background: "white", border: "1.5px solid #B7D7E8", boxShadow: "0 2px 6px rgba(0,0,0,0.06)" }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2A3F4F" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="15 18 9 12 15 6" />
-              </svg>
+        {/* Retour */}
+        <Link href="/dashboard" style={{ textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "8px", marginBottom: "20px", color: "#004649", fontSize: "13px", fontWeight: "600", background: "#FFFFFF", border: "1px solid rgba(0,70,73,0.10)", borderRadius: "50px", padding: "8px 16px 8px 12px" }}>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
+          Fiches patients
+        </Link>
+
+        {/* Bandeau patient */}
+        <section style={{
+          position: "relative", overflow: "hidden",
+          background: "#004649", borderRadius: "28px",
+          padding: "36px 40px", marginBottom: "28px",
+          boxShadow: "0 24px 60px rgba(0,70,73,0.18)",
+        }}>
+          <div aria-hidden="true" style={{ position: "absolute", inset: 0, pointerEvents: "none", background: "radial-gradient(circle at 85% 0%, rgba(183,215,232,0.28), transparent 45%), radial-gradient(circle at 0% 100%, rgba(165,201,185,0.22), transparent 40%)" }} />
+
+          <div style={{ position: "relative", display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "24px", flexWrap: "wrap" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "20px", minWidth: 0 }}>
+              <div style={{ width: "72px", height: "72px", borderRadius: "24px", flexShrink: 0, background: "linear-gradient(135deg, #A5C9B9 0%, #B7D7E8 100%)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <span style={{ color: "#004649", fontWeight: "700", fontSize: "24px" }}>
+                  {`${(patient.prenom || "")[0] || ""}${(patient.nom || "")[0] || ""}`.toUpperCase()}
+                </span>
+              </div>
+              <div style={{ minWidth: 0 }}>
+                <p style={{ color: "#A5C9B9", fontWeight: "500", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: "8px" }}>Fiche patient</p>
+                <h1 style={{ color: "#F4EDE4", fontWeight: "600", fontSize: "32px", letterSpacing: "-0.02em", lineHeight: 1.15, overflowWrap: "anywhere" }}>{nomComplet}</h1>
+                <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginTop: "10px" }}>
+                  {[patient.pseudo && `@${patient.pseudo}`, patient.genre, patient.date_naissance].filter(Boolean).map((t) => (
+                    <span key={t} style={{ color: "rgba(244,237,228,0.85)", fontSize: "12px", background: "rgba(244,237,228,0.10)", border: "1px solid rgba(244,237,228,0.16)", borderRadius: "50px", padding: "4px 12px" }}>{t}</span>
+                  ))}
+                </div>
+              </div>
             </div>
-            <div>
-              <p style={{ margin: 0, fontSize: "11px", color: "#90A4AE", fontWeight: "500", letterSpacing: "0.3px" }}>FICHES PATIENTS</p>
-              <p style={{ margin: 0, fontSize: "15px", color: "#2A3F4F", fontWeight: "700" }}>{nomComplet}</p>
+
+            <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+              <button onClick={() => setShowNotes(true)} style={{
+                background: "linear-gradient(135deg, #A5C9B9, #B7D7E8)", color: "#004649",
+                borderRadius: "50px", padding: "11px 20px", fontSize: "13px", fontWeight: "600",
+                border: "none", cursor: "pointer", boxShadow: "0 8px 20px rgba(0,0,0,0.18)",
+                display: "flex", alignItems: "center", gap: "7px",
+              }}>✏️ Notes de consultation</button>
+              <button onClick={() => setShowHistorique(true)} style={{
+                background: "rgba(244,237,228,0.10)", color: "#F4EDE4",
+                borderRadius: "50px", padding: "11px 18px", fontSize: "13px", fontWeight: "600",
+                border: "1px solid rgba(244,237,228,0.20)", cursor: "pointer",
+                display: "flex", alignItems: "center", gap: "7px",
+              }}>🕐 Historique</button>
+              <button onClick={() => setShowDeleteModal(true)} title="Supprimer la fiche" style={{
+                background: "rgba(244,237,228,0.10)", color: "#F4EDE4",
+                borderRadius: "50px", width: "42px", fontSize: "14px",
+                border: "1px solid rgba(244,237,228,0.20)", cursor: "pointer",
+              }}>🗑️</button>
             </div>
-          </Link>
-          <div style={{ display: "flex", gap: "10px" }}>
-            <button onClick={() => setShowDeleteModal(true)} style={{
-              background: "white", color: "#C62828", borderRadius: "12px", padding: "10px 18px",
-              fontSize: "13px", fontWeight: "600", border: "1.5px solid #FFCDD2", cursor: "pointer",
-              display: "flex", alignItems: "center", gap: "7px",
-              boxShadow: "0 2px 6px rgba(0,0,0,0.06)",
-            }}>🗑️ Supprimer</button>
-            <button onClick={() => setShowHistorique(true)} style={{
-              background: "linear-gradient(135deg, #ffffff 0%, #EAF3F8 100%)",
-              color: "#2A3F4F", borderRadius: "12px", padding: "10px 18px",
-              fontSize: "13px", fontWeight: "600", border: "1.5px solid #B7D7E8", cursor: "pointer",
-              display: "flex", alignItems: "center", gap: "7px",
-              boxShadow: "0 2px 6px rgba(0,0,0,0.06)",
-            }}>🕐 Historique</button>
-            <button onClick={() => setShowNotes(true)} style={{
-              background: "linear-gradient(135deg, #004649 0%, #00363A 100%)",
-              color: "#F4EDE4", borderRadius: "50px", padding: "10px 18px",
-              fontSize: "13px", fontWeight: "600", border: "none", cursor: "pointer",
-              boxShadow: "0 4px 8px rgba(0,70,73,0.3)",
-              display: "flex", alignItems: "center", gap: "7px",
-            }}>✏️ Notes de consultation</button>
           </div>
-        </div>
+
+          {/* Chiffres clés */}
+          <div style={{ position: "relative", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "12px", marginTop: "28px" }}>
+            {[
+              { label: "Sessions / jour", value: stats.momentParJour },
+              { label: "Durée moy. de session", value: stats.tempsSessionMoyen },
+              { label: "Durée moy. d'une taffe", value: stats.dureeMoyenneTaff },
+              { label: "Dernier taux de nicotine", value: lastNicotine },
+            ].map((st) => (
+              <div key={st.label} style={{ padding: "16px 20px", borderRadius: "20px", background: "rgba(244,237,228,0.08)", border: "1px solid rgba(244,237,228,0.16)" }}>
+                <p style={{ color: "#F4EDE4", fontWeight: "600", fontSize: "24px", lineHeight: 1.1, letterSpacing: "-0.02em" }}>{st.value}</p>
+                <p style={{ color: "rgba(244,237,228,0.65)", fontSize: "12px", marginTop: "6px" }}>{st.label}</p>
+              </div>
+            ))}
+          </div>
+        </section>
 
         {/* Onglets */}
-        <div style={{ display: "flex", borderBottom: "2px solid #DFF0EA", marginBottom: "36px", gap: "40px" }}>
+        <div style={{ display: "inline-flex", flexWrap: "wrap", gap: "4px", padding: "6px", background: "#FFFFFF", borderRadius: "50px", border: "1px solid rgba(0,70,73,0.08)", boxShadow: "0 8px 24px rgba(0,70,73,0.05)", marginBottom: "28px" }}>
           {["informations", "statistiques", "parametres", "recommandations", "documents", "messages"].map((o) => {
             const labels = { informations: "Informations", statistiques: "Statistiques", parametres: "Paramètres", recommandations: "Recommandations", documents: "Documents", messages: "Messages" };
             const actif = onglet === o;
             return (
               <button key={o} onClick={() => setOnglet(o)} style={{
-                padding: "12px 0", fontSize: "15px", fontWeight: actif ? "700" : "400",
-                color: "#2A3F4F", background: "none", border: "none", cursor: "pointer",
-                borderBottom: actif ? "3px solid #004649" : "3px solid transparent", marginBottom: "-2px",
+                padding: "10px 20px", fontSize: "14px", fontWeight: actif ? "600" : "500",
+                color: actif ? "#F4EDE4" : "#5A6B72",
+                background: actif ? "#004649" : "transparent",
+                border: "none", borderRadius: "50px", cursor: "pointer",
+                transition: "all 0.2s ease",
               }}>{labels[o]}</button>
             );
           })}
@@ -633,14 +668,14 @@ export default function FichePatient() {
 
         {/* Bannière dossier initial non rempli */}
         {!dossierInitialExiste && (
-          <div style={{ background: "linear-gradient(135deg, #FFF3E0, #FFE0B2)", border: "1.5px solid #FFB74D", borderRadius: "16px", padding: "18px 24px", marginBottom: "24px", display: "flex", alignItems: "center", gap: "16px" }}>
+          <div style={{ background: "#FFF6EC", border: "1px solid #FFD8A8", borderRadius: "24px", padding: "20px 24px", marginBottom: "28px", display: "flex", alignItems: "center", gap: "16px", flexWrap: "wrap" }}>
             <span style={{ fontSize: "28px", flexShrink: 0 }}>⚠️</span>
             <div style={{ flex: 1 }}>
               <p style={{ color: "#E65100", fontWeight: "700", fontSize: "15px", margin: 0 }}>Dossier de consultation initiale non rempli</p>
               <p style={{ color: "#BF360C", fontSize: "13px", margin: "4px 0 0 0" }}>Ce dossier contient des données essentielles pour le suivi et les statistiques. Pensez à le remplir dès la première consultation.</p>
             </div>
             <button onClick={() => { setShowDossierInitial(true); setOnglet("documents"); }}
-              style={{ background: "linear-gradient(135deg, #E65100, #BF360C)", color: "white", border: "none", borderRadius: "12px", padding: "10px 20px", fontSize: "13px", fontWeight: "700", cursor: "pointer", whiteSpace: "nowrap", flexShrink: 0, boxShadow: "0 4px 8px rgba(230,81,0,0.3)" }}>
+              style={{ background: "#E65100", color: "white", border: "none", borderRadius: "50px", padding: "11px 22px", fontSize: "13px", fontWeight: "600", cursor: "pointer", whiteSpace: "nowrap", flexShrink: 0, boxShadow: "0 8px 20px rgba(230,81,0,0.25)" }}>
               📋 Remplir maintenant
             </button>
           </div>
@@ -648,9 +683,10 @@ export default function FichePatient() {
 
         {/* INFORMATIONS */}
         {onglet === "informations" && (
-          <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "40px", boxShadow: "0 8px 24px rgba(0,70,73,0.06)", maxWidth: "700px" }}>
-            <p style={{ color: "#004649", fontWeight: "700", fontSize: "17px", marginBottom: "4px" }}>{nomComplet}</p>
-            <p style={{ color: "#aaa", fontSize: "13px", marginBottom: "24px" }}>Ces informations proviennent de l&apos;application Rêvade</p>
+          <div style={{ display: "grid", gridTemplateColumns: "minmax(300px, 1fr) minmax(360px, 1.4fr)", gap: "24px", alignItems: "start" }}>
+          <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "32px", border: "1px solid rgba(0,70,73,0.08)", boxShadow: "0 8px 24px rgba(0,70,73,0.05)" }}>
+            <p style={{ color: "#004649", fontWeight: "500", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: "6px" }}>Identité</p>
+            <p style={{ color: "#90A4AE", fontSize: "12px", marginBottom: "16px" }}>Informations issues de l&apos;application Rêvade</p>
             {[
               ["Prénom", patient.prenom],
               ["Nom", patient.nom],
@@ -659,16 +695,18 @@ export default function FichePatient() {
               ["Catégorie socio-professionnelle", patient.categorie_socio_pro],
               ["Date de naissance", patient.date_naissance],
             ].filter(([, v]) => v).map(([label, value]) => (
-              <div key={label} style={{ display: "flex", alignItems: "center", padding: "14px 0", borderBottom: "1px solid #F0F0F0" }}>
-                <span style={{ color: "#2A3F4F", fontSize: "14px", fontWeight: "600", minWidth: "220px" }}>{label}</span>
-                <span style={{ color: "#2A3F4F", fontSize: "14px" }}>{value}</span>
+              <div key={label} style={{ display: "flex", flexDirection: "column", gap: "3px", padding: "12px 0", borderBottom: "1px solid rgba(0,70,73,0.08)" }}>
+                <span style={{ color: "#5A6B72", fontSize: "12px" }}>{label}</span>
+                <span style={{ color: "#004649", fontSize: "15px", fontWeight: "600" }}>{value}</span>
               </div>
             ))}
+          </div>
 
-            <p style={{ color: "#004649", fontWeight: "700", fontSize: "16px", marginTop: "36px", marginBottom: "16px" }}>📋 Questionnaires</p>
+          <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "32px", border: "1px solid rgba(0,70,73,0.08)", boxShadow: "0 8px 24px rgba(0,70,73,0.05)" }}>
+            <p style={{ color: "#004649", fontWeight: "500", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: "20px" }}>Questionnaires</p>
 
             {questionnaires.length === 0 ? (
-              <p style={{ color: "#aaa", fontSize: "14px", fontStyle: "italic" }}>Aucun questionnaire complété</p>
+              <p style={{ color: "#90A4AE", fontSize: "14px", fontStyle: "italic" }}>Aucun questionnaire complété</p>
             ) : questionnaires.map((q, i) => {
               const reponses = typeof q.reponses === "string" ? JSON.parse(q.reponses) : (q.reponses || {});
               const scoreFumeur = reponses["score_fagerström_fumeur"];
@@ -700,9 +738,9 @@ export default function FichePatient() {
               const cardBorder = mainStyle.color;
 
               return (
-                <div key={i} style={{ border: `1.5px solid ${cardBorder}40`, borderRadius: "16px", padding: "20px", marginBottom: "16px", backgroundColor: `${mainStyle.bg}`, boxShadow: `0 2px 8px ${cardBorder}20` }}>
+                <div key={i} style={{ border: `1.5px solid ${cardBorder}40`, borderRadius: "20px", padding: "20px", marginBottom: "14px", backgroundColor: `${mainStyle.bg}`, boxShadow: `0 2px 8px ${cardBorder}20` }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "16px", cursor: "pointer" }} onClick={() => toggleQuest(i)}>
-                    <div style={{ background: mainStyle.color, borderRadius: "12px", width: "48px", height: "48px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, boxShadow: `0 4px 8px ${mainStyle.color}40` }}>
+                    <div style={{ background: mainStyle.color, borderRadius: "16px", width: "48px", height: "48px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, boxShadow: `0 4px 8px ${mainStyle.color}40` }}>
                       <span style={{ color: "white", fontWeight: "700", fontSize: "20px" }}>{q.score}</span>
                     </div>
                     <div style={{ flex: 1 }}>
@@ -710,9 +748,9 @@ export default function FichePatient() {
                         <span style={{ color: mainStyle.color, fontWeight: "700", fontSize: "15px" }}>{mainNiveau}</span>
                         {i === 0 && <span style={{ background: "linear-gradient(135deg, #004649 0%, #00363A 100%)", color: "white", borderRadius: "999px", padding: "2px 10px", fontSize: "12px" }}>Récent</span>}
                       </div>
-                      <p style={{ color: "#aaa", fontSize: "13px" }}>{formatDate(q.date_completion)}</p>
+                      <p style={{ color: "#90A4AE", fontSize: "13px" }}>{formatDate(q.date_completion)}</p>
                     </div>
-                    <span style={{ color: "#aaa", fontSize: "18px" }}>{questOuverts[i] ? "▲" : "▼"}</span>
+                    <span style={{ color: "#90A4AE", fontSize: "18px" }}>{questOuverts[i] ? "▲" : "▼"}</span>
                   </div>
                   {questOuverts[i] && (
                     <div style={{ marginTop: "20px", borderTop: `1px solid ${cardBorder}30`, paddingTop: "20px" }}>
@@ -751,6 +789,7 @@ export default function FichePatient() {
                 </div>
               );
             })}
+          </div>
           </div>
         )}
 
@@ -793,9 +832,9 @@ export default function FichePatient() {
               {sousOngletStats === "humeur" && (
                 <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                   {journalEntries.length === 0 ? (
-                    <p style={{ color: "#aaa", fontSize: "14px", fontStyle: "italic" }}>Aucune entrée d&apos;humeur</p>
+                    <p style={{ color: "#90A4AE", fontSize: "14px", fontStyle: "italic" }}>Aucune entrée d&apos;humeur</p>
                   ) : journalEntries.map((h, i) => (
-                    <div key={i} style={{ border: "1px solid #F0F0F0", borderRadius: "16px", padding: "20px 24px", display: "flex", flexDirection: "column", gap: "10px" }}>
+                    <div key={i} style={{ border: "1px solid rgba(0,70,73,0.08)", borderRadius: "16px", padding: "20px 24px", display: "flex", flexDirection: "column", gap: "10px" }}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                         <span style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "15px" }}>
                           {new Date(h.date).toLocaleDateString("fr-FR", { day: "numeric", month: "long" })}
@@ -819,7 +858,7 @@ export default function FichePatient() {
               {sousOngletStats === "substituts" && (
                 <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                   {substitutEntries.length === 0 ? (
-                    <p style={{ color: "#aaa", fontSize: "14px", fontStyle: "italic" }}>Aucun substitut renseigné</p>
+                    <p style={{ color: "#90A4AE", fontSize: "14px", fontStyle: "italic" }}>Aucun substitut renseigné</p>
                   ) : substitutEntries.map((s, i) => (
                     <div key={i} style={{ border: "1.5px solid #B7D7E8", borderRadius: "16px", padding: "20px 24px", display: "flex", flexDirection: "column", gap: "8px" }}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -868,7 +907,7 @@ export default function FichePatient() {
                 <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "16px" }}>
                   <p style={{ color: "#2A3F4F", fontWeight: "600", fontSize: "14px" }}>Plan de sevrage</p>
                   {moments.length === 0 ? (
-                    <p style={{ color: "#aaa", fontSize: "14px", fontStyle: "italic" }}>Aucun moment configuré</p>
+                    <p style={{ color: "#90A4AE", fontSize: "14px", fontStyle: "italic" }}>Aucun moment configuré</p>
                   ) : moments.map((m, i) => (
                     <div key={i} style={{ background: "linear-gradient(135deg, #F5F9F8 0%, #E8F5EF 100%)", border: "1px solid #DFF0EA", borderRadius: "16px", padding: "16px 24px", display: "flex", justifyContent: "space-between", alignItems: "center", boxShadow: "0 2px 8px rgba(0,70,73,0.08)" }}>
                       <div>
@@ -1058,11 +1097,11 @@ export default function FichePatient() {
 
             {/* Liste des documents */}
             {documents.length === 0 ? (
-              <p style={{ color: "#aaa", fontSize: "14px", fontStyle: "italic" }}>Aucun document pour l&apos;instant</p>
+              <p style={{ color: "#90A4AE", fontSize: "14px", fontStyle: "italic" }}>Aucun document pour l&apos;instant</p>
             ) : (
               <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                 {documents.map((doc, i) => (
-                  <div key={i} style={{ display: "flex", alignItems: "center", gap: "14px", padding: "14px 18px", background: "#FFFFFF", borderRadius: "12px", boxShadow: "0 2px 8px rgba(0,0,0,0.06)", border: "1px solid #F0F0F0" }}>
+                  <div key={i} style={{ display: "flex", alignItems: "center", gap: "14px", padding: "14px 18px", background: "#FFFFFF", borderRadius: "12px", boxShadow: "0 2px 8px rgba(0,0,0,0.06)", border: "1px solid rgba(0,70,73,0.08)" }}>
                     <span style={{ fontSize: "22px", flexShrink: 0 }}>{docIcon(doc.type)}</span>
                     <span style={{ flex: 1, color: "#2A3F4F", fontSize: "14px", fontWeight: "500" }}>{doc.nom}</span>
                     {doc.type === "dossier_initial" ? (
@@ -1250,7 +1289,7 @@ export default function FichePatient() {
             {/* Notes */}
             <div>
               <label style={{ color: "#2A3F4F", fontWeight: "600", fontSize: "13px", display: "block", marginBottom: "8px" }}>
-                Notes complémentaires <span style={{ color: "#aaa", fontWeight: "400" }}>(optionnel)</span>
+                Notes complémentaires <span style={{ color: "#90A4AE", fontWeight: "400" }}>(optionnel)</span>
               </label>
               <textarea value={ordonnanceNotes} onChange={e => setOrdonnanceNotes(e.target.value)}
                 placeholder="Instructions particulières, mises en garde, conseils…" rows={3}
@@ -1282,7 +1321,7 @@ export default function FichePatient() {
               <button onClick={() => setShowHistorique(false)} style={{ background: "none", border: "none", fontSize: "22px", cursor: "pointer", color: "#5A6B72" }}>×</button>
             </div>
             {historique.length === 0 ? (
-              <p style={{ color: "#aaa", fontSize: "14px", fontStyle: "italic" }}>Aucun historique disponible</p>
+              <p style={{ color: "#90A4AE", fontSize: "14px", fontStyle: "italic" }}>Aucun historique disponible</p>
             ) : (
               <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                 {historique.map((h, i) => {
@@ -1296,7 +1335,7 @@ export default function FichePatient() {
                       <div style={{ flex: 1 }}>
                         <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "4px" }}>
                           <span style={{ backgroundColor: colors.bg, color: colors.color, borderRadius: "999px", padding: "2px 10px", fontSize: "12px", fontWeight: "600" }}>{h.type}</span>
-                          <span style={{ color: "#aaa", fontSize: "12px" }}>{h.date}</span>
+                          <span style={{ color: "#90A4AE", fontSize: "12px" }}>{h.date}</span>
                         </div>
                         <p style={{ color: "#2A3F4F", fontSize: "14px" }}>{h.detail}</p>
                       </div>
