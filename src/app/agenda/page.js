@@ -170,7 +170,7 @@ export default function Agenda() {
     <div style={{ minHeight: "100vh", backgroundColor: "#EAF3F8" }}>
       <Navbar proId={pro?.id} />
 
-      <div style={{ padding: "40px 80px", maxWidth: "1200px", margin: "0 auto" }}>
+      <div style={{ padding: "40px 48px 72px", maxWidth: "1280px", margin: "0 auto" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "32px" }}>
           <div>
             <h1 style={{ color: "#004649", fontWeight: "600", fontSize: "32px", letterSpacing: "-0.02em", marginBottom: "6px" }}>📅 Agenda</h1>

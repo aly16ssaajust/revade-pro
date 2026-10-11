@@ -7,13 +7,13 @@ import { supabase } from "@/lib/supabase";
 import Toaster from "./Toaster";
 
 const NAV_ITEMS = [
-  { href: "/accueil", label: "ACCUEIL" },
-  { href: "/dashboard", label: "FICHES PATIENTS" },
-  { href: "/agenda", label: "AGENDA" },
-  { href: "/forum", label: "MESSAGERIE", msgBadge: true },
-  { href: "/annuaire", label: "ANNUAIRE" },
-  { href: "/outils", label: "OUTILS" },
-  { href: "/profil", label: "PROFIL" },
+  { href: "/accueil", label: "Accueil" },
+  { href: "/dashboard", label: "Fiches patients" },
+  { href: "/agenda", label: "Agenda" },
+  { href: "/forum", label: "Messagerie", msgBadge: true },
+  { href: "/annuaire", label: "Annuaire" },
+  { href: "/outils", label: "Outils" },
+  { href: "/profil", label: "Profil" },
 ];
 
 export default function Navbar({ proId }) {
@@ -202,21 +202,23 @@ export default function Navbar({ proId }) {
   return (
     <>
       <Toaster />
-      <nav style={{ background: "#B7D7E8", padding: "14px 48px", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid rgba(0,70,73,0.12)", boxShadow: "0 6px 20px rgba(0,70,73,0.08)", position: "sticky", top: 0, zIndex: 100 }}>
-        <Link href="/accueil" style={{ textDecoration: "none" }}>
-          <Image src="/logo.png" alt="Rêvade" width={130} height={48} />
+      <nav style={{ position: "sticky", top: 0, zIndex: 100, background: "rgba(183,215,232,0.82)", backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)", borderBottom: "1px solid rgba(0,70,73,0.10)" }}>
+        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "14px 48px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "24px" }}>
+        <Link href="/accueil" style={{ textDecoration: "none", display: "flex" }}>
+          <Image src="/logo.png" alt="Rêvade" width={110} height={40} priority />
         </Link>
-        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-          {NAV_ITEMS.map((item) => {
+        <div style={{ display: "flex", gap: "4px", alignItems: "center" }}>
+          {NAV_ITEMS.filter((item) => item.href !== "/profil").map((item) => {
             const actif = pathname === item.href || (item.href !== "/accueil" && pathname?.startsWith(item.href));
             const badge = item.msgBadge && unreadMsgs > 0 ? unreadMsgs : 0;
             return (
               <Link key={item.href} href={item.href} style={{ textDecoration: "none", position: "relative" }}>
-                <div style={{ padding: "9px 18px", borderRadius: "50px", fontSize: "12px", fontWeight: actif ? "600" : "500", letterSpacing: "0.08em", color: actif ? "#F4EDE4" : "#004649", background: actif ? "#004649" : "rgba(255,255,255,0.45)", boxShadow: actif ? "0 6px 20px rgba(0,70,73,0.25)" : "none", border: actif ? "1px solid #004649" : "1px solid rgba(0,70,73,0.12)", transition: "all 0.2s ease" }}>
+                <div style={{ padding: "8px 14px", fontSize: "14px", fontWeight: actif ? "600" : "500", color: actif ? "#004649" : "rgba(0,70,73,0.68)", position: "relative", transition: "color 0.2s ease", whiteSpace: "nowrap" }}>
                   {item.label}
+                  <span style={{ position: "absolute", left: "14px", right: "14px", bottom: "2px", height: "2px", borderRadius: "2px", background: "linear-gradient(90deg, #004649, #A5C9B9)", transform: actif ? "scaleX(1)" : "scaleX(0)", transformOrigin: "left", transition: "transform 0.25s ease" }} />
                 </div>
                 {badge > 0 && (
-                  <div style={{ position: "absolute", top: "-6px", right: "-6px", background: "#E53935", color: "white", borderRadius: "50%", minWidth: "18px", height: "18px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "10px", fontWeight: "700", border: "2px solid white", padding: "0 3px", pointerEvents: "none", boxShadow: "0 2px 4px rgba(0,0,0,0.2)" }}>
+                  <div style={{ position: "absolute", top: "-2px", right: "0px", background: "#E53935", color: "white", borderRadius: "50%", minWidth: "18px", height: "18px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "10px", fontWeight: "700", border: "2px solid white", padding: "0 3px", pointerEvents: "none", boxShadow: "0 2px 4px rgba(0,0,0,0.2)" }}>
                     {badge > 99 ? "99+" : badge}
                   </div>
                 )}
@@ -230,7 +232,7 @@ export default function Navbar({ proId }) {
               <button
                 onClick={() => { setBellOpen(o => !o); if (bellFlash) setBellFlash(false); }}
                 title={hasPending ? `${pendingRdv.length} demande${pendingRdv.length > 1 ? "s" : ""} en attente` : "Aucune demande"}
-                style={{ width: "40px", height: "40px", borderRadius: "50%", background: bellFlash ? "linear-gradient(135deg, #E65100, #FF6D00)" : hasPending ? "linear-gradient(135deg, rgba(255,243,224,0.95), rgba(255,224,178,0.95))" : "rgba(255,255,255,0.45)", border: "1px solid rgba(0,70,73,0.12)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "18px", transition: "all 0.3s ease", boxShadow: hasPending ? "0 2px 8px rgba(230,81,0,0.25)" : "0 2px 4px rgba(0,0,0,0.1)" }}>
+                style={{ width: "40px", height: "40px", borderRadius: "50%", background: bellFlash ? "linear-gradient(135deg, #E65100, #FF6D00)" : hasPending ? "linear-gradient(135deg, rgba(255,243,224,0.95), rgba(255,224,178,0.95))" : "rgba(255,255,255,0.45)", border: "1px solid rgba(0,70,73,0.12)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "18px", transition: "all 0.3s ease", boxShadow: hasPending ? "0 2px 8px rgba(230,81,0,0.25)" : "none" }}>
                 🔔
               </button>
               {totalBell > 0 && (
@@ -384,6 +386,17 @@ export default function Navbar({ proId }) {
               )}
             </div>
           )}
+
+          <Link href="/profil" style={{
+            marginLeft: "10px", textDecoration: "none", whiteSpace: "nowrap",
+            fontSize: "14px", fontWeight: "600", padding: "10px 22px", borderRadius: "50px",
+            color: pathname?.startsWith("/profil") ? "#F4EDE4" : "#004649",
+            background: pathname?.startsWith("/profil") ? "#004649" : "linear-gradient(135deg, #A5C9B9, #DCEBF3)",
+            boxShadow: "0 6px 20px rgba(0,70,73,0.18)",
+          }}>
+            Mon profil
+          </Link>
+        </div>
         </div>
       </nav>
 

@@ -163,7 +163,7 @@ export default function Profil() {
     <div style={{ minHeight: "100vh", backgroundColor: "#EAF3F8" }}>
       <Navbar proId={pro?.id} />
 
-      <div style={{ padding: "40px 80px", maxWidth: "1100px", margin: "0 auto" }}>
+      <div style={{ padding: "40px 48px 72px", maxWidth: "1280px", margin: "0 auto" }}>
 
         {section !== null ? (
           <div>
@@ -433,7 +433,7 @@ export default function Profil() {
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "16px", marginBottom: "24px" }}>
               {sections.map((s) => (
-                <div key={s.id} onClick={() => setSection(s.id)} style={{ background: "white", borderRadius: "16px", padding: "28px 24px", boxShadow: "0 10px 30px rgba(0,70,73,0.06)", cursor: "pointer", display: "flex", alignItems: "center", gap: "16px", border: "1.5px solid #E8EEF2", transition: "all 0.15s ease" }}
+                <div key={s.id} onClick={() => setSection(s.id)} style={{ background: "white", borderRadius: "24px", padding: "28px 24px", boxShadow: "0 10px 30px rgba(0,70,73,0.06)", cursor: "pointer", display: "flex", alignItems: "center", gap: "16px", border: "1.5px solid #E8EEF2", transition: "all 0.15s ease" }}
                   onMouseEnter={e => { e.currentTarget.style.border = "1.5px solid #A5C9B9"; e.currentTarget.style.boxShadow = "0 8px 20px rgba(0,70,73,0.1)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
                   onMouseLeave={e => { e.currentTarget.style.border = "1.5px solid #E8EEF2"; e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.06)"; e.currentTarget.style.transform = "translateY(0)"; }}>
                   <div style={{ width: "44px", height: "44px", borderRadius: "12px", background: "linear-gradient(135deg, #E8F5EF 0%, #C8E6D4 100%)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
@@ -446,7 +446,7 @@ export default function Profil() {
             </div>
 
             {/* Déconnexion */}
-            <div style={{ background: "white", borderRadius: "16px", border: "1.5px solid #FFE0DE", padding: "8px 4px" }}>
+            <div style={{ background: "white", borderRadius: "24px", border: "1.5px solid #FFE0DE", padding: "8px 4px" }}>
               <button onClick={handleLogout} style={{ width: "100%", background: "none", border: "none", display: "flex", alignItems: "center", gap: "14px", padding: "16px 20px", cursor: "pointer", borderRadius: "12px" }}
                 onMouseEnter={e => e.currentTarget.style.background = "#FFF5F4"}
                 onMouseLeave={e => e.currentTarget.style.background = "none"}>
@@ -466,7 +466,7 @@ export default function Profil() {
       {/* Modal changement de mot de passe */}
       {showPasswordModal && (
         <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.4)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 50 }}>
-          <div style={{ background: "white", borderRadius: "20px", padding: "40px", width: "420px", display: "flex", flexDirection: "column", gap: "16px", boxShadow: "0 20px 60px rgba(0,0,0,0.2)" }}>
+          <div style={{ background: "white", borderRadius: "24px", padding: "40px", width: "420px", display: "flex", flexDirection: "column", gap: "16px", boxShadow: "0 20px 60px rgba(0,0,0,0.2)" }}>
             <h2 style={{ color: "#004649", fontWeight: "700", fontSize: "18px", textAlign: "center" }}>🔒 Changer le mot de passe</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
               <label style={{ color: "#2A3F4F", fontSize: "13px", fontWeight: "600" }}>Nouveau mot de passe</label>
@@ -510,7 +510,7 @@ export default function Profil() {
       {/* Modal suppression compte */}
       {showDeleteModal && (
         <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.4)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 50 }}>
-          <div style={{ background: "white", borderRadius: "20px", padding: "40px", width: "400px", display: "flex", flexDirection: "column", gap: "16px", boxShadow: "0 20px 60px rgba(0,0,0,0.2)", textAlign: "center" }}>
+          <div style={{ background: "white", borderRadius: "24px", padding: "40px", width: "400px", display: "flex", flexDirection: "column", gap: "16px", boxShadow: "0 20px 60px rgba(0,0,0,0.2)", textAlign: "center" }}>
             <p style={{ fontSize: "28px" }}>⚠️</p>
             <h2 style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "18px" }}>Supprimer mon compte</h2>
             <p style={{ color: "#666", fontSize: "14px", lineHeight: "1.6" }}>

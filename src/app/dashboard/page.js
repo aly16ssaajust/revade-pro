@@ -93,56 +93,84 @@ export default function Dashboard() {
     <div style={{ minHeight: "100vh", backgroundColor: "#EAF3F8" }}>
       <Navbar proId={pro?.id} />
 
-      <div style={{ padding: "40px 60px" }}>
-        <div style={{
-          background: "#FFFFFF",
-          borderRadius: "16px", padding: "14px 20px", marginBottom: "32px",
-          boxShadow: "0 10px 30px rgba(0,70,73,0.06)",
-          border: "1px solid rgba(0,70,73,0.10)",
-        }}>
-          <input
-            type="text" placeholder="Recherche ..."
-            value={recherche} onChange={(e) => setRecherche(e.target.value)}
-            style={{ width: "100%", outline: "none", border: "none", fontSize: "14px", color: "#2A3F4F", backgroundColor: "transparent" }}
-          />
+      <div style={{ padding: "40px 48px 72px", maxWidth: "1280px", margin: "0 auto" }}>
+
+        {/* En-tête */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: "24px", flexWrap: "wrap", marginBottom: "28px" }}>
+          <div>
+            <p style={{ color: "#004649", fontWeight: "500", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: "10px" }}>Suivi</p>
+            <h1 style={{ color: "#004649", fontWeight: "600", fontSize: "32px", letterSpacing: "-0.02em" }}>
+              Fiches patients
+              {!loadingPatients && (
+                <span style={{ marginLeft: "12px", verticalAlign: "middle", fontSize: "13px", fontWeight: "600", color: "#004649", background: "#FFFFFF", border: "1px solid rgba(0,70,73,0.12)", borderRadius: "50px", padding: "4px 12px" }}>
+                  {patientsFiltres.length}
+                </span>
+              )}
+            </h1>
+          </div>
+          <div style={{ display: "flex", gap: "12px", alignItems: "center", flexWrap: "wrap" }}>
+            <div style={{
+              display: "flex", alignItems: "center", gap: "10px", width: "320px",
+              background: "#FFFFFF", borderRadius: "50px", padding: "12px 20px",
+              border: "1px solid rgba(0,70,73,0.10)", boxShadow: "0 8px 24px rgba(0,70,73,0.05)",
+            }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5A6B72" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
+              <input
+                type="text" placeholder="Rechercher un patient…"
+                value={recherche} onChange={(e) => setRecherche(e.target.value)}
+                style={{ flex: 1, outline: "none", border: "none", fontSize: "14px", color: "#2A3F4F", backgroundColor: "transparent" }}
+              />
+            </div>
+            <button onClick={() => setShowModal(true)} style={{
+              background: "#004649", color: "#F4EDE4", border: "none", borderRadius: "50px",
+              padding: "13px 24px", fontSize: "14px", fontWeight: "600", cursor: "pointer",
+              boxShadow: "0 10px 26px rgba(0,70,73,0.25)", whiteSpace: "nowrap",
+            }}>
+              + Nouveau patient
+            </button>
+          </div>
         </div>
 
         {loadingPatients ? (
           <p style={{ color: "#5A6B72", fontSize: "14px" }}>Chargement des patients...</p>
         ) : (
-          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "18px" }}>
             {patientsFiltres.map((p) => {
               const initiales = `${(p.prenom || "")[0] || ""}${(p.nom || "")[0] || ""}`.toUpperCase();
+              const h = hovered === p.id;
               return (
                 <Link key={p.id} href={`/patients/${p.id}`} style={{ textDecoration: "none" }}>
                   <div
                     onMouseEnter={() => setHovered(p.id)}
                     onMouseLeave={() => setHovered(null)}
                     style={{
-                      background: "white",
-                      borderRadius: "14px", padding: "14px 20px",
-                      cursor: "pointer",
+                      background: "#FFFFFF", borderRadius: "24px", padding: "22px",
+                      cursor: "pointer", height: "100%",
                       display: "flex", alignItems: "center", gap: "16px",
-                      boxShadow: hovered === p.id
-                        ? "0 6px 20px rgba(0,70,73,0.12)"
-                        : "0 2px 8px rgba(0,0,0,0.06)",
-                      border: hovered === p.id ? "1.5px solid #A5C9B9" : "1.5px solid #EEF2F5",
-                      transform: hovered === p.id ? "translateX(4px)" : "translateX(0)",
-                      transition: "all 0.18s ease",
+                      border: h ? "1px solid rgba(0,70,73,0.22)" : "1px solid rgba(0,70,73,0.08)",
+                      boxShadow: h ? "0 24px 50px rgba(0,70,73,0.14)" : "0 8px 24px rgba(0,70,73,0.05)",
+                      transform: h ? "translateY(-3px)" : "translateY(0)",
+                      transition: "all 0.25s ease",
                     }}>
                     <div style={{
-                      width: "44px", height: "44px", borderRadius: "50%", flexShrink: 0,
-                      background: "linear-gradient(135deg, #004649 0%, #00363A 100%)",
+                      width: "52px", height: "52px", borderRadius: "18px", flexShrink: 0,
+                      background: "linear-gradient(135deg, #A5C9B9 0%, #B7D7E8 100%)",
                       display: "flex", alignItems: "center", justifyContent: "center",
                     }}>
-                      <span style={{ color: "white", fontWeight: "700", fontSize: "15px" }}>{initiales}</span>
+                      <span style={{ color: "#004649", fontWeight: "700", fontSize: "16px" }}>{initiales}</span>
                     </div>
-                    <div style={{ flex: 1 }}>
-                      <p style={{ margin: 0, color: "#2A3F4F", fontWeight: "700", fontSize: "15px" }}>{p.prenom} {p.nom}</p>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <p style={{ margin: 0, color: "#004649", fontWeight: "600", fontSize: "15px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{p.prenom} {p.nom}</p>
+                      <p style={{ margin: "3px 0 0", color: "#5A6B72", fontSize: "12px" }}>Voir la fiche</p>
                     </div>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#90A4AE" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="9 18 15 12 9 6" />
-                    </svg>
+                    <div style={{
+                      width: "34px", height: "34px", borderRadius: "50%", flexShrink: 0,
+                      background: h ? "#004649" : "#EAF3F8", color: h ? "#F4EDE4" : "#004649",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      transition: "all 0.25s ease", transform: h ? "rotate(-45deg)" : "none",
+                    }}>
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
+                    </div>
                   </div>
                 </Link>
               );
@@ -153,16 +181,14 @@ export default function Dashboard() {
               onMouseEnter={() => setHovered("add")}
               onMouseLeave={() => setHovered(null)}
               style={{
-                background: hovered === "add" ? "#F0F9F7" : "white",
-                borderRadius: "14px", padding: "14px 20px",
-                cursor: "pointer",
+                background: hovered === "add" ? "rgba(255,255,255,0.9)" : "rgba(255,255,255,0.45)",
+                borderRadius: "24px", padding: "22px", cursor: "pointer",
                 display: "flex", alignItems: "center", gap: "16px",
-                boxShadow: hovered === "add" ? "0 6px 20px rgba(0,70,73,0.1)" : "0 2px 8px rgba(0,0,0,0.06)",
-                border: hovered === "add" ? "1.5px dashed #004649" : "1.5px dashed #B7D7E8",
-                transition: "all 0.18s ease",
+                border: hovered === "add" ? "1.5px dashed #004649" : "1.5px dashed rgba(0,70,73,0.25)",
+                transition: "all 0.25s ease",
               }}>
-              <div style={{ width: "44px", height: "44px", borderRadius: "50%", flexShrink: 0, background: "#E8F5EF", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <span style={{ color: "#004649", fontSize: "24px", fontWeight: "300", lineHeight: 1 }}>+</span>
+              <div style={{ width: "52px", height: "52px", borderRadius: "18px", flexShrink: 0, background: "#DCEEE6", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <span style={{ color: "#004649", fontSize: "26px", fontWeight: "300", lineHeight: 1 }}>+</span>
               </div>
               <span style={{ color: "#004649", fontSize: "14px", fontWeight: "600" }}>Ajouter une fiche patient</span>
             </div>
@@ -199,7 +225,7 @@ export default function Dashboard() {
             <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
               <button
                 onClick={() => { setShowModal(false); setCodePatient(""); setErrorAdd(""); }}
-                style={{ padding: "12px 32px", borderRadius: "12px", border: "1px solid #B7D7E8", backgroundColor: "white", color: "#2A3F4F", fontWeight: "600", cursor: "pointer", fontSize: "14px" }}
+                style={{ padding: "12px 32px", borderRadius: "50px", border: "1px solid rgba(0,70,73,0.15)", backgroundColor: "white", color: "#004649", fontWeight: "600", cursor: "pointer", fontSize: "14px" }}
               >Annuler</button>
               <button
                 onClick={ajouterPatient}

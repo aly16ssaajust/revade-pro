@@ -174,7 +174,7 @@ export default function Outils() {
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "#EAF3F8" }}>
       <Navbar proId={pro?.id} />
-      <div style={{ padding: "40px 80px", maxWidth: "1000px", margin: "0 auto" }}>
+      <div style={{ padding: "40px 48px 72px", maxWidth: "1280px", margin: "0 auto" }}>
         <div style={{ marginBottom: "36px" }}>
           <h1 style={{ color: "#004649", fontWeight: "600", fontSize: "32px", letterSpacing: "-0.02em", marginBottom: "6px" }}>🛠 Outils cliniques</h1>
           <p style={{ color: "#5A6B72", fontSize: "14px" }}>Tests validés et ressources de formation pour vos consultations</p>
@@ -380,7 +380,7 @@ function TestCard({ icon, title, subtitle, desc, tags, onOpen }) {
   const [hovered, setHovered] = useState(false);
   return (
     <div onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
-      style={{ background: "#FFFFFF", borderRadius: "20px", padding: "28px", boxShadow: hovered ? "0 12px 32px rgba(0,0,0,0.12)" : "0 4px 16px rgba(0,0,0,0.06)", border: "1px solid rgba(0,70,73,0.10)", transform: hovered ? "translateY(-3px)" : "translateY(0)", transition: "all 0.2s ease", display: "flex", flexDirection: "column", gap: "12px" }}>
+      style={{ background: "#FFFFFF", borderRadius: "24px", padding: "28px", boxShadow: hovered ? "0 12px 32px rgba(0,0,0,0.12)" : "0 4px 16px rgba(0,0,0,0.06)", border: "1px solid rgba(0,70,73,0.10)", transform: hovered ? "translateY(-3px)" : "translateY(0)", transition: "all 0.2s ease", display: "flex", flexDirection: "column", gap: "12px" }}>
       <div style={{ fontSize: "36px" }}>{icon}</div>
       <div>
         <p style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "16px", marginBottom: "3px" }}>{title}</p>

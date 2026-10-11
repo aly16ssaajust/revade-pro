@@ -379,7 +379,7 @@ function ForumContent() {
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "#EAF3F8" }}>
       <Navbar proId={pro?.id} />
-      <div style={{ padding: "40px 80px", maxWidth: "1000px", margin: "0 auto" }}>
+      <div style={{ padding: "40px 48px 72px", maxWidth: "1280px", margin: "0 auto" }}>
         {postOuvert ? (
           renderPost()
         ) : categorieOuverte ? (
@@ -465,7 +465,7 @@ function ForumContent() {
                     </div>
 
                     {/* Thread */}
-                    <div style={{ flex: 1, display: "flex", flexDirection: "column", background: "#FFFFFF", borderRadius: "16px", boxShadow: "0 4px 16px rgba(0,0,0,0.08)", overflow: "hidden" }}>
+                    <div style={{ flex: 1, display: "flex", flexDirection: "column", background: "#FFFFFF", borderRadius: "24px", boxShadow: "0 8px 24px rgba(0,70,73,0.06)", overflow: "hidden" }}>
                       {!patientSel ? (
                         <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: "12px", color: "#aaa" }}>
                           <span style={{ fontSize: "40px" }}>💬</span>

@@ -577,7 +577,7 @@ export default function FichePatient() {
 
       <Navbar proId={pro?.id} />
 
-      <div style={{ padding: "40px 80px", maxWidth: "1200px", margin: "0 auto" }}>
+      <div style={{ padding: "40px 48px 72px", maxWidth: "1280px", margin: "0 auto" }}>
 
         {/* Flèche retour + boutons */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
@@ -648,7 +648,7 @@ export default function FichePatient() {
 
         {/* INFORMATIONS */}
         {onglet === "informations" && (
-          <div style={{ background: "#FFFFFF", borderRadius: "20px", padding: "40px", boxShadow: "0 8px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)", maxWidth: "700px" }}>
+          <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "40px", boxShadow: "0 8px 24px rgba(0,70,73,0.06)", maxWidth: "700px" }}>
             <p style={{ color: "#004649", fontWeight: "700", fontSize: "17px", marginBottom: "4px" }}>{nomComplet}</p>
             <p style={{ color: "#aaa", fontSize: "13px", marginBottom: "24px" }}>Ces informations proviennent de l&apos;application Rêvade</p>
             {[
@@ -757,7 +757,7 @@ export default function FichePatient() {
         {/* STATISTIQUES */}
         {onglet === "statistiques" && (
           <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
-            <div style={{ background: "#FFFFFF", borderRadius: "16px", padding: "24px", boxShadow: "0 10px 30px rgba(0,70,73,0.06)" }}>
+            <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "24px", boxShadow: "0 10px 30px rgba(0,70,73,0.06)" }}>
               <p style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "15px", marginBottom: "8px" }}>Sessions vapotage</p>
               <p style={{ color: "#5A6B72", fontSize: "13px" }}>
                 {sessions.length === 0
@@ -778,7 +778,7 @@ export default function FichePatient() {
                 </div>
               ))}
             </div>
-            <div style={{ background: "#FFFFFF", borderRadius: "20px", padding: "32px", boxShadow: "0 8px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)" }}>
+            <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "32px", boxShadow: "0 8px 24px rgba(0,70,73,0.06)" }}>
               <p style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "16px", marginBottom: "20px" }}>Journal de bord</p>
               <div style={{ display: "flex", borderBottom: "2px solid #F0F0F0", marginBottom: "24px", gap: "32px" }}>
                 {["humeur", "substituts"].map((s) => {
@@ -847,7 +847,7 @@ export default function FichePatient() {
 
         {/* PARAMÈTRES */}
         {onglet === "parametres" && (
-          <div style={{ background: "#FFFFFF", borderRadius: "20px", padding: "40px", boxShadow: "0 8px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)" }}>
+          <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "40px", boxShadow: "0 8px 24px rgba(0,70,73,0.06)" }}>
             <div style={{ display: "flex", gap: "60px", alignItems: "flex-start" }}>
               <div style={{ background: "linear-gradient(135deg, #f0f0f0 0%, #e8e8e8 100%)", borderRadius: "16px", padding: "20px", width: "180px", minHeight: "220px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                 <Image src="/vape.png" alt="Vape" width={140} height={200} style={{ objectFit: "contain" }} />
@@ -901,7 +901,7 @@ export default function FichePatient() {
           <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
 
             {/* Objectif et motivations du patient */}
-            <div style={{ background: "#FFFFFF", borderRadius: "20px", padding: "32px", boxShadow: "0 8px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)" }}>
+            <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "32px", boxShadow: "0 8px 24px rgba(0,70,73,0.06)" }}>
               <p style={{ color: "#004649", fontWeight: "700", fontSize: "16px", marginBottom: "4px" }}>🎯 Objectif et motivations du patient</p>
               <p style={{ color: "#90A4AE", fontSize: "13px", marginBottom: "20px" }}>Renseigné lors de l'entretien motivationnel. Ces informations orientent le plan de sevrage.</p>
 
@@ -960,7 +960,7 @@ export default function FichePatient() {
             </div>
 
             {/* Recommandations libres */}
-            <div style={{ background: "#FFFFFF", borderRadius: "20px", padding: "32px", boxShadow: "0 8px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)" }}>
+            <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "32px", boxShadow: "0 8px 24px rgba(0,70,73,0.06)" }}>
               <p style={{ color: "#004649", fontWeight: "700", fontSize: "16px", marginBottom: "8px" }}>📝 Recommandations thérapeutiques</p>
               <p style={{ color: "#90A4AE", fontSize: "13px", marginBottom: "16px" }}>Rédigez librement vos recommandations, conseils, plan de soins et points de vigilance.</p>
               <textarea value={recommandations.notes || ""} onChange={(e) => setRecommandations(prev => ({ ...prev, notes: e.target.value }))}
@@ -970,7 +970,7 @@ export default function FichePatient() {
             </div>
 
             {/* Plan TSN */}
-            <div style={{ background: "#FFFFFF", borderRadius: "20px", padding: "32px", boxShadow: "0 8px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)" }}>
+            <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "32px", boxShadow: "0 8px 24px rgba(0,70,73,0.06)" }}>
               <p style={{ color: "#004649", fontWeight: "700", fontSize: "16px", marginBottom: "6px" }}>💊 Plan de substitution nicotinique (TSN)</p>
               <p style={{ color: "#90A4AE", fontSize: "13px", marginBottom: "20px" }}>Cochez les produits prescrits et sélectionnez la dose. Plusieurs produits peuvent être combinés (bithérapie).</p>
               <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
@@ -1005,7 +1005,7 @@ export default function FichePatient() {
             </div>
 
             {/* Suivi */}
-            <div style={{ background: "#FFFFFF", borderRadius: "20px", padding: "32px", boxShadow: "0 8px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)" }}>
+            <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "32px", boxShadow: "0 8px 24px rgba(0,70,73,0.06)" }}>
               <p style={{ color: "#004649", fontWeight: "700", fontSize: "16px", marginBottom: "20px" }}>🗓️ Suivi du traitement</p>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
                 <div>
@@ -1335,7 +1335,7 @@ export default function FichePatient() {
       {/* Modal suppression fiche */}
       {showDeleteModal && (
         <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.4)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100 }}>
-          <div style={{ background: "white", borderRadius: "20px", padding: "36px", width: "420px", display: "flex", flexDirection: "column", gap: "20px", boxShadow: "0 24px 64px rgba(0,0,0,0.2)" }}>
+          <div style={{ background: "white", borderRadius: "24px", padding: "36px", width: "420px", display: "flex", flexDirection: "column", gap: "20px", boxShadow: "0 24px 64px rgba(0,0,0,0.2)" }}>
             <div style={{ textAlign: "center" }}>
               <div style={{ fontSize: "36px", marginBottom: "10px" }}>🗑️</div>
               <h2 style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "17px", marginBottom: "6px" }}>Supprimer la fiche patient</h2>

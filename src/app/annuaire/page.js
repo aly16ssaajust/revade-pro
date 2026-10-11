@@ -96,7 +96,7 @@ export default function Annuaire() {
 
       <Navbar proId={pro?.id} />
 
-      <div style={{ padding: "40px 80px", maxWidth: "1200px", margin: "0 auto" }}>
+      <div style={{ padding: "40px 48px 72px", maxWidth: "1280px", margin: "0 auto" }}>
 
         {/* En-tête */}
         <div style={{ marginBottom: "32px" }}>
@@ -159,7 +159,7 @@ export default function Annuaire() {
         {/* Barre de recherche */}
         <div style={{
           background: "#FFFFFF",
-          borderRadius: "16px", padding: "14px 20px", marginBottom: "32px",
+          borderRadius: "24px", padding: "14px 20px", marginBottom: "32px",
           boxShadow: "0 10px 30px rgba(0,70,73,0.06)",
           border: "1px solid rgba(0,70,73,0.10)",
           display: "flex", alignItems: "center", gap: "12px",
@@ -258,7 +258,7 @@ function ContactCard({ contact, hovered, setHovered, showCategorie }) {
       onMouseLeave={() => setHovered(null)}
       style={{
         background: "#FFFFFF",
-        borderRadius: "16px", padding: "24px",
+        borderRadius: "24px", padding: "24px",
         boxShadow: hovered === key
           ? "0 8px 24px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.9)"
           : "0 4px 12px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.9)",

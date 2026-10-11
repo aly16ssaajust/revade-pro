@@ -1,20 +1,24 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { supabase } from "@/lib/supabase";
 import { useProProfile } from "@/lib/useProProfile";
 import Navbar from "@/components/Navbar";
 import { showToast } from "@/lib/toast";
 
 const tuiles = [
-  { id: "dashboard", label: "Fiches patients", icon: "👥", desc: "Gérez et consultez les dossiers de vos patients", href: "/dashboard", color: "#FFFFFF" },
-  { id: "agenda", label: "Agenda", icon: "📅", desc: "Gérez vos rendez-vous et votre planning", href: "/agenda", color: "#B7D7E8" },
-  { id: "forum", label: "Messagerie", icon: "💬", desc: "Échangez avec vos patients en privé", href: "/forum?tab=messagerie", color: "#004649", dark: true },
-  { id: "annuaire", label: "Annuaire", icon: "📞", desc: "Contacts utiles et ressources professionnelles", href: "/annuaire", color: "#FFFFFF" },
-  { id: "outils", label: "Outils", icon: "🛠", desc: "Tests cliniques HAD, Beck, Horn et formations MOOC", href: "/outils", color: "#B7D7E8" },
-  { id: "profil", label: "Profil", icon: "👤", desc: "Gérez vos informations et paramètres professionnels", href: "/profil", color: "#004649", dark: true },
+  { id: "dashboard", label: "Fiches patients", icon: "👥", desc: "Dossiers, consommations et évolution de vos patients", href: "/dashboard", tint: "#DCEEE6" },
+  { id: "agenda", label: "Agenda", icon: "📅", desc: "Rendez-vous, planning et demandes en attente", href: "/agenda", tint: "#D6E9F3" },
+  { id: "forum", label: "Messagerie", icon: "💬", desc: "Échangez avec vos patients en privé", href: "/forum?tab=messagerie", tint: "#F4EDE4" },
+  { id: "annuaire", label: "Annuaire", icon: "📞", desc: "Contacts utiles et ressources professionnelles", href: "/annuaire", tint: "#F4EDE4" },
+  { id: "outils", label: "Outils cliniques", icon: "🛠", desc: "Tests HAD, Beck, Horn et formations MOOC", href: "/outils", tint: "#DCEEE6" },
+  { id: "profil", label: "Profil", icon: "👤", desc: "Vos informations et paramètres professionnels", href: "/profil", tint: "#D6E9F3" },
 ];
+
+const eyebrow = {
+  color: "#004649", fontWeight: "500", fontSize: "12px",
+  letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: "18px",
+};
 
 export default function Accueil() {
   const [hovered, setHovered] = useState(null);
@@ -135,87 +139,125 @@ export default function Accueil() {
     return `Il y a ${Math.floor(diff / 86400)} jours`;
   }
 
+  const stats = [
+    { label: "Patients suivis", value: nbPatients },
+    { label: "RDV ce mois", value: nbRdvMois },
+    { label: "Messages échangés", value: nbMessages },
+  ];
+
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "#EAF3F8" }}>
       <Navbar proId={pro?.id} />
+      <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
 
-      <div style={{ padding: "48px 80px", maxWidth: "1200px", margin: "0 auto" }}>
-        <div style={{ marginBottom: "48px", display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-          <div>
-            <h1 style={{ color: "#004649", fontWeight: "600", fontSize: "32px", letterSpacing: "-0.02em", marginBottom: "8px" }}>
-              Bonjour, {pro ? `${pro.prenom} ${pro.nom}` : "…"} 👋
+      <div style={{ padding: "36px 48px 72px", maxWidth: "1280px", margin: "0 auto" }}>
+
+        {/* Bandeau d'accueil */}
+        <section style={{
+          position: "relative", overflow: "hidden",
+          background: "#004649", borderRadius: "28px",
+          padding: "44px 48px", marginBottom: "48px",
+          display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: "32px", flexWrap: "wrap",
+          boxShadow: "0 24px 60px rgba(0,70,73,0.18)",
+        }}>
+          <div aria-hidden="true" style={{ position: "absolute", inset: 0, pointerEvents: "none", background: "radial-gradient(circle at 85% 0%, rgba(183,215,232,0.28), transparent 45%), radial-gradient(circle at 0% 100%, rgba(165,201,185,0.22), transparent 40%)" }} />
+
+          <div style={{ position: "relative" }}>
+            <p style={{ ...eyebrow, color: "#A5C9B9", marginBottom: "14px" }}>Espace professionnel</p>
+            <h1 style={{ color: "#F4EDE4", fontWeight: "600", fontSize: "38px", letterSpacing: "-0.02em", lineHeight: 1.15, marginBottom: "10px" }}>
+              Bonjour, {pro ? pro.prenom : "…"} 👋
             </h1>
-            <p style={{ color: "#5A6B72", fontSize: "15px" }}>Bienvenue sur votre espace professionnel Rêvade</p>
+            <p style={{ color: "rgba(244,237,228,0.75)", fontSize: "15px", fontWeight: "300", maxWidth: "460px", lineHeight: 1.6 }}>
+              Bienvenue sur votre espace Rêvade. Voici un aperçu de votre activité.
+            </p>
           </div>
-          <button onClick={loadStats} disabled={loadingStats} style={{
-            background: "white", border: "1px solid rgba(0,70,73,0.12)", borderRadius: "50px",
-            padding: "10px 18px", fontSize: "13px", fontWeight: "600", color: "#004649",
-            cursor: loadingStats ? "not-allowed" : "pointer", opacity: loadingStats ? 0.6 : 1,
-            display: "flex", alignItems: "center", gap: "8px",
-            boxShadow: "0 2px 6px rgba(0,0,0,0.06)",
-          }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ animation: loadingStats ? "spin 0.8s linear infinite" : "none" }}>
-              <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
-            </svg>
-            {loadingStats ? "Actualisation…" : "Actualiser"}
-          </button>
-          <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
-        </div>
 
-        <div style={{ display: "flex", gap: "32px", alignItems: "flex-start" }}>
-          <div style={{ flex: 1 }}>
-            {/* Accès rapide */}
-            <p style={{ color: "#004649", fontWeight: "500", fontSize: "13px", marginBottom: "20px", letterSpacing: "0.18em", textTransform: "uppercase" }}>ACCÈS RAPIDE</p>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px" }}>
-              {tuiles.map((t) => (
-                <Link key={t.id} href={t.href} style={{ textDecoration: "none" }}>
-                  <div onMouseEnter={() => setHovered(t.id)} onMouseLeave={() => setHovered(null)} style={{ background: t.color, borderRadius: "24px", padding: "32px 28px", cursor: "pointer", boxShadow: hovered === t.id ? "0 24px 60px rgba(0,70,73,0.16)" : "0 20px 60px rgba(0,70,73,0.08)", border: "1px solid rgba(0,70,73,0.12)", height: "100%", transform: hovered === t.id ? "translateY(-4px)" : "translateY(0)", transition: "all 0.2s ease", display: "flex", flexDirection: "column", gap: "12px" }}>
-                    <span style={{ fontSize: "36px" }}>{t.icon}</span>
-                    <div>
-                      <p style={{ color: t.dark ? "#F4EDE4" : "#004649", fontWeight: "600", fontSize: "17px", marginBottom: "6px" }}>{t.label}</p>
-                      <p style={{ color: t.dark ? "rgba(244,237,228,0.75)" : "#5A6B72", fontSize: "13px", lineHeight: "1.6" }}>{t.desc}</p>
+          <div style={{ position: "relative", display: "flex", gap: "12px", alignItems: "stretch", flexWrap: "wrap" }}>
+            {stats.map((st) => (
+              <div key={st.label} style={{
+                minWidth: "130px", padding: "16px 20px", borderRadius: "20px",
+                background: "rgba(244,237,228,0.08)", border: "1px solid rgba(244,237,228,0.16)",
+              }}>
+                <p style={{ color: "#F4EDE4", fontWeight: "600", fontSize: "30px", lineHeight: 1, letterSpacing: "-0.02em" }}>
+                  {loadingStats ? "…" : st.value}
+                </p>
+                <p style={{ color: "rgba(244,237,228,0.65)", fontSize: "12px", marginTop: "8px" }}>{st.label}</p>
+              </div>
+            ))}
+            <button onClick={loadStats} disabled={loadingStats} title="Actualiser" style={{
+              width: "48px", borderRadius: "20px", border: "1px solid rgba(244,237,228,0.16)",
+              background: "rgba(244,237,228,0.08)", color: "#F4EDE4",
+              cursor: loadingStats ? "not-allowed" : "pointer",
+              display: "flex", alignItems: "center", justifyContent: "center",
+            }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ animation: loadingStats ? "spin 0.8s linear infinite" : "none" }}>
+                <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+              </svg>
+            </button>
+          </div>
+        </section>
+
+        <div style={{ display: "flex", gap: "32px", alignItems: "flex-start", flexWrap: "wrap" }}>
+
+          {/* Accès rapide */}
+          <div style={{ flex: "1 1 600px" }}>
+            <p style={eyebrow}>Accès rapide</p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: "18px" }}>
+              {tuiles.map((t) => {
+                const h = hovered === t.id;
+                return (
+                  <Link key={t.id} href={t.href} style={{ textDecoration: "none" }}>
+                    <div onMouseEnter={() => setHovered(t.id)} onMouseLeave={() => setHovered(null)} style={{
+                      height: "100%", background: "#FFFFFF", borderRadius: "24px", padding: "26px",
+                      border: h ? "1px solid rgba(0,70,73,0.22)" : "1px solid rgba(0,70,73,0.08)",
+                      boxShadow: h ? "0 24px 50px rgba(0,70,73,0.14)" : "0 8px 24px rgba(0,70,73,0.05)",
+                      transform: h ? "translateY(-4px)" : "translateY(0)",
+                      transition: "all 0.25s ease",
+                      display: "flex", flexDirection: "column", gap: "18px",
+                    }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                        <div style={{ width: "52px", height: "52px", borderRadius: "16px", background: t.tint, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "24px" }}>
+                          {t.icon}
+                        </div>
+                        <div style={{
+                          width: "36px", height: "36px", borderRadius: "50%",
+                          background: h ? "#004649" : "#EAF3F8", color: h ? "#F4EDE4" : "#004649",
+                          display: "flex", alignItems: "center", justifyContent: "center",
+                          transition: "all 0.25s ease", transform: h ? "rotate(-45deg)" : "none",
+                        }}>
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        </div>
+                      </div>
+                      <div>
+                        <p style={{ color: "#004649", fontWeight: "600", fontSize: "17px", marginBottom: "6px" }}>{t.label}</p>
+                        <p style={{ color: "#5A6B72", fontSize: "13px", lineHeight: 1.6 }}>{t.desc}</p>
+                      </div>
                     </div>
-                    <div style={{ color: t.dark ? "#A5C9B9" : "#004649", fontSize: "13px", fontWeight: "600" }}>Accéder →</div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-
-            {/* Vue d'ensemble */}
-            <p style={{ color: "#004649", fontWeight: "500", fontSize: "13px", marginBottom: "20px", marginTop: "40px", letterSpacing: "0.18em", textTransform: "uppercase" }}>VUE D'ENSEMBLE</p>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px" }}>
-              {[
-                { label: "Patients suivis", value: nbPatients, icon: "👥" },
-                { label: "RDV ce mois", value: nbRdvMois, icon: "📅" },
-                { label: "Messages échangés", value: nbMessages, icon: "💬" },
-              ].map((stat) => (
-                <div key={stat.label} style={{ background: "#FFFFFF", borderRadius: "24px", padding: "24px", boxShadow: "0 20px 60px rgba(0,70,73,0.08)", border: "1px solid rgba(0,70,73,0.12)", display: "flex", alignItems: "center", gap: "16px" }}>
-                  <span style={{ fontSize: "28px" }}>{stat.icon}</span>
-                  <div>
-                    <p style={{ color: "#004649", fontWeight: "700", fontSize: "24px" }}>{loadingStats ? "…" : stat.value}</p>
-                    <p style={{ color: "#5A6B72", fontSize: "12px" }}>{stat.label}</p>
-                  </div>
-                </div>
-              ))}
+                  </Link>
+                );
+              })}
             </div>
           </div>
 
           {/* Activité récente */}
-          <div style={{ width: "320px", flexShrink: 0 }}>
-            <p style={{ color: "#004649", fontWeight: "500", fontSize: "13px", marginBottom: "20px", letterSpacing: "0.18em", textTransform: "uppercase" }}>ACTIVITÉ RÉCENTE</p>
-            <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "24px", boxShadow: "0 20px 60px rgba(0,70,73,0.08)", border: "1px solid rgba(0,70,73,0.12)" }}>
+          <div style={{ flex: "0 1 340px", minWidth: "300px" }}>
+            <p style={eyebrow}>Activité récente</p>
+            <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "8px 24px", border: "1px solid rgba(0,70,73,0.08)", boxShadow: "0 8px 24px rgba(0,70,73,0.05)" }}>
               {loadingStats ? (
-                <p style={{ color: "#aaa", fontSize: "13px", textAlign: "center" }}>Chargement…</p>
+                <p style={{ color: "#90A4AE", fontSize: "13px", textAlign: "center", padding: "24px 0" }}>Chargement…</p>
               ) : activiteRecente.length === 0 ? (
-                <p style={{ color: "#aaa", fontSize: "13px", textAlign: "center", fontStyle: "italic" }}>Aucune activité récente</p>
+                <div style={{ textAlign: "center", padding: "32px 0" }}>
+                  <div style={{ fontSize: "28px", marginBottom: "8px" }}>🌙</div>
+                  <p style={{ color: "#5A6B72", fontSize: "13px" }}>Aucune activité récente</p>
+                </div>
               ) : activiteRecente.map((a, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: "14px", padding: "16px 0", borderBottom: i < activiteRecente.length - 1 ? "1px solid #F0F0F0" : "none" }}>
-                  <div style={{ width: "36px", height: "36px", borderRadius: "10px", background: "#EAF3F8", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: "16px" }}>{a.icon}</div>
-                  <div style={{ flex: 1 }}>
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: "14px", padding: "16px 0", borderBottom: i < activiteRecente.length - 1 ? "1px solid rgba(0,70,73,0.08)" : "none" }}>
+                  <div style={{ width: "40px", height: "40px", borderRadius: "14px", background: "#EAF3F8", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: "17px" }}>{a.icon}</div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
                     <p style={{ color: "#2A3F4F", fontSize: "13px", fontWeight: "600", marginBottom: "2px" }}>{a.texte}</p>
-                    <p style={{ color: "#5A6B72", fontSize: "12px", marginBottom: "4px" }}>{a.detail}</p>
-                    <p style={{ color: "#90A4AE", fontSize: "11px" }}>{tempsRelatif(a.ts)}</p>
+                    <p style={{ color: "#5A6B72", fontSize: "12px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{a.detail}</p>
                   </div>
+                  <span style={{ color: "#90A4AE", fontSize: "11px", whiteSpace: "nowrap" }}>{tempsRelatif(a.ts)}</span>
                 </div>
               ))}
             </div>

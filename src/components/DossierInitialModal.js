@@ -339,7 +339,7 @@ export default function DossierInitialModal({ open, onClose, patient, pro, patie
                   <p style={{ color: "#5A6B72", fontSize: "12px", marginTop: "8px" }}>Ces données sont pré-remplies automatiquement. Vous pouvez les compléter ou les corriger ci-dessous.</p>
                 </div>
               )}
-              <div style={{ background: "white", borderRadius: "16px", padding: "24px", boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}>
+              <div style={{ background: "white", borderRadius: "24px", padding: "24px", boxShadow: "0 8px 24px rgba(0,70,73,0.06)" }}>
                 <p style={{ fontWeight: "700", color: "#004649", marginBottom: "14px" }}>Statut tabagique <span style={S}>*</span></p>
                 <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                   <CB checked={d.fumeur_occasionnel} onChange={() => tog("fumeur_occasionnel")} label="Fumeur occasionnel (moins d'une cigarette/jour)" />
@@ -348,7 +348,7 @@ export default function DossierInitialModal({ open, onClose, patient, pro, patie
                 </div>
               </div>
 
-              <div style={{ background: "white", borderRadius: "16px", padding: "24px", boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}>
+              <div style={{ background: "white", borderRadius: "24px", padding: "24px", boxShadow: "0 8px 24px rgba(0,70,73,0.06)" }}>
                 <p style={{ fontWeight: "700", color: "#004649", marginBottom: "16px" }}>Consommation journalière</p>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
                   <QtySelect value={d.cig_manufacturees} onChange={v => upd("cig_manufacturees", v)} label="Cigarettes manufacturées" />
@@ -366,7 +366,7 @@ export default function DossierInitialModal({ open, onClose, patient, pro, patie
                 </div>
               </div>
 
-              <div style={{ background: "white", borderRadius: "16px", padding: "24px", boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}>
+              <div style={{ background: "white", borderRadius: "24px", padding: "24px", boxShadow: "0 8px 24px rgba(0,70,73,0.06)" }}>
                 <p style={{ fontWeight: "700", color: "#004649", marginBottom: "16px" }}>Date d'arrêt prévue</p>
                 <RadioGroup value={d.date_arret_decide} onChange={v => upd("date_arret_decide", v)} label="Avez-vous décidé d'une date d'arrêt ?" required
                   options={[["Oui","oui"],["Non","non"]]} />
@@ -378,7 +378,7 @@ export default function DossierInitialModal({ open, onClose, patient, pro, patie
                 )}
               </div>
 
-              <div style={{ background: "white", borderRadius: "16px", padding: "24px", boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}>
+              <div style={{ background: "white", borderRadius: "24px", padding: "24px", boxShadow: "0 8px 24px rgba(0,70,73,0.06)" }}>
                 <p style={{ fontWeight: "700", color: "#004649", marginBottom: "16px" }}>Vapotage</p>
                 <RadioGroup value={d.vapoteur} onChange={v => upd("vapoteur", v)} label="Êtes-vous vapoteur ?" required
                   options={[["Oui","oui"],["Non","non"]]} />
@@ -401,7 +401,7 @@ export default function DossierInitialModal({ open, onClose, patient, pro, patie
           {/* ── SECTION 2 : DONNÉES MÉDICALES ── */}
           {section === "medical" && (
             <div style={sectionStyle}>
-              <div style={{ background: "white", borderRadius: "16px", padding: "24px", boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}>
+              <div style={{ background: "white", borderRadius: "24px", padding: "24px", boxShadow: "0 8px 24px rgba(0,70,73,0.06)" }}>
                 <p style={{ fontWeight: "700", color: "#004649", marginBottom: "16px" }}>Données anthropométriques</p>
                 <div style={rowStyle}>
                   <div>
@@ -421,7 +421,7 @@ export default function DossierInitialModal({ open, onClose, patient, pro, patie
                 )}
               </div>
 
-              <div style={{ background: "white", borderRadius: "16px", padding: "24px", boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}>
+              <div style={{ background: "white", borderRadius: "24px", padding: "24px", boxShadow: "0 8px 24px rgba(0,70,73,0.06)" }}>
                 <p style={{ fontWeight: "700", color: "#004649", marginBottom: "14px" }}>Pathologies <span style={S}>*</span></p>
                 <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                   <CB checked={d.patho_aucune} onChange={() => tog("patho_aucune")} label="Aucune" />
@@ -441,7 +441,7 @@ export default function DossierInitialModal({ open, onClose, patient, pro, patie
                 </div>
               </div>
 
-              <div style={{ background: "white", borderRadius: "16px", padding: "24px", boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}>
+              <div style={{ background: "white", borderRadius: "24px", padding: "24px", boxShadow: "0 8px 24px rgba(0,70,73,0.06)" }}>
                 <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                   <RadioGroup value={d.grossesse} onChange={v => upd("grossesse", v)} label="Grossesse en cours ?" required
                     options={[["Oui","oui"],["Non","non"]]} />
@@ -461,7 +461,7 @@ export default function DossierInitialModal({ open, onClose, patient, pro, patie
           {/* ── SECTION 3 : DÉPENDANCE & STRESS ── */}
           {section === "dependance" && (
             <div style={sectionStyle}>
-              <div style={{ background: "white", borderRadius: "16px", padding: "24px", boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}>
+              <div style={{ background: "white", borderRadius: "24px", padding: "24px", boxShadow: "0 8px 24px rgba(0,70,73,0.06)" }}>
                 <p style={{ fontWeight: "700", color: "#004649", marginBottom: "14px" }}>Dépendance psycho-comportementale <span style={S}>*</span></p>
                 <p style={{ color: "#90A4AE", fontSize: "13px", marginBottom: "14px" }}>Fumer / vapoter avec ou pour :</p>
                 <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
@@ -476,7 +476,7 @@ export default function DossierInitialModal({ open, onClose, patient, pro, patie
                 </div>
               </div>
 
-              <div style={{ background: "white", borderRadius: "16px", padding: "24px", boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}>
+              <div style={{ background: "white", borderRadius: "24px", padding: "24px", boxShadow: "0 8px 24px rgba(0,70,73,0.06)" }}>
                 <p style={{ fontWeight: "700", color: "#004649", marginBottom: "14px" }}>Entretien de stress</p>
                 <p style={{ color: "#2A3F4F", fontWeight: "600", fontSize: "13px", marginBottom: "10px" }}>Qu'est-ce qui déclenche votre stress ? <span style={S}>*</span></p>
                 <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginBottom: "16px" }}>
@@ -527,7 +527,7 @@ export default function DossierInitialModal({ open, onClose, patient, pro, patie
           {/* ── SECTION 4 : HAD ── */}
           {section === "had" && (
             <div style={sectionStyle}>
-              <div style={{ background: "white", borderRadius: "16px", padding: "24px", boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}>
+              <div style={{ background: "white", borderRadius: "24px", padding: "24px", boxShadow: "0 8px 24px rgba(0,70,73,0.06)" }}>
                 <p style={{ fontWeight: "700", color: "#004649", marginBottom: "6px" }}>Évaluation anxiété / dépression — Test HAD <span style={S}>*</span></p>
                 <p style={{ color: "#90A4AE", fontSize: "13px", marginBottom: "20px" }}>14 questions — toutes obligatoires pour le calcul automatique des scores</p>
 
@@ -582,7 +582,7 @@ export default function DossierInitialModal({ open, onClose, patient, pro, patie
           {/* ── SECTION 5 : CO-ADDICTIONS & FAGERSTRÖM ── */}
           {section === "addictions" && (
             <div style={sectionStyle}>
-              <div style={{ background: "white", borderRadius: "16px", padding: "24px", boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}>
+              <div style={{ background: "white", borderRadius: "24px", padding: "24px", boxShadow: "0 8px 24px rgba(0,70,73,0.06)" }}>
                 <p style={{ fontWeight: "700", color: "#004649", marginBottom: "16px" }}>Co-addictions <span style={S}>*</span></p>
                 <p style={{ color: "#90A4AE", fontSize: "13px", marginBottom: "14px" }}>Pour chaque item, indiquer si les addictions sont actuelles, passées, ou les deux</p>
                 {CO_ITEMS.map(({ key, label }) => (
@@ -604,7 +604,7 @@ export default function DossierInitialModal({ open, onClose, patient, pro, patie
                 ))}
               </div>
 
-              <div style={{ background: "white", borderRadius: "16px", padding: "24px", boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}>
+              <div style={{ background: "white", borderRadius: "24px", padding: "24px", boxShadow: "0 8px 24px rgba(0,70,73,0.06)" }}>
                 <p style={{ fontWeight: "700", color: "#004649", marginBottom: "6px" }}>Test de Fagerström</p>
                 {appData?.fag_score != null ? (
                   <div>
@@ -654,7 +654,7 @@ export default function DossierInitialModal({ open, onClose, patient, pro, patie
           {/* ── SECTION 6 : SITUATION ACTUELLE ── */}
           {section === "situation" && (
             <div style={sectionStyle}>
-              <div style={{ background: "white", borderRadius: "16px", padding: "24px", boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}>
+              <div style={{ background: "white", borderRadius: "24px", padding: "24px", boxShadow: "0 8px 24px rgba(0,70,73,0.06)" }}>
                 <p style={{ fontWeight: "700", color: "#004649", marginBottom: "16px" }}>À ce jour</p>
                 <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                   <div>
@@ -666,7 +666,7 @@ export default function DossierInitialModal({ open, onClose, patient, pro, patie
                 </div>
               </div>
 
-              <div style={{ background: "white", borderRadius: "16px", padding: "24px", boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}>
+              <div style={{ background: "white", borderRadius: "24px", padding: "24px", boxShadow: "0 8px 24px rgba(0,70,73,0.06)" }}>
                 <p style={{ fontWeight: "700", color: "#004649", marginBottom: "16px" }}>Substituts nicotiniques</p>
                 <p style={{ color: "#2A3F4F", fontWeight: "600", fontSize: "13px", marginBottom: "10px" }}>Patch</p>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "8px" }}>
@@ -690,7 +690,7 @@ export default function DossierInitialModal({ open, onClose, patient, pro, patie
                 </div>
               </div>
 
-              <div style={{ background: "white", borderRadius: "16px", padding: "24px", boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}>
+              <div style={{ background: "white", borderRadius: "24px", padding: "24px", boxShadow: "0 8px 24px rgba(0,70,73,0.06)" }}>
                 <p style={{ fontWeight: "700", color: "#004649", marginBottom: "16px" }}>Médicaments & Autres</p>
                 <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                   <CB checked={d.med_varenicline} onChange={() => tog("med_varenicline")} label="Varénicline (Champix)" />
@@ -729,7 +729,7 @@ export default function DossierInitialModal({ open, onClose, patient, pro, patie
           {/* ── SECTION 7 : MOTIVATION ── */}
           {section === "motivation" && (
             <div style={sectionStyle}>
-              <div style={{ background: "white", borderRadius: "16px", padding: "24px", boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}>
+              <div style={{ background: "white", borderRadius: "24px", padding: "24px", boxShadow: "0 8px 24px rgba(0,70,73,0.06)" }}>
                 <p style={{ fontWeight: "700", color: "#004649", marginBottom: "16px" }}>Test de Rollnick <span style={S}>*</span></p>
                 <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
                   {[
@@ -749,7 +749,7 @@ export default function DossierInitialModal({ open, onClose, patient, pro, patie
                 </div>
               </div>
 
-              <div style={{ background: "white", borderRadius: "16px", padding: "24px", boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}>
+              <div style={{ background: "white", borderRadius: "24px", padding: "24px", boxShadow: "0 8px 24px rgba(0,70,73,0.06)" }}>
                 <p style={{ fontWeight: "700", color: "#004649", marginBottom: "16px" }}>Balance motivationnelle — Si je consomme</p>
                 <div style={rowStyle}>
                   <div>
@@ -765,7 +765,7 @@ export default function DossierInitialModal({ open, onClose, patient, pro, patie
                 </div>
               </div>
 
-              <div style={{ background: "white", borderRadius: "16px", padding: "24px", boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}>
+              <div style={{ background: "white", borderRadius: "24px", padding: "24px", boxShadow: "0 8px 24px rgba(0,70,73,0.06)" }}>
                 <p style={{ fontWeight: "700", color: "#004649", marginBottom: "14px" }}>Motivations à l'arrêt <span style={S}>*</span></p>
                 <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginBottom: "12px" }}>
                   {[["motiv_sante","Santé"],["motiv_prix","Prix"],["motiv_entourage","Entourage"]].map(([k,l]) => (
@@ -778,7 +778,7 @@ export default function DossierInitialModal({ open, onClose, patient, pro, patie
                 </div>
               </div>
 
-              <div style={{ background: "white", borderRadius: "16px", padding: "24px", boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}>
+              <div style={{ background: "white", borderRadius: "24px", padding: "24px", boxShadow: "0 8px 24px rgba(0,70,73,0.06)" }}>
                 <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                   <div>
                     <label style={labelStyle}>Craintes de l'arrêt <span style={S}>*</span></label>
@@ -793,7 +793,7 @@ export default function DossierInitialModal({ open, onClose, patient, pro, patie
                 </div>
               </div>
 
-              <div style={{ background: "white", borderRadius: "16px", padding: "24px", boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}>
+              <div style={{ background: "white", borderRadius: "24px", padding: "24px", boxShadow: "0 8px 24px rgba(0,70,73,0.06)" }}>
                 <p style={{ fontWeight: "700", color: "#004649", marginBottom: "14px" }}>Suivi poids</p>
                 <RadioGroup value={d.compensation_alimentaire} onChange={v => upd("compensation_alimentaire", v)}
                   label="Compensation alimentaire" required options={[["Oui","oui"],["Non","non"]]} />
