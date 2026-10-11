@@ -27,7 +27,7 @@ const HORN_FACTORS = [
   { id: "C", label: "Plaisir / détente", desc: "Plaisir de fumer quand on est détendu(e)", color: "#2E7D32", bg: "#E8F5E9" },
   { id: "D", label: "Béquille", desc: "Fume pour réduire stress, colère ou anxiété", color: "#E65100", bg: "#FFF3E0" },
   { id: "E", label: "Craving psychologique", desc: "Besoin intense, conscience du manque", color: "#C62828", bg: "#FFEBEE" },
-  { id: "F", label: "Habitude automatique", desc: "Fume automatiquement, sans y penser", color: "#546E7A", bg: "#ECEFF1" },
+  { id: "F", label: "Habitude automatique", desc: "Fume automatiquement, sans y penser", color: "#5A6B72", bg: "#ECEFF1" },
 ];
 const HORN_QS = [
   { n: 1, f: "A" }, { n: 2, f: "B" }, { n: 3, f: "C" }, { n: 4, f: "D" }, { n: 5, f: "E" }, { n: 6, f: "F" },
@@ -74,7 +74,7 @@ function HADView({ data, scores }) {
                   <span style={{ background: t === "A" ? "#E3F2FD" : "#FFF3E0", color: t === "A" ? "#1565C0" : "#E65100", borderRadius: "4px", padding: "1px 6px", fontSize: "10px", fontWeight: "700", marginRight: "6px" }}>
                     Q{n} {t === "A" ? "Anxiété" : "Dépression"}
                   </span>
-                  <span style={{ color: "#546E7A", fontSize: "13px" }}>{q}</span>
+                  <span style={{ color: "#5A6B72", fontSize: "13px" }}>{q}</span>
                 </div>
                 <span style={{ color: lbl === "—" ? "#ccc" : "#004649", fontWeight: "700", fontSize: "13px", flexShrink: 0 }}>→ {lbl}</span>
               </div>
@@ -89,7 +89,7 @@ function HADView({ data, scores }) {
 function HornView({ data, scores }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-      <p style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "14px" }}>Profil motivationnel</p>
+      <p style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "14px" }}>Profil motivationnel</p>
       {HORN_FACTORS.map(factor => {
         const score = scores?.[factor.id] != null
           ? Number(scores[factor.id])
@@ -131,8 +131,8 @@ function BeckView({ data }) {
           {entry.date && <p style={{ color: "#90A4AE", fontSize: "11px", marginBottom: "12px" }}>{entry.date}</p>}
           {BECK_COLS.map(col => entry[col.id] ? (
             <div key={col.id} style={{ marginBottom: "10px" }}>
-              <p style={{ color: "#546E7A", fontSize: "12px", fontWeight: "700", marginBottom: "4px" }}>{col.icon} {col.label}</p>
-              <p style={{ color: "#1E3A4A", fontSize: "13px", whiteSpace: "pre-wrap", lineHeight: "1.6" }}>{entry[col.id]}</p>
+              <p style={{ color: "#5A6B72", fontSize: "12px", fontWeight: "700", marginBottom: "4px" }}>{col.icon} {col.label}</p>
+              <p style={{ color: "#2A3F4F", fontSize: "13px", whiteSpace: "pre-wrap", lineHeight: "1.6" }}>{entry[col.id]}</p>
             </div>
           ) : null)}
         </div>

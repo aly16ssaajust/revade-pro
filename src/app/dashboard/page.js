@@ -90,12 +90,12 @@ export default function Dashboard() {
   }
 
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "#F0F4F8" }}>
+    <div style={{ minHeight: "100vh", backgroundColor: "#EAF3F8" }}>
       <Navbar proId={pro?.id} />
 
       <div style={{ padding: "40px 60px" }}>
         <div style={{
-          background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)",
+          background: "#FFFFFF",
           borderRadius: "16px", padding: "14px 20px", marginBottom: "32px",
           boxShadow: "0 4px 12px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)",
           border: "1px solid rgba(255,255,255,0.8)",
@@ -103,7 +103,7 @@ export default function Dashboard() {
           <input
             type="text" placeholder="Recherche ..."
             value={recherche} onChange={(e) => setRecherche(e.target.value)}
-            style={{ width: "100%", outline: "none", border: "none", fontSize: "14px", color: "#1E3A4A", backgroundColor: "transparent" }}
+            style={{ width: "100%", outline: "none", border: "none", fontSize: "14px", color: "#2A3F4F", backgroundColor: "transparent" }}
           />
         </div>
 
@@ -132,13 +132,13 @@ export default function Dashboard() {
                     }}>
                     <div style={{
                       width: "44px", height: "44px", borderRadius: "50%", flexShrink: 0,
-                      background: "linear-gradient(135deg, #004649 0%, #006B6F 100%)",
+                      background: "linear-gradient(135deg, #004649 0%, #00363A 100%)",
                       display: "flex", alignItems: "center", justifyContent: "center",
                     }}>
                       <span style={{ color: "white", fontWeight: "700", fontSize: "15px" }}>{initiales}</span>
                     </div>
                     <div style={{ flex: 1 }}>
-                      <p style={{ margin: 0, color: "#1E3A4A", fontWeight: "700", fontSize: "15px" }}>{p.prenom} {p.nom}</p>
+                      <p style={{ margin: 0, color: "#2A3F4F", fontWeight: "700", fontSize: "15px" }}>{p.prenom} {p.nom}</p>
                     </div>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#90A4AE" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <polyline points="9 18 15 12 9 6" />
@@ -158,7 +158,7 @@ export default function Dashboard() {
                 cursor: "pointer",
                 display: "flex", alignItems: "center", gap: "16px",
                 boxShadow: hovered === "add" ? "0 6px 20px rgba(0,70,73,0.1)" : "0 2px 8px rgba(0,0,0,0.06)",
-                border: hovered === "add" ? "1.5px dashed #004649" : "1.5px dashed #B8D8E8",
+                border: hovered === "add" ? "1.5px dashed #004649" : "1.5px dashed #B7D7E8",
                 transition: "all 0.18s ease",
               }}>
               <div style={{ width: "44px", height: "44px", borderRadius: "50%", flexShrink: 0, background: "#E8F5EF", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -173,7 +173,7 @@ export default function Dashboard() {
       {showModal && (
         <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.3)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 50 }}>
           <div style={{
-            background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)",
+            background: "#FFFFFF",
             borderRadius: "24px", padding: "48px", width: "440px",
             display: "flex", flexDirection: "column", gap: "20px",
             boxShadow: "0 20px 60px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.9)",
@@ -188,8 +188,8 @@ export default function Dashboard() {
               value={codePatient}
               onChange={(e) => { setCodePatient(e.target.value); setErrorAdd(""); }}
               style={{
-                border: "1px solid #B8D8E8", borderRadius: "12px", padding: "12px 20px",
-                fontSize: "13px", outline: "none", color: "#1E3A4A",
+                border: "1px solid #B7D7E8", borderRadius: "12px", padding: "12px 20px",
+                fontSize: "13px", outline: "none", color: "#2A3F4F",
                 fontFamily: "monospace", letterSpacing: "0.5px",
               }}
             />
@@ -199,14 +199,14 @@ export default function Dashboard() {
             <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
               <button
                 onClick={() => { setShowModal(false); setCodePatient(""); setErrorAdd(""); }}
-                style={{ padding: "12px 32px", borderRadius: "12px", border: "1px solid #B8D8E8", backgroundColor: "white", color: "#1E3A4A", fontWeight: "600", cursor: "pointer", fontSize: "14px" }}
+                style={{ padding: "12px 32px", borderRadius: "12px", border: "1px solid #B7D7E8", backgroundColor: "white", color: "#2A3F4F", fontWeight: "600", cursor: "pointer", fontSize: "14px" }}
               >Annuler</button>
               <button
                 onClick={ajouterPatient}
                 disabled={loadingAdd || !codePatient.trim()}
                 style={{
                   padding: "12px 32px", borderRadius: "12px", border: "none",
-                  background: (loadingAdd || !codePatient.trim()) ? "#90A4AE" : "linear-gradient(135deg, #004649 0%, #006B6F 100%)",
+                  background: (loadingAdd || !codePatient.trim()) ? "#90A4AE" : "linear-gradient(135deg, #004649 0%, #00363A 100%)",
                   color: "white", fontWeight: "600",
                   cursor: (loadingAdd || !codePatient.trim()) ? "not-allowed" : "pointer",
                   fontSize: "14px", boxShadow: "0 4px 8px rgba(0,70,73,0.3)",

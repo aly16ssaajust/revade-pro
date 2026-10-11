@@ -149,7 +149,7 @@ export default function Profil() {
   };
 
   const cardStyle = {
-    background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)",
+    background: "#FFFFFF",
     borderRadius: "20px", padding: "40px",
     boxShadow: "0 8px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)",
   };
@@ -160,7 +160,7 @@ export default function Profil() {
   ];
 
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "#F0F4F8" }}>
+    <div style={{ minHeight: "100vh", backgroundColor: "#EAF3F8" }}>
       <Navbar proId={pro?.id} />
 
       <div style={{ padding: "40px 80px", maxWidth: "1100px", margin: "0 auto" }}>
@@ -168,12 +168,12 @@ export default function Profil() {
         {section !== null ? (
           <div>
             <button onClick={() => setSection(null)} style={{ background: "none", border: "none", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "10px", padding: 0, marginBottom: "32px" }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", borderRadius: "10px", background: "white", border: "1.5px solid #B8D8E8", boxShadow: "0 2px 6px rgba(0,0,0,0.06)" }}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1E3A4A" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", borderRadius: "10px", background: "white", border: "1.5px solid #B7D7E8", boxShadow: "0 2px 6px rgba(0,0,0,0.06)" }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2A3F4F" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
               </div>
               <div>
                 <p style={{ margin: 0, fontSize: "11px", color: "#90A4AE", fontWeight: "500", letterSpacing: "0.3px" }}>PROFIL</p>
-                <p style={{ margin: 0, fontSize: "15px", color: "#1E3A4A", fontWeight: "700" }}>{sections.find(s => s.id === section)?.label || "Retour"}</p>
+                <p style={{ margin: 0, fontSize: "15px", color: "#2A3F4F", fontWeight: "700" }}>{sections.find(s => s.id === section)?.label || "Retour"}</p>
               </div>
             </button>
 
@@ -190,7 +190,7 @@ export default function Profil() {
                       <span style={{ color: "#E53935", fontWeight: "600", fontSize: "12px", maxWidth: "300px" }}>❌ {saveStatus}</span>
                     )}
                     <button onClick={() => modeEdition ? handleSave() : setModeEdition(true)} style={{
-                      background: modeEdition ? "linear-gradient(135deg, #004649 0%, #006B6F 100%)" : "white",
+                      background: modeEdition ? "linear-gradient(135deg, #004649 0%, #00363A 100%)" : "white",
                       color: modeEdition ? "white" : "#004649", border: "2px solid #004649",
                       borderRadius: "12px", padding: "10px 24px", fontSize: "14px", fontWeight: "600", cursor: "pointer",
                       boxShadow: modeEdition ? "0 4px 8px rgba(0,70,73,0.3)" : "0 2px 4px rgba(0,0,0,0.08)",
@@ -207,24 +207,24 @@ export default function Profil() {
                   ["Spécialité","specialite"],["Numéro RPPS","rpps"]
                 ].map(([label, field]) => (
                   <div key={field} style={{ display: "flex", alignItems: "center", padding: "16px 0", borderBottom: "1px solid #F0F0F0" }}>
-                    <span style={{ color: "#1E3A4A", fontSize: "14px", fontWeight: "600", minWidth: "220px" }}>{label}</span>
+                    <span style={{ color: "#2A3F4F", fontSize: "14px", fontWeight: "600", minWidth: "220px" }}>{label}</span>
                     {modeEdition ? (
                       <input value={pro?.[field] ?? ''} onChange={(e) => handleChange(field, e.target.value)}
-                        style={{ flex: 1, border: "1px solid #B8D8E8", borderRadius: "8px", padding: "8px 14px", fontSize: "14px", color: "#1E3A4A", outline: "none" }} />
+                        style={{ flex: 1, border: "1px solid #B7D7E8", borderRadius: "8px", padding: "8px 14px", fontSize: "14px", color: "#2A3F4F", outline: "none" }} />
                     ) : (
-                      <span style={{ color: "#1E3A4A", fontSize: "14px" }}>{pro?.[field] ?? ''}</span>
+                      <span style={{ color: "#2A3F4F", fontSize: "14px" }}>{pro?.[field] ?? ''}</span>
                     )}
                   </div>
                 ))}
 
                 {/* Bio */}
                 <div style={{ padding: "16px 0", borderBottom: "1px solid #F0F0F0" }}>
-                  <span style={{ color: "#1E3A4A", fontSize: "14px", fontWeight: "600", display: "block", marginBottom: "8px" }}>Bio / Présentation</span>
+                  <span style={{ color: "#2A3F4F", fontSize: "14px", fontWeight: "600", display: "block", marginBottom: "8px" }}>Bio / Présentation</span>
                   {modeEdition ? (
                     <textarea value={pro?.bio ?? ''} onChange={(e) => handleChange('bio', e.target.value)} rows={3}
-                      style={{ width: "100%", border: "1px solid #B8D8E8", borderRadius: "8px", padding: "8px 14px", fontSize: "14px", color: "#1E3A4A", outline: "none", resize: "vertical" }} />
+                      style={{ width: "100%", border: "1px solid #B7D7E8", borderRadius: "8px", padding: "8px 14px", fontSize: "14px", color: "#2A3F4F", outline: "none", resize: "vertical" }} />
                   ) : (
-                    <span style={{ color: "#1E3A4A", fontSize: "14px" }}>{pro?.bio || <em style={{ color: "#aaa" }}>Non renseigné</em>}</span>
+                    <span style={{ color: "#2A3F4F", fontSize: "14px" }}>{pro?.bio || <em style={{ color: "#aaa" }}>Non renseigné</em>}</span>
                   )}
                 </div>
 
@@ -238,28 +238,28 @@ export default function Profil() {
                   ].map(([label, field, hint]) => (
                     <div key={field} style={{ display: "flex", alignItems: "center", padding: "12px 0", borderBottom: "1px solid #F8F8F8" }}>
                       <div style={{ minWidth: "220px" }}>
-                        <span style={{ color: "#1E3A4A", fontSize: "14px", fontWeight: "600" }}>{label}</span>
+                        <span style={{ color: "#2A3F4F", fontSize: "14px", fontWeight: "600" }}>{label}</span>
                         {modeEdition && <p style={{ color: "#aaa", fontSize: "11px", marginTop: "2px" }}>{hint}</p>}
                       </div>
                       {modeEdition ? (
                         <input value={pro?.[field] ?? ''} onChange={(e) => handleChange(field, e.target.value)}
                           placeholder={hint}
-                          style={{ flex: 1, border: "1px solid #B8D8E8", borderRadius: "8px", padding: "8px 14px", fontSize: "14px", color: "#1E3A4A", outline: "none" }} />
+                          style={{ flex: 1, border: "1px solid #B7D7E8", borderRadius: "8px", padding: "8px 14px", fontSize: "14px", color: "#2A3F4F", outline: "none" }} />
                       ) : (
-                        <span style={{ color: "#1E3A4A", fontSize: "14px" }}>{pro?.[field] || <em style={{ color: "#aaa" }}>Non renseigné</em>}</span>
+                        <span style={{ color: "#2A3F4F", fontSize: "14px" }}>{pro?.[field] || <em style={{ color: "#aaa" }}>Non renseigné</em>}</span>
                       )}
                     </div>
                   ))}
                   <div style={{ display: "flex", alignItems: "center", padding: "12px 0", borderBottom: "1px solid #F8F8F8" }}>
                     <div style={{ minWidth: "220px" }}>
-                      <span style={{ color: "#1E3A4A", fontSize: "14px", fontWeight: "600" }}>Prise de RDV via Rêvade</span>
+                      <span style={{ color: "#2A3F4F", fontSize: "14px", fontWeight: "600" }}>Prise de RDV via Rêvade</span>
                       {modeEdition && <p style={{ color: "#aaa", fontSize: "11px", marginTop: "2px" }}>Les patients peuvent demander un créneau depuis l'app</p>}
                     </div>
                     {modeEdition ? (
                       <label style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
                         <input type="checkbox" checked={pro?.booking_revade ?? false} onChange={(e) => handleChange('booking_revade', e.target.checked)}
                           style={{ width: "18px", height: "18px", accentColor: "#004649", cursor: "pointer" }} />
-                        <span style={{ fontSize: "14px", color: "#1E3A4A" }}>{pro?.booking_revade ? "Activé" : "Désactivé"}</span>
+                        <span style={{ fontSize: "14px", color: "#2A3F4F" }}>{pro?.booking_revade ? "Activé" : "Désactivé"}</span>
                       </label>
                     ) : (
                       <span style={{ color: pro?.booking_revade ? "#004649" : "#aaa", fontSize: "14px", fontWeight: "600" }}>
@@ -274,14 +274,14 @@ export default function Profil() {
                   <p style={{ color: "#004649", fontSize: "14px", fontWeight: "700", marginBottom: "12px" }}>👁️ Visibilité</p>
                   <div style={{ display: "flex", alignItems: "center", padding: "12px 0" }}>
                     <div style={{ minWidth: "220px" }}>
-                      <span style={{ color: "#1E3A4A", fontSize: "14px", fontWeight: "600" }}>Apparaître dans l'annuaire</span>
+                      <span style={{ color: "#2A3F4F", fontSize: "14px", fontWeight: "600" }}>Apparaître dans l'annuaire</span>
                       {modeEdition && <p style={{ color: "#aaa", fontSize: "11px", marginTop: "2px" }}>Les patients peuvent vous trouver dans la liste des professionnels Rêvade</p>}
                     </div>
                     {modeEdition ? (
                       <label style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
                         <input type="checkbox" checked={pro?.visible_annuaire ?? true} onChange={(e) => handleChange('visible_annuaire', e.target.checked)}
                           style={{ width: "18px", height: "18px", accentColor: "#004649", cursor: "pointer" }} />
-                        <span style={{ fontSize: "14px", color: "#1E3A4A" }}>{(pro?.visible_annuaire ?? true) ? "Visible" : "Caché"}</span>
+                        <span style={{ fontSize: "14px", color: "#2A3F4F" }}>{(pro?.visible_annuaire ?? true) ? "Visible" : "Caché"}</span>
                       </label>
                     ) : (
                       <span style={{ color: (pro?.visible_annuaire ?? true) ? "#004649" : "#aaa", fontSize: "14px", fontWeight: "600" }}>
@@ -301,7 +301,7 @@ export default function Profil() {
                   <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
                     <span style={{ fontSize: "22px" }}>🔒</span>
                     <div>
-                      <p style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "14px" }}>Changer le mot de passe</p>
+                      <p style={{ color: "#2A3F4F", fontWeight: "600", fontSize: "14px" }}>Changer le mot de passe</p>
                       <p style={{ color: "#aaa", fontSize: "13px", marginTop: "2px" }}>Modifier votre mot de passe de connexion</p>
                     </div>
                   </div>
@@ -315,7 +315,7 @@ export default function Profil() {
                     <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
                       <span style={{ fontSize: "22px" }}>{item.icon}</span>
                       <div>
-                        <p style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "14px" }}>{item.label}</p>
+                        <p style={{ color: "#2A3F4F", fontWeight: "600", fontSize: "14px" }}>{item.label}</p>
                         <p style={{ color: "#aaa", fontSize: "13px", marginTop: "2px" }}>{item.desc}</p>
                       </div>
                     </div>
@@ -332,9 +332,9 @@ export default function Profil() {
                 {/* Calendrier */}
                 <div style={{ ...cardStyle, padding: "32px", minWidth: "400px" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
-                    <button onClick={moisPrecedent} style={{ background: "none", border: "none", color: "#1E3A4A", fontSize: "18px", cursor: "pointer" }}>◀</button>
-                    <span style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "16px" }}>{moisNoms[moisActuel]} {anneeActuelle}</span>
-                    <button onClick={moisSuivant} style={{ background: "none", border: "none", color: "#1E3A4A", fontSize: "18px", cursor: "pointer" }}>▶</button>
+                    <button onClick={moisPrecedent} style={{ background: "none", border: "none", color: "#2A3F4F", fontSize: "18px", cursor: "pointer" }}>◀</button>
+                    <span style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "16px" }}>{moisNoms[moisActuel]} {anneeActuelle}</span>
+                    <button onClick={moisSuivant} style={{ background: "none", border: "none", color: "#2A3F4F", fontSize: "18px", cursor: "pointer" }}>▶</button>
                   </div>
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: "4px", marginBottom: "8px" }}>
                     {joursNoms.map((j) => (
@@ -352,9 +352,9 @@ export default function Profil() {
                         <div key={day} onClick={() => setJourSelectionne(key)} style={{
                           textAlign: "center", padding: "10px 4px", borderRadius: "10px", cursor: "pointer",
                           background: estSelectionne
-                            ? "linear-gradient(135deg, #004649 0%, #006B6F 100%)"
+                            ? "linear-gradient(135deg, #004649 0%, #00363A 100%)"
                             : estAujourdhui ? "#DFF0EA" : "transparent",
-                          color: estSelectionne ? "white" : "#1E3A4A",
+                          color: estSelectionne ? "white" : "#2A3F4F",
                           fontWeight: estSelectionne || estAujourdhui ? "700" : "400",
                           fontSize: "14px", position: "relative",
                           boxShadow: estSelectionne ? "0 4px 8px rgba(0,70,73,0.3)" : "none",
@@ -375,7 +375,7 @@ export default function Profil() {
                     </p>
                     <button
                       onClick={() => { setNouveauRdv({ ...nouveauRdv, date: jourSelectionne }); setShowModalRdv(true); }}
-                      style={{ background: "linear-gradient(135deg, #004649 0%, #006B6F 100%)", color: "white", borderRadius: "10px", padding: "8px 16px", fontSize: "13px", fontWeight: "600", border: "none", cursor: "pointer", boxShadow: "0 4px 8px rgba(0,70,73,0.3)" }}>
+                      style={{ background: "linear-gradient(135deg, #004649 0%, #00363A 100%)", color: "white", borderRadius: "10px", padding: "8px 16px", fontSize: "13px", fontWeight: "600", border: "none", cursor: "pointer", boxShadow: "0 4px 8px rgba(0,70,73,0.3)" }}>
                       + Ajouter un RDV
                     </button>
                   </div>
@@ -386,18 +386,18 @@ export default function Profil() {
                     <div key={i} style={{ display: "flex", alignItems: "center", gap: "20px", padding: "16px 20px", background: "linear-gradient(135deg, #F5F9F8 0%, #E8F5EF 100%)", borderRadius: "12px", marginBottom: "12px", borderLeft: "4px solid #004649", boxShadow: "0 2px 8px rgba(0,70,73,0.08)" }}>
                       <span style={{ color: "#004649", fontWeight: "700", fontSize: "14px", minWidth: "60px" }}>{rdv.heure}</span>
                       <div>
-                        <p style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "14px" }}>{rdv.patient}</p>
+                        <p style={{ color: "#2A3F4F", fontWeight: "600", fontSize: "14px" }}>{rdv.patient}</p>
                         <p style={{ color: "#888", fontSize: "13px" }}>{rdv.type}</p>
                       </div>
                     </div>
                   ))}
 
                   {/* Lien Doctolib */}
-                  <div style={{ marginTop: "24px", padding: "16px 20px", background: "linear-gradient(135deg, #f0f8ff 0%, #e8f4fd 100%)", borderRadius: "12px", border: "1px solid #B8D8E8", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <div style={{ marginTop: "24px", padding: "16px 20px", background: "linear-gradient(135deg, #f0f8ff 0%, #e8f4fd 100%)", borderRadius: "12px", border: "1px solid #B7D7E8", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
                       <span style={{ fontSize: "22px" }}>🩺</span>
                       <div>
-                        <p style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "14px" }}>Synchroniser avec Doctolib</p>
+                        <p style={{ color: "#2A3F4F", fontWeight: "600", fontSize: "14px" }}>Synchroniser avec Doctolib</p>
                         <p style={{ color: "#888", fontSize: "12px" }}>Importez vos rendez-vous automatiquement</p>
                       </div>
                     </div>
@@ -413,20 +413,20 @@ export default function Profil() {
         ) : (
           <div>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginBottom: "48px", position: "relative" }}>
-              <button onClick={() => setSection("annuaire")} style={{ position: "absolute", right: 0, top: 0, background: "linear-gradient(135deg, #004649 0%, #006B6F 100%)", color: "white", borderRadius: "12px", padding: "12px 24px", fontSize: "14px", fontWeight: "600", border: "none", cursor: "pointer", boxShadow: "0 4px 8px rgba(0,70,73,0.3)" }}>
+              <button onClick={() => setSection("annuaire")} style={{ position: "absolute", right: 0, top: 0, background: "linear-gradient(135deg, #004649 0%, #00363A 100%)", color: "white", borderRadius: "12px", padding: "12px 24px", fontSize: "14px", fontWeight: "600", border: "none", cursor: "pointer", boxShadow: "0 4px 8px rgba(0,70,73,0.3)" }}>
                 ✏️ Modifier le profil
               </button>
 
-              <div style={{ width: "100px", height: "100px", borderRadius: "50%", background: "linear-gradient(135deg, #004649 0%, #006B6F 100%)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "16px", boxShadow: "0 8px 20px rgba(0,70,73,0.25), inset 0 1px 0 rgba(255,255,255,0.15)", flexShrink: 0 }}>
+              <div style={{ width: "100px", height: "100px", borderRadius: "50%", background: "linear-gradient(135deg, #004649 0%, #00363A 100%)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "16px", boxShadow: "0 8px 20px rgba(0,70,73,0.25), inset 0 1px 0 rgba(255,255,255,0.15)", flexShrink: 0 }}>
                 <span style={{ color: "white", fontWeight: "700", fontSize: "32px", letterSpacing: "1px" }}>
                   {`${(pro?.prenom?.[0] ?? '').toUpperCase()}${(pro?.nom?.[0] ?? '').toUpperCase()}`}
                 </span>
               </div>
 
-              <p style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "20px", marginBottom: "4px" }}>{pro?.prenom} {pro?.nom}</p>
+              <p style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "20px", marginBottom: "4px" }}>{pro?.prenom} {pro?.nom}</p>
               <p style={{ color: "#888", fontSize: "14px", marginBottom: "4px" }}>{pro?.email}</p>
               <p style={{ color: "#888", fontSize: "14px" }}>{pro?.specialite}</p>
-              <div style={{ marginTop: "12px", background: "linear-gradient(135deg, #004649 0%, #006B6F 100%)", color: "white", borderRadius: "999px", padding: "6px 16px", fontSize: "13px", fontWeight: "600", boxShadow: "0 4px 8px rgba(0,70,73,0.3)" }}>
+              <div style={{ marginTop: "12px", background: "linear-gradient(135deg, #004649 0%, #00363A 100%)", color: "white", borderRadius: "999px", padding: "6px 16px", fontSize: "13px", fontWeight: "600", boxShadow: "0 4px 8px rgba(0,70,73,0.3)" }}>
                 ✓ Professionnel certifié
               </div>
             </div>
@@ -439,7 +439,7 @@ export default function Profil() {
                   <div style={{ width: "44px", height: "44px", borderRadius: "12px", background: "linear-gradient(135deg, #E8F5EF 0%, #C8E6D4 100%)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                     <span style={{ fontSize: "22px" }}>{s.icon}</span>
                   </div>
-                  <span style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "14px", flex: 1 }}>{s.label}</span>
+                  <span style={{ color: "#2A3F4F", fontWeight: "600", fontSize: "14px", flex: 1 }}>{s.label}</span>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B0BEC5" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
                 </div>
               ))}
@@ -469,21 +469,21 @@ export default function Profil() {
           <div style={{ background: "white", borderRadius: "20px", padding: "40px", width: "420px", display: "flex", flexDirection: "column", gap: "16px", boxShadow: "0 20px 60px rgba(0,0,0,0.2)" }}>
             <h2 style={{ color: "#004649", fontWeight: "700", fontSize: "18px", textAlign: "center" }}>🔒 Changer le mot de passe</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-              <label style={{ color: "#1E3A4A", fontSize: "13px", fontWeight: "600" }}>Nouveau mot de passe</label>
+              <label style={{ color: "#2A3F4F", fontSize: "13px", fontWeight: "600" }}>Nouveau mot de passe</label>
               <input
                 type="password" value={newPassword}
                 onChange={(e) => { setNewPassword(e.target.value); setPasswordStatus(null); }}
                 placeholder="Minimum 8 caractères"
-                style={{ border: "1px solid #B8D8E8", borderRadius: "12px", padding: "12px 16px", fontSize: "14px", outline: "none", color: "#1E3A4A" }}
+                style={{ border: "1px solid #B7D7E8", borderRadius: "12px", padding: "12px 16px", fontSize: "14px", outline: "none", color: "#2A3F4F" }}
               />
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-              <label style={{ color: "#1E3A4A", fontSize: "13px", fontWeight: "600" }}>Confirmer le mot de passe</label>
+              <label style={{ color: "#2A3F4F", fontSize: "13px", fontWeight: "600" }}>Confirmer le mot de passe</label>
               <input
                 type="password" value={confirmPassword}
                 onChange={(e) => { setConfirmPassword(e.target.value); setPasswordStatus(null); }}
                 placeholder="Répétez le mot de passe"
-                style={{ border: `1px solid ${confirmPassword && confirmPassword !== newPassword ? "#E53935" : "#B8D8E8"}`, borderRadius: "12px", padding: "12px 16px", fontSize: "14px", outline: "none", color: "#1E3A4A" }}
+                style={{ border: `1px solid ${confirmPassword && confirmPassword !== newPassword ? "#E53935" : "#B7D7E8"}`, borderRadius: "12px", padding: "12px 16px", fontSize: "14px", outline: "none", color: "#2A3F4F" }}
               />
               {confirmPassword && confirmPassword !== newPassword && (
                 <p style={{ color: "#E53935", fontSize: "12px" }}>Les mots de passe ne correspondent pas</p>
@@ -493,12 +493,12 @@ export default function Profil() {
             {passwordStatus === 'error' && <p style={{ color: "#E53935", fontSize: "13px", textAlign: "center" }}>Erreur — vérifiez les champs et réessayez</p>}
             <div style={{ display: "flex", gap: "12px", justifyContent: "center", marginTop: "8px" }}>
               <button onClick={() => { setShowPasswordModal(false); setNewPassword(""); setConfirmPassword(""); setPasswordStatus(null); }}
-                style={{ padding: "12px 28px", borderRadius: "12px", border: "1px solid #B8D8E8", backgroundColor: "white", color: "#1E3A4A", fontWeight: "600", cursor: "pointer", fontSize: "14px" }}>
+                style={{ padding: "12px 28px", borderRadius: "12px", border: "1px solid #B7D7E8", backgroundColor: "white", color: "#2A3F4F", fontWeight: "600", cursor: "pointer", fontSize: "14px" }}>
                 Annuler
               </button>
               <button onClick={handlePasswordChange} disabled={passwordLoading || !newPassword || newPassword !== confirmPassword}
                 style={{ padding: "12px 28px", borderRadius: "12px", border: "none",
-                  background: (passwordLoading || !newPassword || newPassword !== confirmPassword) ? "#90A4AE" : "linear-gradient(135deg, #004649 0%, #006B6F 100%)",
+                  background: (passwordLoading || !newPassword || newPassword !== confirmPassword) ? "#90A4AE" : "linear-gradient(135deg, #004649 0%, #00363A 100%)",
                   color: "white", fontWeight: "600", cursor: (passwordLoading || !newPassword || newPassword !== confirmPassword) ? "not-allowed" : "pointer", fontSize: "14px" }}>
                 {passwordLoading ? "Modification..." : "Confirmer"}
               </button>
@@ -512,12 +512,12 @@ export default function Profil() {
         <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.4)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 50 }}>
           <div style={{ background: "white", borderRadius: "20px", padding: "40px", width: "400px", display: "flex", flexDirection: "column", gap: "16px", boxShadow: "0 20px 60px rgba(0,0,0,0.2)", textAlign: "center" }}>
             <p style={{ fontSize: "28px" }}>⚠️</p>
-            <h2 style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "18px" }}>Supprimer mon compte</h2>
+            <h2 style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "18px" }}>Supprimer mon compte</h2>
             <p style={{ color: "#666", fontSize: "14px", lineHeight: "1.6" }}>
               Cette action est irréversible. Toutes vos données seront supprimées définitivement.
             </p>
             <div style={{ display: "flex", gap: "12px", justifyContent: "center", marginTop: "8px" }}>
-              <button onClick={() => setShowDeleteModal(false)} style={{ padding: "12px 28px", borderRadius: "12px", border: "1px solid #B8D8E8", backgroundColor: "white", color: "#1E3A4A", fontWeight: "600", cursor: "pointer", fontSize: "14px" }}>
+              <button onClick={() => setShowDeleteModal(false)} style={{ padding: "12px 28px", borderRadius: "12px", border: "1px solid #B7D7E8", backgroundColor: "white", color: "#2A3F4F", fontWeight: "600", cursor: "pointer", fontSize: "14px" }}>
                 Annuler
               </button>
               <button onClick={handleDeleteAccount} style={{ padding: "12px 28px", borderRadius: "12px", border: "none", background: "#E53935", color: "white", fontWeight: "600", cursor: "pointer", fontSize: "14px" }}>
@@ -531,44 +531,44 @@ export default function Profil() {
       {/* Modal ajout RDV */}
       {showModalRdv && (
         <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.3)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 50 }}>
-          <div style={{ background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)", borderRadius: "24px", padding: "48px", width: "460px", display: "flex", flexDirection: "column", gap: "20px", boxShadow: "0 20px 60px rgba(0,0,0,0.2)" }}>
+          <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "48px", width: "460px", display: "flex", flexDirection: "column", gap: "20px", boxShadow: "0 20px 60px rgba(0,0,0,0.2)" }}>
             <h2 style={{ color: "#004649", fontWeight: "700", fontSize: "20px", textAlign: "center" }}>Nouveau rendez-vous</h2>
 
             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-              <label style={{ color: "#1E3A4A", fontSize: "13px", fontWeight: "600" }}>Date</label>
+              <label style={{ color: "#2A3F4F", fontSize: "13px", fontWeight: "600" }}>Date</label>
               <input type="date" value={nouveauRdv.date} onChange={(e) => setNouveauRdv({ ...nouveauRdv, date: e.target.value })}
-                style={{ border: "1px solid #B8D8E8", borderRadius: "12px", padding: "12px 16px", fontSize: "14px", outline: "none", color: "#1E3A4A" }} />
+                style={{ border: "1px solid #B7D7E8", borderRadius: "12px", padding: "12px 16px", fontSize: "14px", outline: "none", color: "#2A3F4F" }} />
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-              <label style={{ color: "#1E3A4A", fontSize: "13px", fontWeight: "600" }}>Heure</label>
+              <label style={{ color: "#2A3F4F", fontSize: "13px", fontWeight: "600" }}>Heure</label>
               <input type="time" value={nouveauRdv.heure} onChange={(e) => setNouveauRdv({ ...nouveauRdv, heure: e.target.value })}
-                style={{ border: "1px solid #B8D8E8", borderRadius: "12px", padding: "12px 16px", fontSize: "14px", outline: "none", color: "#1E3A4A" }} />
+                style={{ border: "1px solid #B7D7E8", borderRadius: "12px", padding: "12px 16px", fontSize: "14px", outline: "none", color: "#2A3F4F" }} />
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-              <label style={{ color: "#1E3A4A", fontSize: "13px", fontWeight: "600" }}>Patient</label>
+              <label style={{ color: "#2A3F4F", fontSize: "13px", fontWeight: "600" }}>Patient</label>
               <select value={nouveauRdv.patient} onChange={(e) => setNouveauRdv({ ...nouveauRdv, patient: e.target.value })}
-                style={{ border: "1px solid #B8D8E8", borderRadius: "12px", padding: "12px 16px", fontSize: "14px", outline: "none", color: "#1E3A4A", backgroundColor: "white" }}>
+                style={{ border: "1px solid #B7D7E8", borderRadius: "12px", padding: "12px 16px", fontSize: "14px", outline: "none", color: "#2A3F4F", backgroundColor: "white" }}>
                 <option value="">Sélectionner un patient</option>
                 {patientsListe.map((p) => <option key={p} value={p}>{p}</option>)}
               </select>
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-              <label style={{ color: "#1E3A4A", fontSize: "13px", fontWeight: "600" }}>Motif</label>
+              <label style={{ color: "#2A3F4F", fontSize: "13px", fontWeight: "600" }}>Motif</label>
               <select value={nouveauRdv.type} onChange={(e) => setNouveauRdv({ ...nouveauRdv, type: e.target.value })}
-                style={{ border: "1px solid #B8D8E8", borderRadius: "12px", padding: "12px 16px", fontSize: "14px", outline: "none", color: "#1E3A4A", backgroundColor: "white" }}>
+                style={{ border: "1px solid #B7D7E8", borderRadius: "12px", padding: "12px 16px", fontSize: "14px", outline: "none", color: "#2A3F4F", backgroundColor: "white" }}>
                 <option value="">Sélectionner un motif</option>
                 {motifsList.map((m) => <option key={m} value={m}>{m}</option>)}
               </select>
             </div>
 
             <div style={{ display: "flex", gap: "12px", justifyContent: "center", marginTop: "8px" }}>
-              <button onClick={() => setShowModalRdv(false)} style={{ padding: "12px 32px", borderRadius: "12px", border: "1px solid #B8D8E8", backgroundColor: "white", color: "#1E3A4A", fontWeight: "600", cursor: "pointer", fontSize: "14px" }}>
+              <button onClick={() => setShowModalRdv(false)} style={{ padding: "12px 32px", borderRadius: "12px", border: "1px solid #B7D7E8", backgroundColor: "white", color: "#2A3F4F", fontWeight: "600", cursor: "pointer", fontSize: "14px" }}>
                 Annuler
               </button>
-              <button onClick={ajouterRdv} style={{ padding: "12px 32px", borderRadius: "12px", border: "none", background: "linear-gradient(135deg, #004649 0%, #006B6F 100%)", color: "white", fontWeight: "600", cursor: "pointer", fontSize: "14px", boxShadow: "0 4px 8px rgba(0,70,73,0.3)" }}>
+              <button onClick={ajouterRdv} style={{ padding: "12px 32px", borderRadius: "12px", border: "none", background: "linear-gradient(135deg, #004649 0%, #00363A 100%)", color: "white", fontWeight: "600", cursor: "pointer", fontSize: "14px", boxShadow: "0 4px 8px rgba(0,70,73,0.3)" }}>
                 Ajouter
               </button>
             </div>

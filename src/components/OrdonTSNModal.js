@@ -25,8 +25,8 @@ const TSN_PRODUCTS = [
 ];
 
 const inputStyle = {
-  width: "100%", border: "1px solid #B8D8E8", borderRadius: "12px",
-  padding: "12px 16px", fontSize: "14px", color: "#1E3A4A", outline: "none",
+  width: "100%", border: "1px solid #B7D7E8", borderRadius: "12px",
+  padding: "12px 16px", fontSize: "14px", color: "#2A3F4F", outline: "none",
   backgroundColor: "#FAFAFA", boxSizing: "border-box", fontFamily: "inherit",
 };
 
@@ -179,22 +179,22 @@ export default function OrdonTSNModal({ open, onClose, patient, pro, patientId, 
 
         {/* Sélection des produits TSN */}
         <div>
-          <p style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "14px", marginBottom: "14px" }}>Produits à prescrire <span style={{ color: "#E65100" }}>*</span></p>
+          <p style={{ color: "#2A3F4F", fontWeight: "600", fontSize: "14px", marginBottom: "14px" }}>Produits à prescrire <span style={{ color: "#E65100" }}>*</span></p>
           <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
             {TSN_PRODUCTS.map(p => {
               const selected = selections[p.id] || [];
               const active = selected.length > 0;
               return (
                 <div key={p.id} style={{ border: `1.5px solid ${active ? "#004649" : "#E4ECF2"}`, borderRadius: "14px", padding: "14px 18px", background: active ? "#E8F5EF" : "white", transition: "all 0.12s" }}>
-                  <p style={{ fontWeight: "600", fontSize: "14px", color: "#1E3A4A", margin: "0 0 10px 0" }}>{p.label}</p>
+                  <p style={{ fontWeight: "600", fontSize: "14px", color: "#2A3F4F", margin: "0 0 10px 0" }}>{p.label}</p>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
                     {p.doses.map(dose => {
                       const sel = selected.includes(dose);
                       return (
                         <button key={dose} type="button" onClick={() => toggleDose(p.id, dose)}
                           style={{ padding: "5px 14px", borderRadius: "999px", fontSize: "13px", fontWeight: sel ? "700" : "500", border: "none", cursor: "pointer",
-                            background: sel ? "linear-gradient(135deg,#004649,#006B6F)" : "#F0F4F8",
-                            color: sel ? "white" : "#1E3A4A" }}>
+                            background: sel ? "linear-gradient(135deg,#004649, #00363A)" : "#EAF3F8",
+                            color: sel ? "white" : "#2A3F4F" }}>
                           {dose}
                         </button>
                       );
@@ -208,20 +208,20 @@ export default function OrdonTSNModal({ open, onClose, patient, pro, patientId, 
 
         {/* Aperçu */}
         {buildPrescription() && (
-          <div style={{ background: "#F0F4F8", borderRadius: "12px", padding: "14px 18px" }}>
+          <div style={{ background: "#EAF3F8", borderRadius: "12px", padding: "14px 18px" }}>
             <p style={{ fontSize: "12px", color: "#90A4AE", fontWeight: "600", marginBottom: "6px" }}>APERÇU PRESCRIPTION</p>
-            <pre style={{ fontSize: "13px", color: "#1E3A4A", margin: 0, fontFamily: "inherit", whiteSpace: "pre-wrap" }}>{buildPrescription()}</pre>
+            <pre style={{ fontSize: "13px", color: "#2A3F4F", margin: 0, fontFamily: "inherit", whiteSpace: "pre-wrap" }}>{buildPrescription()}</pre>
           </div>
         )}
 
         {/* Durée + Renouvellement */}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
           <div>
-            <label style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "13px", display: "block", marginBottom: "8px" }}>Durée du traitement</label>
+            <label style={{ color: "#2A3F4F", fontWeight: "600", fontSize: "13px", display: "block", marginBottom: "8px" }}>Durée du traitement</label>
             <input value={duree} onChange={e => setDuree(e.target.value)} placeholder="Ex : 6 semaines" style={inputStyle} />
           </div>
           <div>
-            <label style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "13px", display: "block", marginBottom: "8px" }}>Renouvellement</label>
+            <label style={{ color: "#2A3F4F", fontWeight: "600", fontSize: "13px", display: "block", marginBottom: "8px" }}>Renouvellement</label>
             <select value={renouvellement} onChange={e => setRenouvellement(e.target.value)}
               style={{ ...inputStyle, backgroundColor: "white" }}>
               <option>Non autorisé</option>
@@ -234,7 +234,7 @@ export default function OrdonTSNModal({ open, onClose, patient, pro, patientId, 
 
         {/* Notes */}
         <div>
-          <label style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "13px", display: "block", marginBottom: "8px" }}>
+          <label style={{ color: "#2A3F4F", fontWeight: "600", fontSize: "13px", display: "block", marginBottom: "8px" }}>
             Notes complémentaires <span style={{ color: "#aaa", fontWeight: "400" }}>(optionnel)</span>
           </label>
           <textarea value={notes} onChange={e => setNotes(e.target.value)}
@@ -243,21 +243,21 @@ export default function OrdonTSNModal({ open, onClose, patient, pro, patientId, 
         </div>
 
         {/* Info signature */}
-        <div style={{ background: "#F3F8FF", border: "1px solid #B8D8E8", borderRadius: "12px", padding: "12px 16px", display: "flex", alignItems: "center", gap: "10px" }}>
+        <div style={{ background: "#F3F8FF", border: "1px solid #B7D7E8", borderRadius: "12px", padding: "12px 16px", display: "flex", alignItems: "center", gap: "10px" }}>
           <span style={{ fontSize: "18px" }}>🔏</span>
-          <p style={{ margin: 0, fontSize: "13px", color: "#1E3A4A" }}>
+          <p style={{ margin: 0, fontSize: "13px", color: "#2A3F4F" }}>
             Le PDF généré inclut une zone réservée à la <strong>signature électronique e-CPS</strong> ou au cachet du praticien.
           </p>
         </div>
 
         {/* Actions */}
         <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end" }}>
-          <button onClick={onClose} style={{ padding: "12px 28px", borderRadius: "12px", border: "1px solid #B8D8E8", background: "white", color: "#1E3A4A", fontWeight: "600", cursor: "pointer", fontSize: "14px" }}>
+          <button onClick={onClose} style={{ padding: "12px 28px", borderRadius: "12px", border: "1px solid #B7D7E8", background: "white", color: "#2A3F4F", fontWeight: "600", cursor: "pointer", fontSize: "14px" }}>
             Annuler
           </button>
           <button onClick={generer} disabled={generating || !buildPrescription().trim()}
             style={{ padding: "12px 28px", borderRadius: "12px", border: "none",
-              background: (generating || !buildPrescription().trim()) ? "#90A4AE" : "linear-gradient(135deg,#004649,#006B6F)",
+              background: (generating || !buildPrescription().trim()) ? "#90A4AE" : "linear-gradient(135deg,#004649, #00363A)",
               color: "white", fontWeight: "600", cursor: (generating || !buildPrescription().trim()) ? "not-allowed" : "pointer",
               fontSize: "14px", boxShadow: "0 4px 8px rgba(0,70,73,0.3)" }}>
             {generating ? "Génération…" : "📄 Générer le PDF"}

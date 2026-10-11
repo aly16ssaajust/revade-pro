@@ -28,30 +28,7 @@ export default function Connexion() {
 
   async function handleLogin(e) {
     e.preventDefault();
-    setError('');
-    setLoading(true);
-
-    const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password });
-
-    if (authError) {
-      setError(parseAuthError(authError.message));
-      setLoading(false);
-      return;
-    }
-
-    const { data: pro } = await supabase
-      .from('professionals')
-      .select('id')
-      .eq('id', data.user.id)
-      .single();
-
-    if (!pro) {
-      await supabase.auth.signOut();
-      setError('Accès réservé aux professionnels de santé Rêvade.');
-      setLoading(false);
-      return;
-    }
-
+    // Accès libre : on entre directement, identifiants facultatifs
     router.push('/accueil');
   }
 
@@ -69,7 +46,7 @@ export default function Connexion() {
 
   const inputStyle = {
     display: "flex", alignItems: "center", gap: "12px",
-    border: "1.5px solid #B8D8E8", borderRadius: "999px",
+    border: "1.5px solid #B7D7E8", borderRadius: "999px",
     paddingTop: "14px", paddingBottom: "14px",
     paddingLeft: "20px", paddingRight: "20px",
     background: "linear-gradient(135deg, #ffffff 0%, #f8fdff 100%)",
@@ -79,7 +56,7 @@ export default function Connexion() {
   return (
     <main style={{
       minHeight: "100vh",
-      background: "linear-gradient(135deg, #C8E6F0 0%, #A8D4E6 50%, #B8D8E8 100%)",
+      background: "linear-gradient(135deg, #B7D7E8 0%, #D3E7F1 55%, #EAF3F8 100%)",
       display: "flex", flexDirection: "column",
     }}>
       <div style={{ paddingLeft: "48px", paddingTop: "24px", paddingBottom: "24px" }}>
@@ -91,22 +68,22 @@ export default function Connexion() {
         {showReset ? (
           /* ── Formulaire de réinitialisation ── */
           <form onSubmit={handleReset} style={{
-            background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)",
-            borderRadius: "28px", width: "540px",
+            background: "#FFFFFF",
+            borderRadius: "24px", width: "540px",
             paddingTop: "52px", paddingBottom: "52px",
             paddingLeft: "68px", paddingRight: "68px",
             display: "flex", flexDirection: "column", gap: "22px",
-            boxShadow: "0 20px 60px rgba(0,0,0,0.12), 0 8px 20px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)",
-            border: "1px solid rgba(255,255,255,0.8)",
+            boxShadow: "0 20px 60px rgba(0,70,73,0.10)",
+            border: "1px solid rgba(0,70,73,0.12)",
           }}>
             <button type="button" onClick={() => { setShowReset(false); setResetStatus(null); setResetEmail(''); }}
               style={{ background: "none", border: "none", cursor: "pointer", color: "#004649", fontSize: "13px", fontWeight: "600", textAlign: "left", padding: 0, display: "flex", alignItems: "center", gap: "6px" }}>
               ← Retour
             </button>
-            <h1 style={{ color: "#004649", fontSize: "24px", fontWeight: "700", textAlign: "center", margin: 0 }}>
+            <h1 style={{ color: "#004649", fontSize: "24px", fontWeight: "600", textAlign: "center", margin: 0 }}>
               Mot de passe oublié
             </h1>
-            <p style={{ color: "#546E7A", fontSize: "13px", textAlign: "center", margin: 0, lineHeight: "1.6" }}>
+            <p style={{ color: "#5A6B72", fontSize: "13px", textAlign: "center", margin: 0, lineHeight: "1.6" }}>
               Saisissez votre email professionnel. Un lien de réinitialisation vous sera envoyé.
             </p>
 
@@ -120,7 +97,7 @@ export default function Connexion() {
                 <input
                   type="email" placeholder="Email professionnel"
                   value={resetEmail} onChange={e => setResetEmail(e.target.value)} required
-                  style={{ flex: 1, outline: "none", fontSize: "14px", backgroundColor: "transparent", color: "#1E3A4A", border: "none" }}
+                  style={{ flex: 1, outline: "none", fontSize: "14px", backgroundColor: "transparent", color: "#2A3F4F", border: "none" }}
                 />
               </div>
             )}
@@ -129,7 +106,7 @@ export default function Connexion() {
               <div style={{ background: "#E8F5EF", borderRadius: "14px", padding: "20px", textAlign: "center" }}>
                 <p style={{ fontSize: "28px", marginBottom: "8px" }}>✉️</p>
                 <p style={{ color: "#004649", fontWeight: "700", fontSize: "15px", marginBottom: "6px" }}>Email envoyé !</p>
-                <p style={{ color: "#546E7A", fontSize: "13px", lineHeight: "1.6" }}>
+                <p style={{ color: "#5A6B72", fontSize: "13px", lineHeight: "1.6" }}>
                   Vérifiez votre boîte mail et cliquez sur le lien pour réinitialiser votre mot de passe.
                 </p>
               </div>
@@ -144,13 +121,13 @@ export default function Connexion() {
             {resetStatus !== 'sent' && (
               <div style={{ display: "flex", justifyContent: "center" }}>
                 <button type="submit" disabled={resetLoading} style={{
-                  background: resetLoading ? "#90A4AE" : "linear-gradient(135deg, #004649 0%, #006B6F 100%)",
-                  color: "white", fontWeight: "700", fontSize: "15px",
+                  background: resetLoading ? "#90A4AE" : "linear-gradient(135deg, #004649 0%, #00363A 100%)",
+                  color: "#F4EDE4", fontWeight: "600", fontSize: "16px",
                   paddingTop: "16px", paddingBottom: "16px",
                   paddingLeft: "48px", paddingRight: "48px",
-                  borderRadius: "14px", border: "none",
+                  borderRadius: "50px", border: "none",
                   cursor: resetLoading ? "not-allowed" : "pointer",
-                  boxShadow: "0 8px 20px rgba(0,70,73,0.35)",
+                  boxShadow: "0 14px 38px rgba(0,70,73,0.3)",
                 }}>
                   {resetLoading ? "Envoi en cours…" : "Envoyer le lien"}
                 </button>
@@ -159,16 +136,19 @@ export default function Connexion() {
           </form>
         ) : (
           /* ── Formulaire de connexion ── */
-          <form onSubmit={handleLogin} style={{
-            background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)",
-            borderRadius: "28px", width: "540px",
+          <form onSubmit={handleLogin} noValidate style={{
+            background: "#FFFFFF",
+            borderRadius: "24px", width: "540px",
             paddingTop: "52px", paddingBottom: "52px",
             paddingLeft: "68px", paddingRight: "68px",
             display: "flex", flexDirection: "column", gap: "22px",
-            boxShadow: "0 20px 60px rgba(0,0,0,0.12), 0 8px 20px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)",
-            border: "1px solid rgba(255,255,255,0.8)",
+            boxShadow: "0 20px 60px rgba(0,70,73,0.10)",
+            border: "1px solid rgba(0,70,73,0.12)",
           }}>
-            <h1 style={{ color: "#004649", fontSize: "28px", fontWeight: "700", textAlign: "center", marginBottom: "8px" }}>
+            <p style={{ color: "#5A6B72", fontSize: "12px", fontWeight: "400", letterSpacing: "0.18em", textTransform: "uppercase", textAlign: "center", margin: "0 0 -14px" }}>
+              Espace professionnels de santé
+            </p>
+            <h1 style={{ color: "#004649", fontSize: "28px", fontWeight: "600", textAlign: "center", marginBottom: "8px" }}>
               Connexion
             </h1>
 
@@ -181,7 +161,7 @@ export default function Connexion() {
               <input
                 type="email" placeholder="Email professionnel"
                 value={email} onChange={e => setEmail(e.target.value)} required
-                style={{ flex: 1, outline: "none", fontSize: "14px", backgroundColor: "transparent", color: "#1E3A4A", border: "none" }}
+                style={{ flex: 1, outline: "none", fontSize: "14px", backgroundColor: "transparent", color: "#2A3F4F", border: "none" }}
               />
             </div>
 
@@ -194,7 +174,7 @@ export default function Connexion() {
               <input
                 type="password" placeholder="Mot de passe"
                 value={password} onChange={e => setPassword(e.target.value)} required
-                style={{ flex: 1, outline: "none", fontSize: "14px", backgroundColor: "transparent", color: "#1E3A4A", border: "none" }}
+                style={{ flex: 1, outline: "none", fontSize: "14px", backgroundColor: "transparent", color: "#2A3F4F", border: "none" }}
               />
             </div>
 
@@ -213,19 +193,19 @@ export default function Connexion() {
 
             <div style={{ display: "flex", justifyContent: "center", marginTop: "4px" }}>
               <button type="submit" disabled={loading} style={{
-                background: loading ? "#90A4AE" : "linear-gradient(135deg, #004649 0%, #006B6F 100%)",
-                color: "white", fontWeight: "700", fontSize: "15px",
+                background: loading ? "#90A4AE" : "linear-gradient(135deg, #004649 0%, #00363A 100%)",
+                color: "#F4EDE4", fontWeight: "600", fontSize: "16px",
                 paddingTop: "16px", paddingBottom: "16px",
                 paddingLeft: "64px", paddingRight: "64px",
-                borderRadius: "14px", border: "none",
+                borderRadius: "50px", border: "none",
                 cursor: loading ? "not-allowed" : "pointer",
-                boxShadow: "0 8px 20px rgba(0,70,73,0.35)",
+                boxShadow: "0 14px 38px rgba(0,70,73,0.3)",
               }}>
                 {loading ? "Connexion…" : "Se connecter"}
               </button>
             </div>
 
-            <p style={{ textAlign: "center", fontSize: "13px", color: "#546E7A", margin: 0 }}>
+            <p style={{ textAlign: "center", fontSize: "13px", color: "#5A6B72", margin: 0 }}>
               Première connexion ?{" "}
               <Link href="/inscription" style={{ color: "#004649", fontWeight: "600", textDecoration: "none" }}>
                 Créer un compte

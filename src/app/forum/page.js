@@ -31,7 +31,7 @@ function formatDate(isoString) {
 
 
 const cardStyle = {
-  background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)",
+  background: "#FFFFFF",
   borderRadius: "20px", padding: "32px",
   boxShadow: "0 8px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)",
   marginBottom: "20px",
@@ -244,7 +244,7 @@ function ForumContent() {
 
   const BadgePro = () => (
     <span style={{
-      background: "linear-gradient(135deg, #004649 0%, #006B6F 100%)",
+      background: "linear-gradient(135deg, #004649 0%, #00363A 100%)",
       color: "white", borderRadius: "999px", padding: "2px 10px",
       fontSize: "11px", fontWeight: "600",
     }}>✓ Professionnel certifié</span>
@@ -260,23 +260,23 @@ function ForumContent() {
           onClick={() => { setPostOuvert(null); setCommentaires([]); }}
           style={{ background: "none", border: "none", padding: 0, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "10px", marginBottom: "24px" }}
         >
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", borderRadius: "10px", background: "white", border: "1.5px solid #B8D8E8", boxShadow: "0 2px 6px rgba(0,0,0,0.06)" }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1E3A4A" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", borderRadius: "10px", background: "white", border: "1.5px solid #B7D7E8", boxShadow: "0 2px 6px rgba(0,0,0,0.06)" }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2A3F4F" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="15 18 9 12 15 6" />
             </svg>
           </div>
           <div>
             <p style={{ margin: 0, fontSize: "11px", color: "#90A4AE", fontWeight: "500", letterSpacing: "0.3px" }}>DISCUSSIONS</p>
-            <p style={{ margin: 0, fontSize: "15px", color: "#1E3A4A", fontWeight: "700" }}>{postOuvert.titre}</p>
+            <p style={{ margin: 0, fontSize: "15px", color: "#2A3F4F", fontWeight: "700" }}>{postOuvert.titre}</p>
           </div>
         </button>
 
         <div style={cardStyle}>
-          <p style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "17px", marginBottom: "8px" }}>{postOuvert.titre}</p>
+          <p style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "17px", marginBottom: "8px" }}>{postOuvert.titre}</p>
           <p style={{ color: "#888", fontSize: "13px", marginBottom: "16px" }}>
             par {postOuvert.pseudo}, le {formatDate(postOuvert.created_at)}
           </p>
-          <p style={{ color: "#1E3A4A", fontSize: "14px", lineHeight: "1.6", fontStyle: "italic" }}>
+          <p style={{ color: "#2A3F4F", fontSize: "14px", lineHeight: "1.6", fontStyle: "italic" }}>
             « {postOuvert.contenu} »
           </p>
           <div style={{ display: "flex", gap: "20px", marginTop: "16px" }}>
@@ -291,24 +291,24 @@ function ForumContent() {
           <div key={i} style={{
             background: msg.is_pro
               ? "linear-gradient(135deg, #F0F9F7 0%, #E4F5F1 100%)"
-              : "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)",
+              : "#FFFFFF",
             borderRadius: "16px", padding: "24px",
             boxShadow: "0 4px 12px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.9)",
             marginBottom: "12px",
             borderLeft: msg.is_pro ? "4px solid #004649" : "none",
           }}>
             <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px", flexWrap: "wrap" }}>
-              <span style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "14px" }}>{msg.pseudo}</span>
+              <span style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "14px" }}>{msg.pseudo}</span>
               {msg.is_pro && <BadgePro />}
               <span style={{ color: "#aaa", fontSize: "12px", marginLeft: "auto" }}>{formatDate(msg.created_at)}</span>
             </div>
-            <p style={{ color: "#1E3A4A", fontSize: "14px", lineHeight: "1.6" }}>{msg.contenu}</p>
+            <p style={{ color: "#2A3F4F", fontSize: "14px", lineHeight: "1.6" }}>{msg.contenu}</p>
           </div>
         ))}
 
         <div style={{ ...cardStyle, marginTop: "24px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "16px", flexWrap: "wrap" }}>
-            <span style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "14px" }}>{pseudoPro}</span>
+            <span style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "14px" }}>{pseudoPro}</span>
             <BadgePro />
           </div>
           <textarea
@@ -316,14 +316,14 @@ function ForumContent() {
             onChange={(e) => setNouveauMessage(e.target.value)}
             placeholder="Écrire un message..."
             rows={4}
-            style={{ width: "100%", border: "1px solid #B8D8E8", borderRadius: "12px", padding: "14px", fontSize: "14px", color: "#1E3A4A", outline: "none", resize: "none", backgroundColor: "#FAFAFA", boxSizing: "border-box" }}
+            style={{ width: "100%", border: "1px solid #B7D7E8", borderRadius: "12px", padding: "14px", fontSize: "14px", color: "#2A3F4F", outline: "none", resize: "none", backgroundColor: "#FAFAFA", boxSizing: "border-box" }}
           />
           <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "12px" }}>
             <button
               onClick={envoyerMessage}
               disabled={envoi || !nouveauMessage.trim()}
               style={{
-                background: (envoi || !nouveauMessage.trim()) ? "#90A4AE" : "linear-gradient(135deg, #004649 0%, #006B6F 100%)",
+                background: (envoi || !nouveauMessage.trim()) ? "#90A4AE" : "linear-gradient(135deg, #004649 0%, #00363A 100%)",
                 color: "white", borderRadius: "12px", padding: "12px 32px",
                 fontSize: "14px", fontWeight: "600", border: "none",
                 cursor: (envoi || !nouveauMessage.trim()) ? "not-allowed" : "pointer",
@@ -342,14 +342,14 @@ function ForumContent() {
         onClick={() => setCategorieOuverte(null)}
         style={{ background: "none", border: "none", padding: 0, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "10px", marginBottom: "24px" }}
       >
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", borderRadius: "10px", background: "white", border: "1.5px solid #B8D8E8", boxShadow: "0 2px 6px rgba(0,0,0,0.06)" }}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1E3A4A" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", borderRadius: "10px", background: "white", border: "1.5px solid #B7D7E8", boxShadow: "0 2px 6px rgba(0,0,0,0.06)" }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2A3F4F" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="15 18 9 12 15 6" />
           </svg>
         </div>
         <div>
           <p style={{ margin: 0, fontSize: "11px", color: "#90A4AE", fontWeight: "500", letterSpacing: "0.3px" }}>CATÉGORIES</p>
-          <p style={{ margin: 0, fontSize: "15px", color: "#1E3A4A", fontWeight: "700" }}>{categorieIcon(categorieOuverte)} {categorieLabel(categorieOuverte)}</p>
+          <p style={{ margin: 0, fontSize: "15px", color: "#2A3F4F", fontWeight: "700" }}>{categorieIcon(categorieOuverte)} {categorieLabel(categorieOuverte)}</p>
         </div>
       </button>
       <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
@@ -362,7 +362,7 @@ function ForumContent() {
             boxShadow: "0 4px 12px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8)",
             cursor: "pointer", border: "1px solid rgba(255,255,255,0.6)",
           }}>
-            <p style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "15px", marginBottom: "6px" }}>{post.titre}</p>
+            <p style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "15px", marginBottom: "6px" }}>{post.titre}</p>
             <p style={{ color: "#888", fontSize: "13px", marginBottom: "10px" }}>par {post.pseudo}, le {formatDate(post.created_at)}</p>
             <p style={{ color: "#555", fontSize: "13px", fontStyle: "italic", lineHeight: "1.5", marginBottom: "16px" }}>« {post.contenu} »</p>
             <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
@@ -377,7 +377,7 @@ function ForumContent() {
   );
 
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "#F0F4F8" }}>
+    <div style={{ minHeight: "100vh", backgroundColor: "#EAF3F8" }}>
       <Navbar proId={pro?.id} />
       <div style={{ padding: "40px 80px", maxWidth: "1000px", margin: "0 auto" }}>
         {postOuvert ? (
@@ -391,7 +391,7 @@ function ForumContent() {
                 const labels = { categories: "Catégories", messages: "Derniers messages", messagerie: "💬 Messagerie patients" };
                 const actif = onglet === o;
                 return (
-                  <button key={o} onClick={() => setOnglet(o)} style={{ padding: "12px 0", fontSize: "15px", fontWeight: actif ? "700" : "400", color: "#1E3A4A", background: "none", border: "none", cursor: "pointer", borderBottom: actif ? "3px solid #004649" : "3px solid transparent", marginBottom: "-2px", whiteSpace: "nowrap" }}>
+                  <button key={o} onClick={() => setOnglet(o)} style={{ padding: "12px 0", fontSize: "15px", fontWeight: actif ? "700" : "400", color: "#2A3F4F", background: "none", border: "none", cursor: "pointer", borderBottom: actif ? "3px solid #004649" : "3px solid transparent", marginBottom: "-2px", whiteSpace: "nowrap" }}>
                     {labels[o]}
                   </button>
                 );
@@ -408,7 +408,7 @@ function ForumContent() {
                       <p style={{ color: "#aaa", fontSize: "14px", fontStyle: "italic" }}>Aucune discussion pour le moment</p>
                     ) : categories.map((cat) => (
                       <div key={cat.id} onClick={() => setCategorieOuverte(cat.id)} style={{
-                        background: "linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%)",
+                        background: "linear-gradient(135deg, #ffffff 0%, #EAF3F8 100%)",
                         borderRadius: "16px", padding: "24px 32px",
                         boxShadow: "0 4px 12px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)",
                         display: "flex", alignItems: "center", justifyContent: "space-between",
@@ -416,7 +416,7 @@ function ForumContent() {
                       }}>
                         <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
                           <span style={{ fontSize: "28px" }}>{cat.icon}</span>
-                          <span style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "15px" }}>{cat.nom}</span>
+                          <span style={{ color: "#2A3F4F", fontWeight: "600", fontSize: "15px" }}>{cat.nom}</span>
                         </div>
                         <span style={{ color: "#888", fontSize: "13px" }}>{cat.nbSujets} sujet{cat.nbSujets > 1 ? "s" : ""} →</span>
                       </div>
@@ -438,7 +438,7 @@ function ForumContent() {
                         <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
                           <span style={{ fontSize: "13px", color: "#888" }}>{categorieIcon(post.categorie)} {categorieLabel(post.categorie)}</span>
                         </div>
-                        <p style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "15px", marginBottom: "6px" }}>{post.titre}</p>
+                        <p style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "15px", marginBottom: "6px" }}>{post.titre}</p>
                         <p style={{ color: "#888", fontSize: "13px", marginBottom: "10px" }}>par {post.pseudo}, le {formatDate(post.created_at)}</p>
                         <p style={{ color: "#555", fontSize: "13px", fontStyle: "italic", lineHeight: "1.5", marginBottom: "16px" }}>« {post.contenu} »</p>
                         <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
@@ -454,18 +454,18 @@ function ForumContent() {
                   <div style={{ display: "flex", gap: "24px", minHeight: "520px" }}>
                     {/* Patient list */}
                     <div style={{ width: "220px", flexShrink: 0, display: "flex", flexDirection: "column", gap: "8px" }}>
-                      <p style={{ color: "#546E7A", fontSize: "12px", fontWeight: "700", letterSpacing: "0.5px", marginBottom: "4px", textTransform: "uppercase" }}>Mes patients</p>
+                      <p style={{ color: "#5A6B72", fontSize: "12px", fontWeight: "700", letterSpacing: "0.5px", marginBottom: "4px", textTransform: "uppercase" }}>Mes patients</p>
                       {patientsMsg.length === 0 ? (
                         <p style={{ color: "#aaa", fontSize: "13px", fontStyle: "italic" }}>Aucun patient lié</p>
                       ) : patientsMsg.map((p) => (
-                        <button key={p.id} onClick={() => selectPatient(p)} style={{ textAlign: "left", padding: "12px 14px", borderRadius: "12px", border: "none", cursor: "pointer", background: patientSel?.id === p.id ? "linear-gradient(135deg, #004649, #006B6F)" : "linear-gradient(135deg, #ffffff, #f0f4f8)", color: patientSel?.id === p.id ? "white" : "#1E3A4A", fontWeight: "600", fontSize: "14px", boxShadow: "0 2px 6px rgba(0,0,0,0.08)" }}>
+                        <button key={p.id} onClick={() => selectPatient(p)} style={{ textAlign: "left", padding: "12px 14px", borderRadius: "12px", border: "none", cursor: "pointer", background: patientSel?.id === p.id ? "linear-gradient(135deg, #004649, #00363A)" : "linear-gradient(135deg, #ffffff, #EAF3F8)", color: patientSel?.id === p.id ? "white" : "#2A3F4F", fontWeight: "600", fontSize: "14px", boxShadow: "0 2px 6px rgba(0,0,0,0.08)" }}>
                           {p.prenom} {p.nom}
                         </button>
                       ))}
                     </div>
 
                     {/* Thread */}
-                    <div style={{ flex: 1, display: "flex", flexDirection: "column", background: "linear-gradient(135deg, #ffffff, #f8f9fa)", borderRadius: "16px", boxShadow: "0 4px 16px rgba(0,0,0,0.08)", overflow: "hidden" }}>
+                    <div style={{ flex: 1, display: "flex", flexDirection: "column", background: "#FFFFFF", borderRadius: "16px", boxShadow: "0 4px 16px rgba(0,0,0,0.08)", overflow: "hidden" }}>
                       {!patientSel ? (
                         <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: "12px", color: "#aaa" }}>
                           <span style={{ fontSize: "40px" }}>💬</span>
@@ -474,8 +474,8 @@ function ForumContent() {
                       ) : (
                         <>
                           {/* Thread header */}
-                          <div style={{ padding: "16px 20px", borderBottom: "1px solid #F0F0F0", background: "linear-gradient(135deg, #F8FAFB, #F0F4F8)" }}>
-                            <p style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "15px" }}>{patientSel.prenom} {patientSel.nom}</p>
+                          <div style={{ padding: "16px 20px", borderBottom: "1px solid #F0F0F0", background: "linear-gradient(135deg, #F8FAFB, #EAF3F8)" }}>
+                            <p style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "15px" }}>{patientSel.prenom} {patientSel.nom}</p>
                           </div>
 
                           {/* Messages */}
@@ -488,7 +488,7 @@ function ForumContent() {
                               const isPro = msg.sender_type === "pro";
                               return (
                                 <div key={msg.id} style={{ display: "flex", justifyContent: isPro ? "flex-end" : "flex-start" }}>
-                                  <div style={{ maxWidth: "70%", padding: "10px 14px", borderRadius: isPro ? "16px 16px 4px 16px" : "16px 16px 16px 4px", background: isPro ? "linear-gradient(135deg, #004649, #006B6F)" : "white", color: isPro ? "white" : "#1E3A4A", boxShadow: "0 2px 6px rgba(0,0,0,0.08)", fontSize: "14px", lineHeight: "1.5" }}>
+                                  <div style={{ maxWidth: "70%", padding: "10px 14px", borderRadius: isPro ? "16px 16px 4px 16px" : "16px 16px 16px 4px", background: isPro ? "linear-gradient(135deg, #004649, #00363A)" : "white", color: isPro ? "white" : "#2A3F4F", boxShadow: "0 2px 6px rgba(0,0,0,0.08)", fontSize: "14px", lineHeight: "1.5" }}>
                                     <p style={{ margin: 0 }}>{msg.content}</p>
                                     <p style={{ margin: "4px 0 0", fontSize: "11px", opacity: 0.7, textAlign: "right" }}>{formatMsgTime(msg.created_at)}</p>
                                   </div>
@@ -506,12 +506,12 @@ function ForumContent() {
                               onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMsg(); } }}
                               placeholder="Écrire un message…"
                               rows={2}
-                              style={{ flex: 1, border: "1px solid #E0E0E0", borderRadius: "12px", padding: "10px 14px", fontSize: "14px", outline: "none", resize: "none", color: "#1E3A4A", fontFamily: "inherit", lineHeight: "1.5" }}
+                              style={{ flex: 1, border: "1px solid #E0E0E0", borderRadius: "12px", padding: "10px 14px", fontSize: "14px", outline: "none", resize: "none", color: "#2A3F4F", fontFamily: "inherit", lineHeight: "1.5" }}
                             />
                             <button
                               onClick={sendMsg}
                               disabled={sendingMsg || !msgContent.trim()}
-                              style={{ background: sendingMsg || !msgContent.trim() ? "#B0BEC5" : "linear-gradient(135deg, #004649, #006B6F)", color: "white", border: "none", borderRadius: "10px", padding: "10px 20px", fontSize: "14px", fontWeight: "600", cursor: sendingMsg || !msgContent.trim() ? "default" : "pointer", whiteSpace: "nowrap" }}>
+                              style={{ background: sendingMsg || !msgContent.trim() ? "#B0BEC5" : "linear-gradient(135deg, #004649, #00363A)", color: "white", border: "none", borderRadius: "10px", padding: "10px 20px", fontSize: "14px", fontWeight: "600", cursor: sendingMsg || !msgContent.trim() ? "default" : "pointer", whiteSpace: "nowrap" }}>
                               {sendingMsg ? "…" : "Envoyer"}
                             </button>
                           </div>

@@ -24,7 +24,7 @@ export default function Toaster() {
     }}>
       {toasts.map(t => (
         <div key={t.id} style={{
-          background: t.type === 'error' ? '#1E3A4A' : t.type === 'warning' ? '#FF6B00' : '#004649',
+          background: t.type === 'error' ? '#2A3F4F' : t.type === 'warning' ? '#FF6B00' : '#004649',
           color: 'white',
           borderRadius: '14px',
           padding: '14px 20px',

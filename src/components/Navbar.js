@@ -202,7 +202,7 @@ export default function Navbar({ proId }) {
   return (
     <>
       <Toaster />
-      <nav style={{ background: "linear-gradient(135deg, #C8E6F0 0%, #A8D4E6 100%)", padding: "16px 48px", display: "flex", alignItems: "center", justifyContent: "space-between", boxShadow: "0 4px 12px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.6)" }}>
+      <nav style={{ background: "#B7D7E8", padding: "14px 48px", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid rgba(0,70,73,0.12)", boxShadow: "0 6px 20px rgba(0,70,73,0.08)", position: "sticky", top: 0, zIndex: 100 }}>
         <Link href="/accueil" style={{ textDecoration: "none" }}>
           <Image src="/logo.png" alt="Rêvade" width={130} height={48} />
         </Link>
@@ -212,7 +212,7 @@ export default function Navbar({ proId }) {
             const badge = item.msgBadge && unreadMsgs > 0 ? unreadMsgs : 0;
             return (
               <Link key={item.href} href={item.href} style={{ textDecoration: "none", position: "relative" }}>
-                <div style={{ padding: "10px 18px", borderRadius: "10px", fontSize: "12px", fontWeight: "700", letterSpacing: "0.5px", color: actif ? "white" : "#1E3A4A", background: actif ? "linear-gradient(135deg, #004649 0%, #006B6F 100%)" : "linear-gradient(135deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.2) 100%)", boxShadow: actif ? "0 4px 8px rgba(0,70,73,0.4), inset 0 1px 0 rgba(255,255,255,0.2)" : "0 2px 4px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)", border: "1px solid rgba(255,255,255,0.3)" }}>
+                <div style={{ padding: "9px 18px", borderRadius: "50px", fontSize: "12px", fontWeight: actif ? "600" : "500", letterSpacing: "0.08em", color: actif ? "#F4EDE4" : "#004649", background: actif ? "#004649" : "rgba(255,255,255,0.45)", boxShadow: actif ? "0 6px 20px rgba(0,70,73,0.25)" : "none", border: actif ? "1px solid #004649" : "1px solid rgba(0,70,73,0.12)", transition: "all 0.2s ease" }}>
                   {item.label}
                 </div>
                 {badge > 0 && (
@@ -230,7 +230,7 @@ export default function Navbar({ proId }) {
               <button
                 onClick={() => { setBellOpen(o => !o); if (bellFlash) setBellFlash(false); }}
                 title={hasPending ? `${pendingRdv.length} demande${pendingRdv.length > 1 ? "s" : ""} en attente` : "Aucune demande"}
-                style={{ width: "42px", height: "42px", borderRadius: "10px", background: bellFlash ? "linear-gradient(135deg, #E65100, #FF6D00)" : hasPending ? "linear-gradient(135deg, rgba(255,243,224,0.95), rgba(255,224,178,0.95))" : "linear-gradient(135deg, rgba(255,255,255,0.5), rgba(255,255,255,0.2))", border: "1px solid rgba(255,255,255,0.4)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "18px", transition: "all 0.3s ease", boxShadow: hasPending ? "0 2px 8px rgba(230,81,0,0.25)" : "0 2px 4px rgba(0,0,0,0.1)" }}>
+                style={{ width: "40px", height: "40px", borderRadius: "50%", background: bellFlash ? "linear-gradient(135deg, #E65100, #FF6D00)" : hasPending ? "linear-gradient(135deg, rgba(255,243,224,0.95), rgba(255,224,178,0.95))" : "rgba(255,255,255,0.45)", border: "1px solid rgba(0,70,73,0.12)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "18px", transition: "all 0.3s ease", boxShadow: hasPending ? "0 2px 8px rgba(230,81,0,0.25)" : "0 2px 4px rgba(0,0,0,0.1)" }}>
                 🔔
               </button>
               {totalBell > 0 && (
@@ -243,9 +243,9 @@ export default function Navbar({ proId }) {
               {bellOpen && (
                 <div style={{ position: "absolute", top: "52px", right: 0, width: "380px", background: "white", borderRadius: "16px", boxShadow: "0 16px 48px rgba(0,0,0,0.16), 0 4px 12px rgba(0,0,0,0.08)", border: "1px solid #E8E8E8", zIndex: 200, overflow: "hidden" }}>
                   {/* Header dropdown */}
-                  <div style={{ padding: "16px 20px", borderBottom: "1px solid #F0F0F0", display: "flex", justifyContent: "space-between", alignItems: "center", background: "linear-gradient(135deg, #F8FAFB, #F0F4F8)" }}>
+                  <div style={{ padding: "16px 20px", borderBottom: "1px solid #F0F0F0", display: "flex", justifyContent: "space-between", alignItems: "center", background: "#EAF3F8" }}>
                     <div>
-                      <p style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "14px", marginBottom: "2px" }}>
+                      <p style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "14px", marginBottom: "2px" }}>
                         {hasPending ? `${pendingRdv.length} demande${pendingRdv.length > 1 ? "s" : ""} en attente` : "Notifications"}
                       </p>
                       <p style={{ color: "#90A4AE", fontSize: "11px" }}>Répondez directement ici</p>
@@ -280,8 +280,8 @@ export default function Navbar({ proId }) {
                             💬
                           </div>
                           <div style={{ flex: 1 }}>
-                            <p style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "13px", marginBottom: "1px" }}>{msg.patientName}</p>
-                            <p style={{ color: "#546E7A", fontSize: "11px" }}>{msg.count} message{msg.count > 1 ? "s" : ""} non lu{msg.count > 1 ? "s" : ""}</p>
+                            <p style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "13px", marginBottom: "1px" }}>{msg.patientName}</p>
+                            <p style={{ color: "#5A6B72", fontSize: "11px" }}>{msg.count} message{msg.count > 1 ? "s" : ""} non lu{msg.count > 1 ? "s" : ""}</p>
                           </div>
                           <div style={{ background: "#1565C0", color: "white", borderRadius: "6px", padding: "4px 10px", fontSize: "11px", fontWeight: "600", whiteSpace: "nowrap" }}>
                             Ouvrir →
@@ -308,7 +308,7 @@ export default function Navbar({ proId }) {
                         >
                           <div style={{ width: "36px", height: "36px", borderRadius: "10px", background: "#FFEBEE", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: "16px" }}>❌</div>
                           <div style={{ flex: 1 }}>
-                            <p style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "13px", marginBottom: "1px" }}>
+                            <p style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "13px", marginBottom: "1px" }}>
                               {rdv.patient_pseudo ? `@${rdv.patient_pseudo}` : rdv.patient_name || "Patient"}
                             </p>
                             <p style={{ color: "#C62828", fontSize: "11px" }}>A annulé son RDV · {formatDate(rdv.date_heure)}</p>
@@ -324,7 +324,7 @@ export default function Navbar({ proId }) {
                   {pendingRdv.length === 0 && cancelledRdv.length === 0 ? (
                     <div style={{ padding: pendingMsgs.length > 0 ? "16px 20px" : "32px 20px", textAlign: "center" }}>
                       {pendingMsgs.length === 0 && <><div style={{ fontSize: "32px", marginBottom: "8px" }}>✅</div>
-                      <p style={{ color: "#546E7A", fontSize: "13px", fontWeight: "600" }}>Tout est à jour</p>
+                      <p style={{ color: "#5A6B72", fontSize: "13px", fontWeight: "600" }}>Tout est à jour</p>
                       <p style={{ color: "#90A4AE", fontSize: "12px", marginTop: "4px" }}>Aucune demande en attente</p></>}
                       {pendingMsgs.length > 0 && <p style={{ color: "#90A4AE", fontSize: "12px", fontStyle: "italic" }}>Aucune demande de RDV en attente</p>}
                     </div>
@@ -335,17 +335,17 @@ export default function Navbar({ proId }) {
                           {/* Patient info */}
                           <div style={{ marginBottom: "10px" }}>
                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "3px" }}>
-                              <p style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "14px" }}>
+                              <p style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "14px" }}>
                                 {rdv.patient_pseudo ? `@${rdv.patient_pseudo}` : rdv.patient_name || "Patient"}
                               </p>
                               <span style={{ background: "#FFF3E0", color: "#E65100", fontSize: "10px", fontWeight: "700", padding: "2px 8px", borderRadius: "6px", border: "1px solid #FFCC80" }}>
                                 En attente
                               </span>
                             </div>
-                            <p style={{ color: "#546E7A", fontSize: "12px" }}>📅 {formatDate(rdv.date_heure)}</p>
+                            <p style={{ color: "#5A6B72", fontSize: "12px" }}>📅 {formatDate(rdv.date_heure)}</p>
                             {rdv.patient_user_id && (
                               <div style={{ display: "flex", alignItems: "center", gap: "4px", marginTop: "3px" }}>
-                                <code style={{ color: "#546E7A", fontSize: "9px", fontFamily: "monospace", background: "#F0F4F8", padding: "1px 5px", borderRadius: "3px", letterSpacing: "0.2px" }}>
+                                <code style={{ color: "#5A6B72", fontSize: "9px", fontFamily: "monospace", background: "#EAF3F8", padding: "1px 5px", borderRadius: "3px", letterSpacing: "0.2px" }}>
                                   {rdv.patient_user_id}
                                 </code>
                                 <button
@@ -366,7 +366,7 @@ export default function Navbar({ proId }) {
                             <button
                               onClick={() => confirmRdv(rdv)}
                               disabled={savingId === rdv.id}
-                              style={{ flex: 1, background: savingId === rdv.id ? "#E0E0E0" : "linear-gradient(135deg, #004649, #006B6F)", color: "white", border: "none", borderRadius: "8px", padding: "8px 12px", fontSize: "12px", fontWeight: "700", cursor: savingId === rdv.id ? "default" : "pointer", transition: "opacity 0.2s" }}>
+                              style={{ flex: 1, background: savingId === rdv.id ? "#E0E0E0" : "linear-gradient(135deg, #004649, #00363A)", color: "white", border: "none", borderRadius: "8px", padding: "8px 12px", fontSize: "12px", fontWeight: "700", cursor: savingId === rdv.id ? "default" : "pointer", transition: "opacity 0.2s" }}>
                               {savingId === rdv.id ? "…" : "✓ Confirmer"}
                             </button>
                             <button
@@ -393,14 +393,14 @@ export default function Navbar({ proId }) {
           <div style={{ background: "white", borderRadius: "20px", padding: "36px", width: "440px", display: "flex", flexDirection: "column", gap: "18px", boxShadow: "0 24px 64px rgba(0,0,0,0.2)" }}>
             <div style={{ textAlign: "center" }}>
               <div style={{ fontSize: "36px", marginBottom: "10px" }}>❌</div>
-              <h2 style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "17px", marginBottom: "4px" }}>Refuser la demande</h2>
+              <h2 style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "17px", marginBottom: "4px" }}>Refuser la demande</h2>
               <p style={{ color: "#888", fontSize: "13px" }}>
                 <strong>{cancelModal.rdv.patient_pseudo ? `@${cancelModal.rdv.patient_pseudo}` : cancelModal.rdv.patient_name}</strong> · {formatDate(cancelModal.rdv.date_heure)}
               </p>
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-              <label style={{ color: "#1E3A4A", fontSize: "13px", fontWeight: "600" }}>
+              <label style={{ color: "#2A3F4F", fontSize: "13px", fontWeight: "600" }}>
                 Message au patient <span style={{ color: "#aaa", fontWeight: "400" }}>(optionnel)</span>
               </label>
               <textarea
@@ -409,7 +409,7 @@ export default function Navbar({ proId }) {
                 rows={3}
                 autoFocus
                 placeholder="Ex : Je suis indisponible ce jour, n'hésitez pas à reprendre rendez-vous…"
-                style={{ border: "1px solid #E0E0E0", borderRadius: "10px", padding: "10px 14px", fontSize: "14px", outline: "none", color: "#1E3A4A", resize: "none", fontFamily: "inherit", lineHeight: "1.5" }}
+                style={{ border: "1px solid #E0E0E0", borderRadius: "10px", padding: "10px 14px", fontSize: "14px", outline: "none", color: "#2A3F4F", resize: "none", fontFamily: "inherit", lineHeight: "1.5" }}
               />
               <p style={{ color: "#aaa", fontSize: "11px" }}>Ce message sera visible par le patient dans son application.</p>
             </div>
@@ -417,7 +417,7 @@ export default function Navbar({ proId }) {
             <div style={{ display: "flex", gap: "10px" }}>
               <button
                 onClick={() => { setCancelModal(null); setCancelMessage(""); }}
-                style={{ flex: 1, padding: "12px", borderRadius: "10px", border: "1px solid #E0E0E0", background: "white", color: "#546E7A", fontWeight: "600", cursor: "pointer", fontSize: "14px" }}>
+                style={{ flex: 1, padding: "12px", borderRadius: "10px", border: "1px solid #E0E0E0", background: "white", color: "#5A6B72", fontWeight: "600", cursor: "pointer", fontSize: "14px" }}>
                 Retour
               </button>
               <button

@@ -1,5 +1,17 @@
 @import "tailwindcss";
 
+/* DA Rêvade (revade.fr) — déclinaison bleue pour les pros de santé */
+:root {
+  --teal: #004649;
+  --teal-dark: #00363A;
+  --cream: #F4EDE4;
+  --sage: #A5C9B9;
+  --blue: #B7D7E8;
+  --blue-light: #EAF3F8;
+  --ink: #2A3F4F;
+  --muted: #5A6B72;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -7,5 +19,21 @@
 }
 
 body {
-  font-family: 'Segoe UI', sans-serif;
+  font-family: var(--font-poppins), system-ui, sans-serif;
+  color: var(--ink);
+  background: var(--blue-light);
+  -webkit-font-smoothing: antialiased;
+}
+
+input, select, button, textarea {
+  font-family: inherit;
+}
+
+h1, h2, h3 {
+  letter-spacing: -0.01em;
+}
+
+::selection {
+  color: var(--teal);
+  background: rgba(165, 201, 185, 0.5);
 }

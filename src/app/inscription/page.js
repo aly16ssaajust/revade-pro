@@ -8,7 +8,7 @@ import { supabase } from "@/lib/supabase";
 
 const inputStyle = {
   display: "flex", alignItems: "center", gap: "12px",
-  border: "1.5px solid #B8D8E8", borderRadius: "14px",
+  border: "1.5px solid #B7D7E8", borderRadius: "14px",
   paddingTop: "13px", paddingBottom: "13px",
   paddingLeft: "18px", paddingRight: "18px",
   background: "#ffffff",
@@ -17,18 +17,18 @@ const inputStyle = {
 
 const fieldStyle = {
   flex: 1, outline: "none", fontSize: "14px",
-  backgroundColor: "transparent", color: "#1E3A4A", border: "none",
+  backgroundColor: "transparent", color: "#2A3F4F", border: "none",
 };
 
 const sectionLabel = {
-  color: "#004649", fontSize: "12px", fontWeight: "700",
-  letterSpacing: "1px", textTransform: "uppercase",
+  color: "#004649", fontSize: "12px", fontWeight: "500",
+  letterSpacing: "0.18em", textTransform: "uppercase",
   margin: "8px 0 4px 4px",
 };
 
 function Icon({ d }) {
   return (
-    <span style={{ color: "#A8D4E6", flexShrink: 0 }}>
+    <span style={{ color: "#5A6B72", flexShrink: 0 }}>
       <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
         <path strokeLinecap="round" strokeLinejoin="round" d={d} />
       </svg>
@@ -136,7 +136,7 @@ export default function Inscription() {
   return (
     <main style={{
       minHeight: "100vh",
-      background: "linear-gradient(135deg, #C8E6F0 0%, #A8D4E6 50%, #B8D8E8 100%)",
+      background: "linear-gradient(135deg, #B7D7E8 0%, #D3E7F1 55%, #EAF3F8 100%)",
       display: "flex", flexDirection: "column",
     }}>
 
@@ -146,16 +146,19 @@ export default function Inscription() {
 
       <div style={{ flex: 1, display: "flex", alignItems: "flex-start", justifyContent: "center", paddingBottom: "48px" }}>
         <form onSubmit={handleRegister} style={{
-          background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)",
-          borderRadius: "28px", width: "560px",
+          background: "#FFFFFF",
+          borderRadius: "24px", width: "560px",
           paddingTop: "44px", paddingBottom: "44px",
           paddingLeft: "64px", paddingRight: "64px",
           display: "flex", flexDirection: "column", gap: "12px",
-          boxShadow: "0 20px 60px rgba(0,0,0,0.12), 0 8px 20px rgba(0,0,0,0.08)",
-          border: "1px solid rgba(255,255,255,0.8)",
+          boxShadow: "0 20px 60px rgba(0,70,73,0.10)",
+          border: "1px solid rgba(0,70,73,0.12)",
         }}>
 
-          <h1 style={{ color: "#004649", fontSize: "24px", fontWeight: "700", textAlign: "center", marginBottom: "2px" }}>
+          <p style={{ color: "#5A6B72", fontSize: "12px", fontWeight: "400", letterSpacing: "0.18em", textTransform: "uppercase", textAlign: "center", margin: "0 0 -6px" }}>
+            Espace professionnels de santé
+          </p>
+          <h1 style={{ color: "#004649", fontSize: "24px", fontWeight: "600", textAlign: "center", marginBottom: "2px" }}>
             Créer un compte
           </h1>
           <p style={{ color: "#90A4AE", fontSize: "13px", textAlign: "center", marginBottom: "8px" }}>
@@ -246,19 +249,19 @@ export default function Inscription() {
 
           <div style={{ display: "flex", justifyContent: "center", marginTop: "8px" }}>
             <button type="submit" disabled={loading} style={{
-              background: loading ? "#90A4AE" : "linear-gradient(135deg, #004649 0%, #006B6F 100%)",
-              color: "white", fontWeight: "700", fontSize: "15px",
+              background: loading ? "#90A4AE" : "linear-gradient(135deg, #004649 0%, #00363A 100%)",
+              color: "#F4EDE4", fontWeight: "600", fontSize: "16px",
               paddingTop: "16px", paddingBottom: "16px",
               paddingLeft: "64px", paddingRight: "64px",
-              borderRadius: "14px", border: "none",
+              borderRadius: "50px", border: "none",
               cursor: loading ? "not-allowed" : "pointer",
-              boxShadow: "0 8px 20px rgba(0,70,73,0.35)",
+              boxShadow: "0 14px 38px rgba(0,70,73,0.3)",
             }}>
               {loading ? "Création en cours..." : "Créer mon compte"}
             </button>
           </div>
 
-          <p style={{ textAlign: "center", fontSize: "13px", color: "#546E7A", margin: 0 }}>
+          <p style={{ textAlign: "center", fontSize: "13px", color: "#5A6B72", margin: 0 }}>
             Déjà un compte ?{" "}
             <Link href="/connexion" style={{ color: "#004649", fontWeight: "600", textDecoration: "none" }}>
               Se connecter

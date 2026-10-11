@@ -157,7 +157,7 @@ export default function Agenda() {
   const moisSel = jourSelectionne ? parseInt(jourSelectionne.split("-")[1]) - 1 : null;
   const anneeSel = jourSelectionne ? parseInt(jourSelectionne.split("-")[0]) : null;
 
-  const cardStyle = { background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)", borderRadius: "20px", boxShadow: "0 8px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)" };
+  const cardStyle = { background: "#FFFFFF", borderRadius: "20px", boxShadow: "0 8px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)" };
 
   function formatHeure(isoString) {
     const d = new Date(isoString);
@@ -167,13 +167,13 @@ export default function Agenda() {
   const actionIsConfirm = actionModal?.action === "confirme";
 
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "#F0F4F8" }}>
+    <div style={{ minHeight: "100vh", backgroundColor: "#EAF3F8" }}>
       <Navbar proId={pro?.id} />
 
       <div style={{ padding: "40px 80px", maxWidth: "1200px", margin: "0 auto" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "32px" }}>
           <div>
-            <h1 style={{ color: "#004649", fontWeight: "700", fontSize: "24px", marginBottom: "6px" }}>📅 Agenda</h1>
+            <h1 style={{ color: "#004649", fontWeight: "600", fontSize: "32px", letterSpacing: "-0.02em", marginBottom: "6px" }}>📅 Agenda</h1>
             <p style={{ color: "#888", fontSize: "14px" }}>Gérez vos rendez-vous et suivez les demandes de vos patients</p>
           </div>
           <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
@@ -182,7 +182,7 @@ export default function Agenda() {
                 ⏳ {nbEnAttente} demande{nbEnAttente > 1 ? "s" : ""} en attente
               </div>
             )}
-            <button onClick={() => { setNouveauRdv({ ...nouveauRdv, date: jourSelectionne }); setShowModal(true); }} style={{ background: "linear-gradient(135deg, #004649 0%, #006B6F 100%)", color: "white", borderRadius: "12px", padding: "10px 20px", fontSize: "14px", fontWeight: "600", border: "none", cursor: "pointer", boxShadow: "0 4px 8px rgba(0,70,73,0.3)" }}>
+            <button onClick={() => { setNouveauRdv({ ...nouveauRdv, date: jourSelectionne }); setShowModal(true); }} style={{ background: "linear-gradient(135deg, #004649 0%, #00363A 100%)", color: "white", borderRadius: "12px", padding: "10px 20px", fontSize: "14px", fontWeight: "600", border: "none", cursor: "pointer", boxShadow: "0 4px 8px rgba(0,70,73,0.3)" }}>
               + Nouveau RDV
             </button>
           </div>
@@ -192,9 +192,9 @@ export default function Agenda() {
           {/* Calendrier */}
           <div style={{ ...cardStyle, padding: "32px", minWidth: "380px" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
-              <button onClick={moisPrecedent} style={{ background: "none", border: "none", color: "#1E3A4A", fontSize: "18px", cursor: "pointer" }}>◀</button>
-              <span style={{ color: "#1E3A4A", fontWeight: "700", fontSize: "16px" }}>{MOIS_NOMS[moisActuel]} {anneeActuelle}</span>
-              <button onClick={moisSuivant} style={{ background: "none", border: "none", color: "#1E3A4A", fontSize: "18px", cursor: "pointer" }}>▶</button>
+              <button onClick={moisPrecedent} style={{ background: "none", border: "none", color: "#2A3F4F", fontSize: "18px", cursor: "pointer" }}>◀</button>
+              <span style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "16px" }}>{MOIS_NOMS[moisActuel]} {anneeActuelle}</span>
+              <button onClick={moisSuivant} style={{ background: "none", border: "none", color: "#2A3F4F", fontSize: "18px", cursor: "pointer" }}>▶</button>
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: "4px", marginBottom: "8px" }}>
               {JOURS_NOMS.map(j => <div key={j} style={{ textAlign: "center", color: "#888", fontSize: "12px", fontWeight: "600", padding: "4px" }}>{j}</div>)}
@@ -208,7 +208,7 @@ export default function Agenda() {
                 const estSel = jourSel === day && moisSel === moisActuel && anneeSel === anneeActuelle;
                 const estAujourd = day === today.getDate() && moisActuel === today.getMonth() && anneeActuelle === today.getFullYear();
                 return (
-                  <div key={day} onClick={() => setJourSelectionne(key)} style={{ textAlign: "center", padding: "10px 4px", borderRadius: "10px", cursor: "pointer", background: estSel ? "linear-gradient(135deg, #004649 0%, #006B6F 100%)" : estAujourd ? "#DFF0EA" : "transparent", color: estSel ? "white" : "#1E3A4A", fontWeight: estSel || estAujourd ? "700" : "400", fontSize: "14px", position: "relative", boxShadow: estSel ? "0 4px 8px rgba(0,70,73,0.3)" : "none" }}>
+                  <div key={day} onClick={() => setJourSelectionne(key)} style={{ textAlign: "center", padding: "10px 4px", borderRadius: "10px", cursor: "pointer", background: estSel ? "linear-gradient(135deg, #004649 0%, #00363A 100%)" : estAujourd ? "#DFF0EA" : "transparent", color: estSel ? "white" : "#2A3F4F", fontWeight: estSel || estAujourd ? "700" : "400", fontSize: "14px", position: "relative", boxShadow: estSel ? "0 4px 8px rgba(0,70,73,0.3)" : "none" }}>
                     {day}
                     {aRdv && <div style={{ position: "absolute", bottom: "3px", left: "50%", transform: "translateX(-50%)", width: "5px", height: "5px", borderRadius: "50%", backgroundColor: aEnAttente ? "#E65100" : (estSel ? "white" : "#004649") }} />}
                   </div>
@@ -242,15 +242,15 @@ export default function Agenda() {
                     <p style={{ color: "#888", fontSize: "11px" }}>{rdv.duree_minutes} min</p>
                   </div>
                   <div style={{ flex: 1 }}>
-                    <p style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "14px" }}>{patientDisplay}</p>
+                    <p style={{ color: "#2A3F4F", fontWeight: "600", fontSize: "14px" }}>{patientDisplay}</p>
                     {rdv.patient_user_id && (
                       <div style={{ display: "flex", alignItems: "center", gap: "6px", marginTop: "3px" }}>
-                        <code style={{ color: "#546E7A", fontSize: "10px", fontFamily: "monospace", background: "#F5F5F5", padding: "2px 6px", borderRadius: "4px", letterSpacing: "0.3px", userSelect: "all" }}>
+                        <code style={{ color: "#5A6B72", fontSize: "10px", fontFamily: "monospace", background: "#F5F5F5", padding: "2px 6px", borderRadius: "4px", letterSpacing: "0.3px", userSelect: "all" }}>
                           {rdv.patient_user_id}
                         </code>
                         <button
                           onClick={() => { navigator.clipboard.writeText(rdv.patient_user_id); setCopiedId(rdv.id); setTimeout(() => setCopiedId(null), 1500); }}
-                          style={{ background: copiedId === rdv.id ? "#E8F5EF" : "#EEF2F7", border: `1px solid ${copiedId === rdv.id ? "#A5C9B9" : "#D0D9E2"}`, borderRadius: "5px", cursor: "pointer", padding: "2px 8px", fontSize: "10px", fontWeight: "600", color: copiedId === rdv.id ? "#004649" : "#546E7A", transition: "all 0.2s", whiteSpace: "nowrap" }}>
+                          style={{ background: copiedId === rdv.id ? "#E8F5EF" : "#EEF2F7", border: `1px solid ${copiedId === rdv.id ? "#A5C9B9" : "#D0D9E2"}`, borderRadius: "5px", cursor: "pointer", padding: "2px 8px", fontSize: "10px", fontWeight: "600", color: copiedId === rdv.id ? "#004649" : "#5A6B72", transition: "all 0.2s", whiteSpace: "nowrap" }}>
                           {copiedId === rdv.id ? "✓ Copié" : "Copier"}
                         </button>
                       </div>
@@ -266,7 +266,7 @@ export default function Agenda() {
                   </div>
                   <div style={{ display: "flex", gap: "8px", flexShrink: 0 }}>
                     {rdv.statut === "en_attente" && (
-                      <button onClick={() => openActionModal(rdv, "confirme")} style={{ background: "linear-gradient(135deg, #004649, #006B6F)", color: "white", border: "none", borderRadius: "8px", padding: "6px 12px", fontSize: "12px", fontWeight: "600", cursor: "pointer" }}>✓ Confirmer</button>
+                      <button onClick={() => openActionModal(rdv, "confirme")} style={{ background: "linear-gradient(135deg, #004649, #00363A)", color: "white", border: "none", borderRadius: "8px", padding: "6px 12px", fontSize: "12px", fontWeight: "600", cursor: "pointer" }}>✓ Confirmer</button>
                     )}
                     {rdv.statut !== "annule" && (
                       <button onClick={() => openActionModal(rdv, "annule")} style={{ background: "white", color: "#888", border: "1px solid #E0E0E0", borderRadius: "8px", padding: "6px 12px", fontSize: "12px", cursor: "pointer" }}>Annuler</button>
@@ -278,11 +278,11 @@ export default function Agenda() {
             })}
 
             {/* Synchronisation Doctolib */}
-            <div style={{ marginTop: "24px", padding: "16px 20px", background: "linear-gradient(135deg, #f0f8ff 0%, #e8f4fd 100%)", borderRadius: "12px", border: "1px solid #B8D8E8", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <div style={{ marginTop: "24px", padding: "16px 20px", background: "linear-gradient(135deg, #f0f8ff 0%, #e8f4fd 100%)", borderRadius: "12px", border: "1px solid #B7D7E8", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
                 <span style={{ fontSize: "22px" }}>🩺</span>
                 <div>
-                  <p style={{ color: "#1E3A4A", fontWeight: "600", fontSize: "14px" }}>Synchroniser avec Doctolib</p>
+                  <p style={{ color: "#2A3F4F", fontWeight: "600", fontSize: "14px" }}>Synchroniser avec Doctolib</p>
                   <p style={{ color: "#888", fontSize: "12px" }}>
                     {pro?.doctolib_url
                       ? "Accédez à votre agenda Doctolib et importez vos rendez-vous manuellement"
@@ -300,7 +300,7 @@ export default function Agenda() {
                 </a>
               ) : (
                 <Link href="/profil" style={{ textDecoration: "none" }}>
-                  <div style={{ background: "white", color: "#0596DE", border: "1px solid #B8D8E8", borderRadius: "10px", padding: "8px 16px", fontSize: "13px", fontWeight: "600", whiteSpace: "nowrap" }}>
+                  <div style={{ background: "white", color: "#0596DE", border: "1px solid #B7D7E8", borderRadius: "10px", padding: "8px 16px", fontSize: "13px", fontWeight: "600", whiteSpace: "nowrap" }}>
                     Configurer →
                   </div>
                 </Link>
@@ -313,54 +313,54 @@ export default function Agenda() {
       {/* Modal nouveau RDV */}
       {showModal && (
         <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.3)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 50 }}>
-          <div style={{ background: "linear-gradient(135deg, #ffffff, #f8f9fa)", borderRadius: "24px", padding: "48px", width: "500px", display: "flex", flexDirection: "column", gap: "18px", boxShadow: "0 20px 60px rgba(0,0,0,0.2)" }}>
+          <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "48px", width: "500px", display: "flex", flexDirection: "column", gap: "18px", boxShadow: "0 20px 60px rgba(0,0,0,0.2)" }}>
             <h2 style={{ color: "#004649", fontWeight: "700", fontSize: "20px", textAlign: "center" }}>Nouveau rendez-vous</h2>
 
             <div style={{ display: "flex", gap: "16px" }}>
               <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "6px" }}>
-                <label style={{ color: "#1E3A4A", fontSize: "13px", fontWeight: "600" }}>Date *</label>
-                <input type="date" value={nouveauRdv.date} onChange={e => setNouveauRdv({ ...nouveauRdv, date: e.target.value })} style={{ border: "1px solid #B8D8E8", borderRadius: "10px", padding: "10px 14px", fontSize: "14px", outline: "none", color: "#1E3A4A" }} />
+                <label style={{ color: "#2A3F4F", fontSize: "13px", fontWeight: "600" }}>Date *</label>
+                <input type="date" value={nouveauRdv.date} onChange={e => setNouveauRdv({ ...nouveauRdv, date: e.target.value })} style={{ border: "1px solid #B7D7E8", borderRadius: "10px", padding: "10px 14px", fontSize: "14px", outline: "none", color: "#2A3F4F" }} />
               </div>
               <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "6px" }}>
-                <label style={{ color: "#1E3A4A", fontSize: "13px", fontWeight: "600" }}>Heure *</label>
-                <input type="time" value={nouveauRdv.heure} onChange={e => setNouveauRdv({ ...nouveauRdv, heure: e.target.value })} style={{ border: "1px solid #B8D8E8", borderRadius: "10px", padding: "10px 14px", fontSize: "14px", outline: "none", color: "#1E3A4A" }} />
+                <label style={{ color: "#2A3F4F", fontSize: "13px", fontWeight: "600" }}>Heure *</label>
+                <input type="time" value={nouveauRdv.heure} onChange={e => setNouveauRdv({ ...nouveauRdv, heure: e.target.value })} style={{ border: "1px solid #B7D7E8", borderRadius: "10px", padding: "10px 14px", fontSize: "14px", outline: "none", color: "#2A3F4F" }} />
               </div>
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-              <label style={{ color: "#1E3A4A", fontSize: "13px", fontWeight: "600" }}>Patient *</label>
+              <label style={{ color: "#2A3F4F", fontSize: "13px", fontWeight: "600" }}>Patient *</label>
               <select value={nouveauRdv.patient_user_id} onChange={e => {
                 const p = patients.find(p => p.id === e.target.value);
                 const name = p ? `${p.prenom ?? ""} ${p.nom ?? ""}`.trim() || p.pseudo : "";
                 setNouveauRdv({ ...nouveauRdv, patient_user_id: e.target.value, patient_name: name });
-              }} style={{ border: "1px solid #B8D8E8", borderRadius: "10px", padding: "10px 14px", fontSize: "14px", outline: "none", color: "#1E3A4A", backgroundColor: "white" }}>
+              }} style={{ border: "1px solid #B7D7E8", borderRadius: "10px", padding: "10px 14px", fontSize: "14px", outline: "none", color: "#2A3F4F", backgroundColor: "white" }}>
                 <option value="">Sélectionner un patient lié</option>
                 {patients.map(p => <option key={p.id} value={p.id}>{`${p.prenom ?? ""} ${p.nom ?? ""}`.trim() || p.pseudo}</option>)}
               </select>
-              <input placeholder="Ou saisir un nom manuellement" value={nouveauRdv.patient_name} onChange={e => setNouveauRdv({ ...nouveauRdv, patient_name: e.target.value, patient_user_id: "" })} style={{ border: "1px solid #B8D8E8", borderRadius: "10px", padding: "10px 14px", fontSize: "14px", outline: "none", color: "#1E3A4A" }} />
+              <input placeholder="Ou saisir un nom manuellement" value={nouveauRdv.patient_name} onChange={e => setNouveauRdv({ ...nouveauRdv, patient_name: e.target.value, patient_user_id: "" })} style={{ border: "1px solid #B7D7E8", borderRadius: "10px", padding: "10px 14px", fontSize: "14px", outline: "none", color: "#2A3F4F" }} />
             </div>
 
             <div style={{ display: "flex", gap: "16px" }}>
               <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "6px" }}>
-                <label style={{ color: "#1E3A4A", fontSize: "13px", fontWeight: "600" }}>Durée</label>
-                <select value={nouveauRdv.duree} onChange={e => setNouveauRdv({ ...nouveauRdv, duree: e.target.value })} style={{ border: "1px solid #B8D8E8", borderRadius: "10px", padding: "10px 14px", fontSize: "14px", outline: "none", color: "#1E3A4A", backgroundColor: "white" }}>
+                <label style={{ color: "#2A3F4F", fontSize: "13px", fontWeight: "600" }}>Durée</label>
+                <select value={nouveauRdv.duree} onChange={e => setNouveauRdv({ ...nouveauRdv, duree: e.target.value })} style={{ border: "1px solid #B7D7E8", borderRadius: "10px", padding: "10px 14px", fontSize: "14px", outline: "none", color: "#2A3F4F", backgroundColor: "white" }}>
                   {["15","30","45","60","90"].map(d => <option key={d} value={d}>{d} min</option>)}
                 </select>
               </div>
               <div style={{ flex: 2, display: "flex", flexDirection: "column", gap: "6px" }}>
-                <label style={{ color: "#1E3A4A", fontSize: "13px", fontWeight: "600" }}>Motif</label>
-                <input value={nouveauRdv.motif} onChange={e => setNouveauRdv({ ...nouveauRdv, motif: e.target.value })} placeholder="Consultation, suivi, bilan…" style={{ border: "1px solid #B8D8E8", borderRadius: "10px", padding: "10px 14px", fontSize: "14px", outline: "none", color: "#1E3A4A" }} />
+                <label style={{ color: "#2A3F4F", fontSize: "13px", fontWeight: "600" }}>Motif</label>
+                <input value={nouveauRdv.motif} onChange={e => setNouveauRdv({ ...nouveauRdv, motif: e.target.value })} placeholder="Consultation, suivi, bilan…" style={{ border: "1px solid #B7D7E8", borderRadius: "10px", padding: "10px 14px", fontSize: "14px", outline: "none", color: "#2A3F4F" }} />
               </div>
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-              <label style={{ color: "#1E3A4A", fontSize: "13px", fontWeight: "600" }}>Notes (optionnel)</label>
-              <textarea value={nouveauRdv.notes} onChange={e => setNouveauRdv({ ...nouveauRdv, notes: e.target.value })} rows={2} style={{ border: "1px solid #B8D8E8", borderRadius: "10px", padding: "10px 14px", fontSize: "14px", outline: "none", color: "#1E3A4A", resize: "vertical" }} />
+              <label style={{ color: "#2A3F4F", fontSize: "13px", fontWeight: "600" }}>Notes (optionnel)</label>
+              <textarea value={nouveauRdv.notes} onChange={e => setNouveauRdv({ ...nouveauRdv, notes: e.target.value })} rows={2} style={{ border: "1px solid #B7D7E8", borderRadius: "10px", padding: "10px 14px", fontSize: "14px", outline: "none", color: "#2A3F4F", resize: "vertical" }} />
             </div>
 
             <div style={{ display: "flex", gap: "12px", justifyContent: "center", marginTop: "8px" }}>
-              <button onClick={() => setShowModal(false)} style={{ padding: "12px 32px", borderRadius: "12px", border: "1px solid #B8D8E8", backgroundColor: "white", color: "#1E3A4A", fontWeight: "600", cursor: "pointer", fontSize: "14px" }}>Annuler</button>
-              <button onClick={ajouterRdv} disabled={saving} style={{ padding: "12px 32px", borderRadius: "12px", border: "none", background: "linear-gradient(135deg, #004649 0%, #006B6F 100%)", color: "white", fontWeight: "600", cursor: "pointer", fontSize: "14px", opacity: saving ? 0.7 : 1 }}>
+              <button onClick={() => setShowModal(false)} style={{ padding: "12px 32px", borderRadius: "12px", border: "1px solid #B7D7E8", backgroundColor: "white", color: "#2A3F4F", fontWeight: "600", cursor: "pointer", fontSize: "14px" }}>Annuler</button>
+              <button onClick={ajouterRdv} disabled={saving} style={{ padding: "12px 32px", borderRadius: "12px", border: "none", background: "linear-gradient(135deg, #004649 0%, #00363A 100%)", color: "white", fontWeight: "600", cursor: "pointer", fontSize: "14px", opacity: saving ? 0.7 : 1 }}>
                 {saving ? "Enregistrement…" : "Ajouter le RDV"}
               </button>
             </div>
@@ -371,7 +371,7 @@ export default function Agenda() {
       {/* Modal action (confirmer / annuler avec message au patient) */}
       {actionModal && (
         <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.35)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 50 }}>
-          <div style={{ background: "linear-gradient(135deg, #ffffff, #f8f9fa)", borderRadius: "24px", padding: "40px", width: "460px", display: "flex", flexDirection: "column", gap: "20px", boxShadow: "0 20px 60px rgba(0,0,0,0.2)" }}>
+          <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "40px", width: "460px", display: "flex", flexDirection: "column", gap: "20px", boxShadow: "0 20px 60px rgba(0,0,0,0.2)" }}>
             <div style={{ textAlign: "center" }}>
               <div style={{ fontSize: "36px", marginBottom: "8px" }}>{actionIsConfirm ? "✅" : "❌"}</div>
               <h2 style={{ color: "#004649", fontWeight: "700", fontSize: "18px", marginBottom: "4px" }}>
@@ -385,7 +385,7 @@ export default function Agenda() {
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-              <label style={{ color: "#1E3A4A", fontSize: "13px", fontWeight: "600" }}>
+              <label style={{ color: "#2A3F4F", fontSize: "13px", fontWeight: "600" }}>
                 Message au patient <span style={{ color: "#aaa", fontWeight: "400" }}>(optionnel)</span>
               </label>
               <textarea
@@ -395,7 +395,7 @@ export default function Agenda() {
                 placeholder={actionIsConfirm
                   ? "Ex : Votre rendez-vous est confirmé, pensez à apporter votre ordonnance…"
                   : "Ex : Je suis indisponible ce jour, n'hésitez pas à reprendre rendez-vous…"}
-                style={{ border: "1px solid #B8D8E8", borderRadius: "10px", padding: "10px 14px", fontSize: "14px", outline: "none", color: "#1E3A4A", resize: "vertical", fontFamily: "inherit" }}
+                style={{ border: "1px solid #B7D7E8", borderRadius: "10px", padding: "10px 14px", fontSize: "14px", outline: "none", color: "#2A3F4F", resize: "vertical", fontFamily: "inherit" }}
               />
               <p style={{ color: "#aaa", fontSize: "11px" }}>Ce message sera visible par le patient dans son application.</p>
             </div>
@@ -403,13 +403,13 @@ export default function Agenda() {
             <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
               <button
                 onClick={() => { setActionModal(null); setActionMessage(""); }}
-                style={{ padding: "12px 28px", borderRadius: "12px", border: "1px solid #B8D8E8", backgroundColor: "white", color: "#1E3A4A", fontWeight: "600", cursor: "pointer", fontSize: "14px" }}>
+                style={{ padding: "12px 28px", borderRadius: "12px", border: "1px solid #B7D7E8", backgroundColor: "white", color: "#2A3F4F", fontWeight: "600", cursor: "pointer", fontSize: "14px" }}>
                 Retour
               </button>
               <button
                 onClick={executeAction}
                 disabled={saving}
-                style={{ padding: "12px 28px", borderRadius: "12px", border: "none", background: actionIsConfirm ? "linear-gradient(135deg, #004649 0%, #006B6F 100%)" : "linear-gradient(135deg, #B71C1C, #E53935)", color: "white", fontWeight: "600", cursor: "pointer", fontSize: "14px", opacity: saving ? 0.7 : 1 }}>
+                style={{ padding: "12px 28px", borderRadius: "12px", border: "none", background: actionIsConfirm ? "linear-gradient(135deg, #004649 0%, #00363A 100%)" : "linear-gradient(135deg, #B71C1C, #E53935)", color: "white", fontWeight: "600", cursor: "pointer", fontSize: "14px", opacity: saving ? 0.7 : 1 }}>
                 {saving ? "…" : actionIsConfirm ? "✓ Confirmer" : "Annuler le RDV"}
               </button>
             </div>
