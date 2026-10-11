@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
-/* DA Rêvade (revade.fr) — déclinaison bleu nuit pour les pros de santé */
+/* DA Rêvade (revade.fr) — déclinaison bleue pour les pros de santé */
 :root {
-  --navy: #0B2F4B;
-  --navy-dark: #072238;
+  --teal: #004649;
+  --teal-dark: #00363A;
   --cream: #F4EDE4;
   --sage: #A5C9B9;
   --blue: #B7D7E8;
@@ -34,6 +34,6 @@ h1, h2, h3 {
 }
 
 ::selection {
-  color: var(--navy);
+  color: var(--teal);
   background: rgba(165, 201, 185, 0.5);
 }

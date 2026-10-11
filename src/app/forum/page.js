@@ -244,7 +244,7 @@ function ForumContent() {
 
   const BadgePro = () => (
     <span style={{
-      background: "linear-gradient(135deg, #0B2F4B 0%, #072238 100%)",
+      background: "linear-gradient(135deg, #004649 0%, #00363A 100%)",
       color: "white", borderRadius: "999px", padding: "2px 10px",
       fontSize: "11px", fontWeight: "600",
     }}>✓ Professionnel certifié</span>
@@ -273,7 +273,7 @@ function ForumContent() {
 
         <div style={cardStyle}>
           <p style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "17px", marginBottom: "8px" }}>{postOuvert.titre}</p>
-          <p style={{ color: "#888", fontSize: "13px", marginBottom: "16px" }}>
+          <p style={{ color: "#5A6B72", fontSize: "13px", marginBottom: "16px" }}>
             par {postOuvert.pseudo}, le {formatDate(postOuvert.created_at)}
           </p>
           <p style={{ color: "#2A3F4F", fontSize: "14px", lineHeight: "1.6", fontStyle: "italic" }}>
@@ -281,12 +281,12 @@ function ForumContent() {
           </p>
           <div style={{ display: "flex", gap: "20px", marginTop: "16px" }}>
             <span style={{ color: "#E07B39", fontSize: "13px" }}>❤️ {postOuvert.likes_count || 0}</span>
-            <span style={{ color: "#888", fontSize: "13px" }}>💬 {postOuvert.comments_count || 0} réponses</span>
+            <span style={{ color: "#5A6B72", fontSize: "13px" }}>💬 {postOuvert.comments_count || 0} réponses</span>
           </div>
         </div>
 
         {loadingComments ? (
-          <p style={{ color: "#888", fontSize: "14px" }}>Chargement des commentaires...</p>
+          <p style={{ color: "#5A6B72", fontSize: "14px" }}>Chargement des commentaires...</p>
         ) : commentaires.map((msg, i) => (
           <div key={i} style={{
             background: msg.is_pro
@@ -295,7 +295,7 @@ function ForumContent() {
             borderRadius: "16px", padding: "24px",
             boxShadow: "0 4px 12px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.9)",
             marginBottom: "12px",
-            borderLeft: msg.is_pro ? "4px solid #0B2F4B" : "none",
+            borderLeft: msg.is_pro ? "4px solid #004649" : "none",
           }}>
             <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px", flexWrap: "wrap" }}>
               <span style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "14px" }}>{msg.pseudo}</span>
@@ -323,11 +323,11 @@ function ForumContent() {
               onClick={envoyerMessage}
               disabled={envoi || !nouveauMessage.trim()}
               style={{
-                background: (envoi || !nouveauMessage.trim()) ? "#90A4AE" : "linear-gradient(135deg, #0B2F4B 0%, #072238 100%)",
+                background: (envoi || !nouveauMessage.trim()) ? "#90A4AE" : "linear-gradient(135deg, #004649 0%, #00363A 100%)",
                 color: "#F4EDE4", borderRadius: "50px", padding: "12px 32px",
                 fontSize: "14px", fontWeight: "600", border: "none",
                 cursor: (envoi || !nouveauMessage.trim()) ? "not-allowed" : "pointer",
-                boxShadow: "0 4px 8px rgba(11,47,75,0.3)",
+                boxShadow: "0 4px 8px rgba(0,70,73,0.3)",
               }}
             >{envoi ? "Envoi..." : "Envoyer"}</button>
           </div>
@@ -363,12 +363,12 @@ function ForumContent() {
             cursor: "pointer", border: "1px solid rgba(255,255,255,0.6)",
           }}>
             <p style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "15px", marginBottom: "6px" }}>{post.titre}</p>
-            <p style={{ color: "#888", fontSize: "13px", marginBottom: "10px" }}>par {post.pseudo}, le {formatDate(post.created_at)}</p>
+            <p style={{ color: "#5A6B72", fontSize: "13px", marginBottom: "10px" }}>par {post.pseudo}, le {formatDate(post.created_at)}</p>
             <p style={{ color: "#555", fontSize: "13px", fontStyle: "italic", lineHeight: "1.5", marginBottom: "16px" }}>« {post.contenu} »</p>
             <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
               <span style={{ color: "#E07B39", fontSize: "13px" }}>❤️ {post.likes_count || 0}</span>
-              <span style={{ color: "#888", fontSize: "13px" }}>💬 {post.comments_count || 0} réponses</span>
-              <span style={{ color: "#0B2F4B", fontSize: "13px", fontWeight: "600" }}>✨ Répondre</span>
+              <span style={{ color: "#5A6B72", fontSize: "13px" }}>💬 {post.comments_count || 0} réponses</span>
+              <span style={{ color: "#004649", fontSize: "13px", fontWeight: "600" }}>✨ Répondre</span>
             </div>
           </div>
         ))}
@@ -378,8 +378,8 @@ function ForumContent() {
 
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "#EAF3F8" }}>
-      <Navbar proId={pro?.id} eyebrow="Échanges" title="Messagerie & forum" subtitle="Échangez avec vos patients et avec la communauté des professionnels Rêvade." />
-      <div style={{ padding: "40px 48px 64px", maxWidth: "1280px", margin: "0 auto", width: "100%" }}>
+      <Navbar proId={pro?.id} />
+      <div style={{ padding: "40px 80px", maxWidth: "1000px", margin: "0 auto" }}>
         {postOuvert ? (
           renderPost()
         ) : categorieOuverte ? (
@@ -391,7 +391,7 @@ function ForumContent() {
                 const labels = { categories: "Catégories", messages: "Derniers messages", messagerie: "💬 Messagerie patients" };
                 const actif = onglet === o;
                 return (
-                  <button key={o} onClick={() => setOnglet(o)} style={{ padding: "12px 0", fontSize: "15px", fontWeight: actif ? "700" : "400", color: "#2A3F4F", background: "none", border: "none", cursor: "pointer", borderBottom: actif ? "3px solid #0B2F4B" : "3px solid transparent", marginBottom: "-2px", whiteSpace: "nowrap" }}>
+                  <button key={o} onClick={() => setOnglet(o)} style={{ padding: "12px 0", fontSize: "15px", fontWeight: actif ? "700" : "400", color: "#2A3F4F", background: "none", border: "none", cursor: "pointer", borderBottom: actif ? "3px solid #004649" : "3px solid transparent", marginBottom: "-2px", whiteSpace: "nowrap" }}>
                     {labels[o]}
                   </button>
                 );
@@ -399,7 +399,7 @@ function ForumContent() {
             </div>
 
             {loading ? (
-              <p style={{ color: "#888", fontSize: "14px" }}>Chargement du forum...</p>
+              <p style={{ color: "#5A6B72", fontSize: "14px" }}>Chargement du forum...</p>
             ) : (
               <>
                 {onglet === "categories" && (
@@ -410,7 +410,7 @@ function ForumContent() {
                       <div key={cat.id} onClick={() => setCategorieOuverte(cat.id)} style={{
                         background: "linear-gradient(135deg, #ffffff 0%, #EAF3F8 100%)",
                         borderRadius: "16px", padding: "24px 32px",
-                        boxShadow: "0 4px 12px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)",
+                        boxShadow: "0 10px 30px rgba(0,70,73,0.06)",
                         display: "flex", alignItems: "center", justifyContent: "space-between",
                         cursor: "pointer", border: "1px solid rgba(255,255,255,0.6)",
                       }}>
@@ -418,7 +418,7 @@ function ForumContent() {
                           <span style={{ fontSize: "28px" }}>{cat.icon}</span>
                           <span style={{ color: "#2A3F4F", fontWeight: "600", fontSize: "15px" }}>{cat.nom}</span>
                         </div>
-                        <span style={{ color: "#888", fontSize: "13px" }}>{cat.nbSujets} sujet{cat.nbSujets > 1 ? "s" : ""} →</span>
+                        <span style={{ color: "#5A6B72", fontSize: "13px" }}>{cat.nbSujets} sujet{cat.nbSujets > 1 ? "s" : ""} →</span>
                       </div>
                     ))}
                   </div>
@@ -436,15 +436,15 @@ function ForumContent() {
                         cursor: "pointer", border: "1px solid rgba(255,255,255,0.6)",
                       }}>
                         <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
-                          <span style={{ fontSize: "13px", color: "#888" }}>{categorieIcon(post.categorie)} {categorieLabel(post.categorie)}</span>
+                          <span style={{ fontSize: "13px", color: "#5A6B72" }}>{categorieIcon(post.categorie)} {categorieLabel(post.categorie)}</span>
                         </div>
                         <p style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "15px", marginBottom: "6px" }}>{post.titre}</p>
-                        <p style={{ color: "#888", fontSize: "13px", marginBottom: "10px" }}>par {post.pseudo}, le {formatDate(post.created_at)}</p>
+                        <p style={{ color: "#5A6B72", fontSize: "13px", marginBottom: "10px" }}>par {post.pseudo}, le {formatDate(post.created_at)}</p>
                         <p style={{ color: "#555", fontSize: "13px", fontStyle: "italic", lineHeight: "1.5", marginBottom: "16px" }}>« {post.contenu} »</p>
                         <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
                           <span style={{ color: "#E07B39", fontSize: "13px" }}>❤️ {post.likes_count || 0}</span>
-                          <span style={{ color: "#888", fontSize: "13px" }}>💬 {post.comments_count || 0} réponses</span>
-                          <span style={{ color: "#0B2F4B", fontSize: "13px", fontWeight: "600" }}>✨ Répondre</span>
+                          <span style={{ color: "#5A6B72", fontSize: "13px" }}>💬 {post.comments_count || 0} réponses</span>
+                          <span style={{ color: "#004649", fontSize: "13px", fontWeight: "600" }}>✨ Répondre</span>
                         </div>
                       </div>
                     ))}
@@ -458,7 +458,7 @@ function ForumContent() {
                       {patientsMsg.length === 0 ? (
                         <p style={{ color: "#aaa", fontSize: "13px", fontStyle: "italic" }}>Aucun patient lié</p>
                       ) : patientsMsg.map((p) => (
-                        <button key={p.id} onClick={() => selectPatient(p)} style={{ textAlign: "left", padding: "12px 14px", borderRadius: "50px", border: "none", cursor: "pointer", background: patientSel?.id === p.id ? "linear-gradient(135deg, #0B2F4B, #072238)" : "linear-gradient(135deg, #ffffff, #EAF3F8)", color: patientSel?.id === p.id ? "white" : "#2A3F4F", fontWeight: "600", fontSize: "14px", boxShadow: "0 2px 6px rgba(0,0,0,0.08)" }}>
+                        <button key={p.id} onClick={() => selectPatient(p)} style={{ textAlign: "left", padding: "12px 14px", borderRadius: "50px", border: "none", cursor: "pointer", background: patientSel?.id === p.id ? "linear-gradient(135deg, #004649, #00363A)" : "linear-gradient(135deg, #ffffff, #EAF3F8)", color: patientSel?.id === p.id ? "white" : "#2A3F4F", fontWeight: "600", fontSize: "14px", boxShadow: "0 2px 6px rgba(0,0,0,0.08)" }}>
                           {p.prenom} {p.nom}
                         </button>
                       ))}
@@ -488,7 +488,7 @@ function ForumContent() {
                               const isPro = msg.sender_type === "pro";
                               return (
                                 <div key={msg.id} style={{ display: "flex", justifyContent: isPro ? "flex-end" : "flex-start" }}>
-                                  <div style={{ maxWidth: "70%", padding: "10px 14px", borderRadius: isPro ? "16px 16px 4px 16px" : "16px 16px 16px 4px", background: isPro ? "linear-gradient(135deg, #0B2F4B, #072238)" : "white", color: isPro ? "white" : "#2A3F4F", boxShadow: "0 2px 6px rgba(0,0,0,0.08)", fontSize: "14px", lineHeight: "1.5" }}>
+                                  <div style={{ maxWidth: "70%", padding: "10px 14px", borderRadius: isPro ? "16px 16px 4px 16px" : "16px 16px 16px 4px", background: isPro ? "linear-gradient(135deg, #004649, #00363A)" : "white", color: isPro ? "white" : "#2A3F4F", boxShadow: "0 2px 6px rgba(0,0,0,0.08)", fontSize: "14px", lineHeight: "1.5" }}>
                                     <p style={{ margin: 0 }}>{msg.content}</p>
                                     <p style={{ margin: "4px 0 0", fontSize: "11px", opacity: 0.7, textAlign: "right" }}>{formatMsgTime(msg.created_at)}</p>
                                   </div>
@@ -511,7 +511,7 @@ function ForumContent() {
                             <button
                               onClick={sendMsg}
                               disabled={sendingMsg || !msgContent.trim()}
-                              style={{ background: sendingMsg || !msgContent.trim() ? "#B0BEC5" : "linear-gradient(135deg, #0B2F4B, #072238)", color: "#F4EDE4", border: "none", borderRadius: "50px", padding: "10px 20px", fontSize: "14px", fontWeight: "600", cursor: sendingMsg || !msgContent.trim() ? "default" : "pointer", whiteSpace: "nowrap" }}>
+                              style={{ background: sendingMsg || !msgContent.trim() ? "#B0BEC5" : "linear-gradient(135deg, #004649, #00363A)", color: "#F4EDE4", border: "none", borderRadius: "50px", padding: "10px 20px", fontSize: "14px", fontWeight: "600", cursor: sendingMsg || !msgContent.trim() ? "default" : "pointer", whiteSpace: "nowrap" }}>
                               {sendingMsg ? "…" : "Envoyer"}
                             </button>
                           </div>
@@ -531,7 +531,7 @@ function ForumContent() {
 
 export default function Forum() {
   return (
-    <Suspense fallback={<div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "100vh" }}><p style={{ color: "#888" }}>Chargement...</p></div>}>
+    <Suspense fallback={<div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "100vh" }}><p style={{ color: "#5A6B72" }}>Chargement...</p></div>}>
       <ForumContent />
     </Suspense>
   );

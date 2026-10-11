@@ -76,7 +76,7 @@ function HADView({ data, scores }) {
                   </span>
                   <span style={{ color: "#5A6B72", fontSize: "13px" }}>{q}</span>
                 </div>
-                <span style={{ color: lbl === "—" ? "#ccc" : "#0B2F4B", fontWeight: "700", fontSize: "13px", flexShrink: 0 }}>→ {lbl}</span>
+                <span style={{ color: lbl === "—" ? "#ccc" : "#004649", fontWeight: "700", fontSize: "13px", flexShrink: 0 }}>→ {lbl}</span>
               </div>
             </div>
           );
@@ -171,10 +171,10 @@ export default function TestResultModal({ test, onClose }) {
       <div style={{ background: "white", borderRadius: "24px", padding: "36px", width: "680px", maxHeight: "90vh", overflowY: "auto", display: "flex", flexDirection: "column", gap: "20px", boxShadow: "0 24px 64px rgba(0,0,0,0.2)" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
           <div>
-            <h2 style={{ color: "#0B2F4B", fontWeight: "700", fontSize: "20px", margin: "0 0 4px 0" }}>{TITLES[test.type] ?? "Test"}</h2>
+            <h2 style={{ color: "#004649", fontWeight: "700", fontSize: "20px", margin: "0 0 4px 0" }}>{TITLES[test.type] ?? "Test"}</h2>
             <p style={{ color: "#90A4AE", fontSize: "13px", margin: 0 }}>{test.nom} &nbsp;•&nbsp; {SUBTITLES[test.type]}</p>
           </div>
-          <button onClick={onClose} style={{ background: "none", border: "none", fontSize: "24px", cursor: "pointer", color: "#888" }}>×</button>
+          <button onClick={onClose} style={{ background: "none", border: "none", fontSize: "24px", cursor: "pointer", color: "#5A6B72" }}>×</button>
         </div>
 
         {loading ? (

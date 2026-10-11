@@ -5,19 +5,18 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import Toaster from "./Toaster";
-import NightSky from "./NightSky";
 
 const NAV_ITEMS = [
-  { href: "/accueil", label: "Accueil" },
-  { href: "/dashboard", label: "Fiches patients" },
-  { href: "/agenda", label: "Agenda" },
-  { href: "/forum", label: "Messagerie", msgBadge: true },
-  { href: "/annuaire", label: "Annuaire" },
-  { href: "/outils", label: "Outils" },
-  { href: "/profil", label: "Profil" },
+  { href: "/accueil", label: "ACCUEIL" },
+  { href: "/dashboard", label: "FICHES PATIENTS" },
+  { href: "/agenda", label: "AGENDA" },
+  { href: "/forum", label: "MESSAGERIE", msgBadge: true },
+  { href: "/annuaire", label: "ANNUAIRE" },
+  { href: "/outils", label: "OUTILS" },
+  { href: "/profil", label: "PROFIL" },
 ];
 
-export default function Navbar({ proId, eyebrow, title, subtitle }) {
+export default function Navbar({ proId }) {
   const pathname = usePathname();
   const router = useRouter();
   const [pendingRdv, setPendingRdv] = useState([]);
@@ -203,19 +202,17 @@ export default function Navbar({ proId, eyebrow, title, subtitle }) {
   return (
     <>
       <Toaster />
-      <header style={{ position: "relative", zIndex: 50, background: "#0B2F4B" }}>
-      <NightSky />
-      <nav style={{ position: "relative", zIndex: 2, maxWidth: "1280px", margin: "0 auto", padding: "22px 48px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "24px" }}>
-        <Link href="/accueil" style={{ textDecoration: "none", display: "flex" }}>
-          <Image src="/logo-white.svg" alt="Rêvade" width={110} height={40} priority />
+      <nav style={{ background: "#B7D7E8", padding: "14px 48px", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid rgba(0,70,73,0.12)", boxShadow: "0 6px 20px rgba(0,70,73,0.08)", position: "sticky", top: 0, zIndex: 100 }}>
+        <Link href="/accueil" style={{ textDecoration: "none" }}>
+          <Image src="/logo.png" alt="Rêvade" width={130} height={48} />
         </Link>
-        <div style={{ display: "flex", gap: "6px", alignItems: "center" }}>
+        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
           {NAV_ITEMS.map((item) => {
             const actif = pathname === item.href || (item.href !== "/accueil" && pathname?.startsWith(item.href));
             const badge = item.msgBadge && unreadMsgs > 0 ? unreadMsgs : 0;
             return (
               <Link key={item.href} href={item.href} style={{ textDecoration: "none", position: "relative" }}>
-                <div style={{ padding: "9px 16px", borderRadius: "50px", fontSize: "14px", fontWeight: actif ? "600" : "500", color: actif ? "#0B2F4B" : "rgba(244,237,228,0.82)", background: actif ? "linear-gradient(135deg, #A5C9B9, #B7D7E8)" : "transparent", boxShadow: actif ? "0 6px 20px rgba(0,0,0,0.25)" : "none", transition: "all 0.2s ease", whiteSpace: "nowrap" }}>
+                <div style={{ padding: "9px 18px", borderRadius: "50px", fontSize: "12px", fontWeight: actif ? "600" : "500", letterSpacing: "0.08em", color: actif ? "#F4EDE4" : "#004649", background: actif ? "#004649" : "rgba(255,255,255,0.45)", boxShadow: actif ? "0 6px 20px rgba(0,70,73,0.25)" : "none", border: actif ? "1px solid #004649" : "1px solid rgba(0,70,73,0.12)", transition: "all 0.2s ease" }}>
                   {item.label}
                 </div>
                 {badge > 0 && (
@@ -233,7 +230,7 @@ export default function Navbar({ proId, eyebrow, title, subtitle }) {
               <button
                 onClick={() => { setBellOpen(o => !o); if (bellFlash) setBellFlash(false); }}
                 title={hasPending ? `${pendingRdv.length} demande${pendingRdv.length > 1 ? "s" : ""} en attente` : "Aucune demande"}
-                style={{ width: "40px", height: "40px", borderRadius: "50%", background: bellFlash ? "linear-gradient(135deg, #E65100, #FF6D00)" : hasPending ? "linear-gradient(135deg, rgba(255,243,224,0.95), rgba(255,224,178,0.95))" : "rgba(244,237,228,0.08)", border: "1px solid rgba(244,237,228,0.18)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "18px", transition: "all 0.3s ease", boxShadow: hasPending ? "0 2px 8px rgba(230,81,0,0.25)" : "none", marginLeft: "8px" }}>
+                style={{ width: "40px", height: "40px", borderRadius: "50%", background: bellFlash ? "linear-gradient(135deg, #E65100, #FF6D00)" : hasPending ? "linear-gradient(135deg, rgba(255,243,224,0.95), rgba(255,224,178,0.95))" : "rgba(255,255,255,0.45)", border: "1px solid rgba(0,70,73,0.12)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "18px", transition: "all 0.3s ease", boxShadow: hasPending ? "0 2px 8px rgba(230,81,0,0.25)" : "0 2px 4px rgba(0,0,0,0.1)" }}>
                 🔔
               </button>
               {totalBell > 0 && (
@@ -253,7 +250,7 @@ export default function Navbar({ proId, eyebrow, title, subtitle }) {
                       </p>
                       <p style={{ color: "#90A4AE", fontSize: "11px" }}>Répondez directement ici</p>
                     </div>
-                    <Link href="/agenda" onClick={() => setBellOpen(false)} style={{ color: "#0B2F4B", fontSize: "12px", fontWeight: "600", textDecoration: "none", background: "rgba(11,47,75,0.08)", padding: "6px 12px", borderRadius: "8px" }}>
+                    <Link href="/agenda" onClick={() => setBellOpen(false)} style={{ color: "#004649", fontSize: "12px", fontWeight: "600", textDecoration: "none", background: "rgba(0,70,73,0.08)", padding: "6px 12px", borderRadius: "8px" }}>
                       Agenda →
                     </Link>
                   </div>
@@ -360,7 +357,7 @@ export default function Navbar({ proId, eyebrow, title, subtitle }) {
                               </div>
                             )}
                             {rdv.motif && (
-                              <p style={{ color: "#888", fontSize: "11px", marginTop: "2px", fontStyle: "italic" }}>"{rdv.motif}"</p>
+                              <p style={{ color: "#5A6B72", fontSize: "11px", marginTop: "2px", fontStyle: "italic" }}>"{rdv.motif}"</p>
                             )}
                           </div>
 
@@ -369,7 +366,7 @@ export default function Navbar({ proId, eyebrow, title, subtitle }) {
                             <button
                               onClick={() => confirmRdv(rdv)}
                               disabled={savingId === rdv.id}
-                              style={{ flex: 1, background: savingId === rdv.id ? "#E0E0E0" : "linear-gradient(135deg, #0B2F4B, #072238)", color: "#F4EDE4", border: "none", borderRadius: "50px", padding: "8px 12px", fontSize: "12px", fontWeight: "700", cursor: savingId === rdv.id ? "default" : "pointer", transition: "opacity 0.2s" }}>
+                              style={{ flex: 1, background: savingId === rdv.id ? "#E0E0E0" : "linear-gradient(135deg, #004649, #00363A)", color: "#F4EDE4", border: "none", borderRadius: "50px", padding: "8px 12px", fontSize: "12px", fontWeight: "700", cursor: savingId === rdv.id ? "default" : "pointer", transition: "opacity 0.2s" }}>
                               {savingId === rdv.id ? "…" : "✓ Confirmer"}
                             </button>
                             <button
@@ -390,25 +387,6 @@ export default function Navbar({ proId, eyebrow, title, subtitle }) {
         </div>
       </nav>
 
-      {title && (
-        <div style={{ position: "relative", zIndex: 1, maxWidth: "1280px", margin: "0 auto", padding: "28px 48px 56px" }}>
-          {eyebrow && (
-            <p style={{ fontWeight: "300", textTransform: "uppercase", letterSpacing: "0.18em", fontSize: "13px", color: "#A5C9B9", marginBottom: "14px" }}>
-              {eyebrow}
-            </p>
-          )}
-          <h1 style={{ fontStyle: "italic", fontWeight: "700", fontSize: "clamp(34px, 4vw, 52px)", lineHeight: "1.1", letterSpacing: "-0.02em", color: "#F4EDE4" }}>
-            {title}
-          </h1>
-          {subtitle && (
-            <p style={{ fontWeight: "300", fontSize: "17px", lineHeight: "1.6", color: "rgba(244,237,228,0.72)", marginTop: "14px", maxWidth: "640px" }}>
-              {subtitle}
-            </p>
-          )}
-        </div>
-      )}
-      </header>
-
       {/* Modal refus avec message au patient */}
       {cancelModal && (
         <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.4)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 300 }}>
@@ -416,7 +394,7 @@ export default function Navbar({ proId, eyebrow, title, subtitle }) {
             <div style={{ textAlign: "center" }}>
               <div style={{ fontSize: "36px", marginBottom: "10px" }}>❌</div>
               <h2 style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "17px", marginBottom: "4px" }}>Refuser la demande</h2>
-              <p style={{ color: "#888", fontSize: "13px" }}>
+              <p style={{ color: "#5A6B72", fontSize: "13px" }}>
                 <strong>{cancelModal.rdv.patient_pseudo ? `@${cancelModal.rdv.patient_pseudo}` : cancelModal.rdv.patient_name}</strong> · {formatDate(cancelModal.rdv.date_heure)}
               </p>
             </div>

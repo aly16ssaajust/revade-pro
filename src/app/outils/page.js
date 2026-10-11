@@ -157,8 +157,8 @@ export default function Outils() {
           <button onClick={onSave} disabled={saving || !canSave || !selectedPatient}
             style={{ padding: "9px 22px", borderRadius: "50px", border: "none", fontSize: "13px", fontWeight: "700", whiteSpace: "nowrap",
               cursor: (saving || !canSave || !selectedPatient) ? "not-allowed" : "pointer",
-              background: (saving || !canSave || !selectedPatient) ? "#90A4AE" : "linear-gradient(135deg,#0B2F4B, #072238)",
-              color: "#F4EDE4", boxShadow: (saving || !canSave || !selectedPatient) ? "none" : "0 4px 8px rgba(11,47,75,0.3)" }}>
+              background: (saving || !canSave || !selectedPatient) ? "#90A4AE" : "linear-gradient(135deg,#004649, #00363A)",
+              color: "#F4EDE4", boxShadow: (saving || !canSave || !selectedPatient) ? "none" : "0 4px 8px rgba(0,70,73,0.3)" }}>
             {saving ? "Enregistrement…" : "💾 Enregistrer dans les documents"}
           </button>
         ) : (
@@ -173,8 +173,12 @@ export default function Outils() {
   /* ── Render ── */
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "#EAF3F8" }}>
-      <Navbar proId={pro?.id} eyebrow="Pratique clinique" title="Outils cliniques" subtitle="Tests validés et ressources de formation pour vos consultations." />
-      <div style={{ padding: "40px 48px 64px", maxWidth: "1280px", margin: "0 auto", width: "100%" }}>
+      <Navbar proId={pro?.id} />
+      <div style={{ padding: "40px 80px", maxWidth: "1000px", margin: "0 auto" }}>
+        <div style={{ marginBottom: "36px" }}>
+          <h1 style={{ color: "#004649", fontWeight: "600", fontSize: "32px", letterSpacing: "-0.02em", marginBottom: "6px" }}>🛠 Outils cliniques</h1>
+          <p style={{ color: "#5A6B72", fontSize: "14px" }}>Tests validés et ressources de formation pour vos consultations</p>
+        </div>
 
         <h2 style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "16px", marginBottom: "16px" }}>📋 Tests & Évaluations</h2>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(290px, 1fr))", gap: "16px", marginBottom: "48px" }}>
@@ -191,23 +195,23 @@ export default function Outils() {
 
         <h2 style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "16px", marginBottom: "16px" }}>🎓 Formations gratuites</h2>
         <a href="https://www.fun-mooc.fr/courses/course-v1:u-paris+37021+session03/about" target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
-          <div style={{ background: "linear-gradient(135deg,#E8F5EF,#D0EDE0)", border: "1.5px solid #A5C9B9", borderRadius: "20px", padding: "28px 32px", display: "flex", gap: "20px", alignItems: "flex-start", boxShadow: "0 4px 16px rgba(11,47,75,0.08)", cursor: "pointer" }}
+          <div style={{ background: "linear-gradient(135deg,#E8F5EF,#D0EDE0)", border: "1.5px solid #A5C9B9", borderRadius: "20px", padding: "28px 32px", display: "flex", gap: "20px", alignItems: "flex-start", boxShadow: "0 4px 16px rgba(0,70,73,0.08)", cursor: "pointer" }}
             onMouseEnter={e => e.currentTarget.style.transform = "translateY(-2px)"}
             onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
             <div style={{ fontSize: "40px", flexShrink: 0 }}>🎓</div>
             <div style={{ flex: 1 }}>
               <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap", marginBottom: "6px" }}>
-                <p style={{ color: "#0B2F4B", fontWeight: "700", fontSize: "16px", margin: 0 }}>MOOC — Aide à l'arrêt du tabac</p>
-                <span style={{ background: "#0B2F4B", color: "white", borderRadius: "999px", padding: "2px 10px", fontSize: "11px", fontWeight: "700" }}>GRATUIT</span>
+                <p style={{ color: "#004649", fontWeight: "700", fontSize: "16px", margin: 0 }}>MOOC — Aide à l'arrêt du tabac</p>
+                <span style={{ background: "#004649", color: "white", borderRadius: "999px", padding: "2px 10px", fontSize: "11px", fontWeight: "700" }}>GRATUIT</span>
               </div>
               <p style={{ color: "#2A3F4F", fontSize: "13px", marginBottom: "10px", lineHeight: "1.6" }}>La Société Francophone de Tabacologie met à disposition ce MOOC pour vous aider à prendre en charge le sevrage tabagique. Déjà <strong>8 000 inscrits</strong>.</p>
               <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
                 {["#MOOC","#SevrageTabagique","SFT","Université de Paris"].map(t => (
-                  <span key={t} style={{ background: "rgba(11,47,75,0.1)", color: "#0B2F4B", borderRadius: "999px", padding: "3px 10px", fontSize: "12px", fontWeight: "600" }}>{t}</span>
+                  <span key={t} style={{ background: "rgba(0,70,73,0.1)", color: "#004649", borderRadius: "999px", padding: "3px 10px", fontSize: "12px", fontWeight: "600" }}>{t}</span>
                 ))}
               </div>
             </div>
-            <div style={{ background: "linear-gradient(135deg,#0B2F4B, #072238)", color: "white", borderRadius: "12px", padding: "10px 18px", fontSize: "13px", fontWeight: "700", flexShrink: 0, alignSelf: "center" }}>Accéder →</div>
+            <div style={{ background: "linear-gradient(135deg,#004649, #00363A)", color: "white", borderRadius: "12px", padding: "10px 18px", fontSize: "13px", fontWeight: "700", flexShrink: 0, alignSelf: "center" }}>Accéder →</div>
           </div>
         </a>
       </div>
@@ -229,7 +233,7 @@ export default function Outils() {
                   return (
                     <button key={val} type="button" onClick={() => { setHadRep(p => ({ ...p, [n]: val })); setSavedTest(false); }}
                       style={{ padding: "7px 14px", borderRadius: "999px", fontSize: "12px", fontWeight: sel ? "700" : "500", border: "none", cursor: "pointer",
-                        background: sel ? "linear-gradient(135deg,#0B2F4B, #072238)" : "#EAF3F8", color: sel ? "white" : "#5A6B72" }}>
+                        background: sel ? "linear-gradient(135deg,#004649, #00363A)" : "#EAF3F8", color: sel ? "white" : "#5A6B72" }}>
                       {lbl}
                     </button>
                   );
@@ -240,7 +244,7 @@ export default function Outils() {
 
           {hadComplete ? (
             <div style={{ background: "linear-gradient(135deg,#E8F5EF,#D0EDE0)", borderRadius: "14px", padding: "20px 24px" }}>
-              <p style={{ fontWeight: "700", color: "#0B2F4B", marginBottom: "12px" }}>Résultats HAD</p>
+              <p style={{ fontWeight: "700", color: "#004649", marginBottom: "12px" }}>Résultats HAD</p>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "10px" }}>
                 <div style={{ background: "#E3F2FD", borderRadius: "12px", padding: "14px", textAlign: "center" }}>
                   <p style={{ fontSize: "12px", color: "#1565C0", fontWeight: "700", marginBottom: "4px" }}>Score A — Anxiété</p>
@@ -280,7 +284,7 @@ export default function Outils() {
           ))}
           <button onClick={addBeckEntry} disabled={!beckData.situation.trim()}
             style={{ padding: "10px 20px", borderRadius: "10px", border: "none", fontWeight: "600", fontSize: "13px", cursor: beckData.situation.trim() ? "pointer" : "not-allowed",
-              background: beckData.situation.trim() ? "#E8F5EF" : "#EAF3F8", color: beckData.situation.trim() ? "#0B2F4B" : "#90A4AE" }}>
+              background: beckData.situation.trim() ? "#E8F5EF" : "#EAF3F8", color: beckData.situation.trim() ? "#004649" : "#90A4AE" }}>
             + Ajouter à l'historique de session
           </button>
           {beckHistory.length > 0 && (
@@ -323,7 +327,7 @@ export default function Outils() {
                     return (
                       <button key={val} type="button" onClick={() => { setHornRep(p => ({ ...p, [n]: val })); setSavedTest(false); }}
                         style={{ padding: "7px 14px", borderRadius: "999px", fontSize: "12px", fontWeight: sel ? "700" : "500", border: "none", cursor: "pointer",
-                          background: sel ? "linear-gradient(135deg,#0B2F4B, #072238)" : "#EAF3F8", color: sel ? "white" : "#5A6B72" }}>
+                          background: sel ? "linear-gradient(135deg,#004649, #00363A)" : "#EAF3F8", color: sel ? "white" : "#5A6B72" }}>
                         {lbl}
                       </button>
                     );
@@ -335,7 +339,7 @@ export default function Outils() {
 
           {hornComplete ? (
             <div>
-              <p style={{ fontWeight: "700", color: "#0B2F4B", marginBottom: "12px" }}>Profil motivationnel</p>
+              <p style={{ fontWeight: "700", color: "#004649", marginBottom: "12px" }}>Profil motivationnel</p>
               <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                 {HORN_FACTORS.map(factor => {
                   const score = hornScore(factor.id);
@@ -376,7 +380,7 @@ function TestCard({ icon, title, subtitle, desc, tags, onOpen }) {
   const [hovered, setHovered] = useState(false);
   return (
     <div onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
-      style={{ background: "#FFFFFF", borderRadius: "20px", padding: "28px", boxShadow: hovered ? "0 12px 32px rgba(0,0,0,0.12)" : "0 4px 16px rgba(0,0,0,0.06)", border: "1px solid rgba(11,47,75,0.10)", transform: hovered ? "translateY(-3px)" : "translateY(0)", transition: "all 0.2s ease", display: "flex", flexDirection: "column", gap: "12px" }}>
+      style={{ background: "#FFFFFF", borderRadius: "20px", padding: "28px", boxShadow: hovered ? "0 12px 32px rgba(0,0,0,0.12)" : "0 4px 16px rgba(0,0,0,0.06)", border: "1px solid rgba(0,70,73,0.10)", transform: hovered ? "translateY(-3px)" : "translateY(0)", transition: "all 0.2s ease", display: "flex", flexDirection: "column", gap: "12px" }}>
       <div style={{ fontSize: "36px" }}>{icon}</div>
       <div>
         <p style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "16px", marginBottom: "3px" }}>{title}</p>
@@ -384,9 +388,9 @@ function TestCard({ icon, title, subtitle, desc, tags, onOpen }) {
       </div>
       <p style={{ color: "#5A6B72", fontSize: "13px", lineHeight: "1.6", flex: 1 }}>{desc}</p>
       <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
-        {tags.map(t => <span key={t} style={{ background: "#E8F5EF", color: "#0B2F4B", borderRadius: "999px", padding: "3px 10px", fontSize: "11px", fontWeight: "600" }}>{t}</span>)}
+        {tags.map(t => <span key={t} style={{ background: "#E8F5EF", color: "#004649", borderRadius: "999px", padding: "3px 10px", fontSize: "11px", fontWeight: "600" }}>{t}</span>)}
       </div>
-      <button onClick={onOpen} style={{ padding: "11px", borderRadius: "50px", border: "none", background: "linear-gradient(135deg,#0B2F4B, #072238)", color: "#F4EDE4", fontWeight: "700", fontSize: "14px", cursor: "pointer", boxShadow: "0 4px 8px rgba(11,47,75,0.3)" }}>
+      <button onClick={onOpen} style={{ padding: "11px", borderRadius: "50px", border: "none", background: "linear-gradient(135deg,#004649, #00363A)", color: "#F4EDE4", fontWeight: "700", fontSize: "14px", cursor: "pointer", boxShadow: "0 4px 8px rgba(0,70,73,0.3)" }}>
         Lancer le test →
       </button>
     </div>
@@ -399,10 +403,10 @@ function Modal({ title, subtitle, children, onClose }) {
       <div style={{ background: "white", borderRadius: "24px", padding: "36px", width: "720px", maxHeight: "90vh", overflowY: "auto", display: "flex", flexDirection: "column", gap: "22px", boxShadow: "0 24px 64px rgba(0,0,0,0.2)" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
           <div>
-            <h2 style={{ color: "#0B2F4B", fontWeight: "700", fontSize: "20px", margin: "0 0 4px 0" }}>{title}</h2>
+            <h2 style={{ color: "#004649", fontWeight: "700", fontSize: "20px", margin: "0 0 4px 0" }}>{title}</h2>
             <p style={{ color: "#90A4AE", fontSize: "13px", margin: 0 }}>{subtitle}</p>
           </div>
-          <button onClick={onClose} style={{ background: "none", border: "none", fontSize: "24px", cursor: "pointer", color: "#888" }}>×</button>
+          <button onClick={onClose} style={{ background: "none", border: "none", fontSize: "24px", cursor: "pointer", color: "#5A6B72" }}>×</button>
         </div>
         {children}
       </div>
