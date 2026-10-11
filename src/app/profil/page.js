@@ -150,8 +150,9 @@ export default function Profil() {
 
   const cardStyle = {
     background: "#FFFFFF",
-    borderRadius: "20px", padding: "40px",
-    boxShadow: "0 8px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)",
+    borderRadius: "24px", padding: "40px",
+    border: "1px solid rgba(0,70,73,0.08)",
+    boxShadow: "0 8px 24px rgba(0,70,73,0.05)",
   };
 
   const sections = [
@@ -168,12 +169,12 @@ export default function Profil() {
         {section !== null ? (
           <div>
             <button onClick={() => setSection(null)} style={{ background: "none", border: "none", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "10px", padding: 0, marginBottom: "32px" }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", borderRadius: "10px", background: "white", border: "1.5px solid #B7D7E8", boxShadow: "0 2px 6px rgba(0,0,0,0.06)" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "40px", height: "40px", borderRadius: "50%", background: "white", border: "1px solid rgba(0,70,73,0.12)" }}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2A3F4F" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
               </div>
               <div>
-                <p style={{ margin: 0, fontSize: "11px", color: "#90A4AE", fontWeight: "500", letterSpacing: "0.3px" }}>PROFIL</p>
-                <p style={{ margin: 0, fontSize: "15px", color: "#2A3F4F", fontWeight: "700" }}>{sections.find(s => s.id === section)?.label || "Retour"}</p>
+                <p style={{ margin: 0, fontSize: "11px", color: "#004649", fontWeight: "500", letterSpacing: "0.18em" }}>PROFIL</p>
+                <p style={{ margin: 0, fontSize: "15px", color: "#004649", fontWeight: "600" }}>{sections.find(s => s.id === section)?.label || "Retour"}</p>
               </div>
             </button>
 
@@ -181,7 +182,7 @@ export default function Profil() {
             {section === "annuaire" && (
               <div style={cardStyle}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "32px" }}>
-                  <h2 style={{ color: "#004649", fontWeight: "700", fontSize: "18px" }}>Mes informations sur l'annuaire</h2>
+                  <h2 style={{ color: "#004649", fontWeight: "600", fontSize: "20px", letterSpacing: "-0.01em" }}>Mes informations sur l'annuaire</h2>
                   <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
                     {saveStatus === 'ok' && (
                       <span style={{ color: "#004649", fontWeight: "600", fontSize: "13px" }}>✓ Sauvegardé</span>
@@ -191,7 +192,7 @@ export default function Profil() {
                     )}
                     <button onClick={() => modeEdition ? handleSave() : setModeEdition(true)} style={{
                       background: modeEdition ? "linear-gradient(135deg, #004649 0%, #00363A 100%)" : "white",
-                      color: modeEdition ? "white" : "#004649", border: "2px solid #004649",
+                      color: modeEdition ? "#F4EDE4" : "#004649", border: "1px solid #004649",
                       borderRadius: "50px", padding: "10px 24px", fontSize: "14px", fontWeight: "600", cursor: "pointer",
                       boxShadow: modeEdition ? "0 4px 8px rgba(0,70,73,0.3)" : "0 2px 4px rgba(0,0,0,0.08)",
                       opacity: saveLoading ? 0.7 : 1,
@@ -206,54 +207,54 @@ export default function Profil() {
                   ["Téléphone","telephone"],["Cabinet","cabinet"],["Adresse","adresse"],
                   ["Spécialité","specialite"],["Numéro RPPS","rpps"]
                 ].map(([label, field]) => (
-                  <div key={field} style={{ display: "flex", alignItems: "center", padding: "16px 0", borderBottom: "1px solid #F0F0F0" }}>
-                    <span style={{ color: "#2A3F4F", fontSize: "14px", fontWeight: "600", minWidth: "220px" }}>{label}</span>
+                  <div key={field} style={{ display: "flex", alignItems: "center", padding: "16px 0", borderBottom: "1px solid rgba(0,70,73,0.08)" }}>
+                    <span style={{ color: "#5A6B72", fontSize: "13px", minWidth: "220px" }}>{label}</span>
                     {modeEdition ? (
                       <input value={pro?.[field] ?? ''} onChange={(e) => handleChange(field, e.target.value)}
-                        style={{ flex: 1, border: "1px solid #B7D7E8", borderRadius: "8px", padding: "8px 14px", fontSize: "14px", color: "#2A3F4F", outline: "none" }} />
+                        style={{ flex: 1, border: "1px solid rgba(0,70,73,0.14)", borderRadius: "14px", padding: "8px 14px", fontSize: "14px", color: "#2A3F4F", outline: "none" }} />
                     ) : (
-                      <span style={{ color: "#2A3F4F", fontSize: "14px" }}>{pro?.[field] ?? ''}</span>
+                      <span style={{ color: "#004649", fontSize: "15px", fontWeight: "600" }}>{pro?.[field] ?? ''}</span>
                     )}
                   </div>
                 ))}
 
                 {/* Bio */}
-                <div style={{ padding: "16px 0", borderBottom: "1px solid #F0F0F0" }}>
+                <div style={{ padding: "16px 0", borderBottom: "1px solid rgba(0,70,73,0.08)" }}>
                   <span style={{ color: "#2A3F4F", fontSize: "14px", fontWeight: "600", display: "block", marginBottom: "8px" }}>Bio / Présentation</span>
                   {modeEdition ? (
                     <textarea value={pro?.bio ?? ''} onChange={(e) => handleChange('bio', e.target.value)} rows={3}
-                      style={{ width: "100%", border: "1px solid #B7D7E8", borderRadius: "8px", padding: "8px 14px", fontSize: "14px", color: "#2A3F4F", outline: "none", resize: "vertical" }} />
+                      style={{ width: "100%", border: "1px solid rgba(0,70,73,0.14)", borderRadius: "14px", padding: "8px 14px", fontSize: "14px", color: "#2A3F4F", outline: "none", resize: "vertical" }} />
                   ) : (
-                    <span style={{ color: "#2A3F4F", fontSize: "14px" }}>{pro?.bio || <em style={{ color: "#aaa" }}>Non renseigné</em>}</span>
+                    <span style={{ color: "#2A3F4F", fontSize: "14px" }}>{pro?.bio || <em style={{ color: "#90A4AE" }}>Non renseigné</em>}</span>
                   )}
                 </div>
 
                 {/* Prise de RDV */}
                 <div style={{ padding: "20px 0 8px" }}>
-                  <p style={{ color: "#004649", fontSize: "14px", fontWeight: "700", marginBottom: "16px" }}>📅 Options de prise de rendez-vous</p>
+                  <p style={{ color: "#004649", fontWeight: "500", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: "12px" }}>Options de prise de rendez-vous</p>
                   {[
                     ["Email de réservation","booking_email","Affiché aux patients pour vous contacter par email"],
                     ["Téléphone de réservation","booking_phone","Affiché aux patients pour vous appeler"],
                     ["Lien Doctolib","doctolib_url","URL complète de votre profil Doctolib"],
                   ].map(([label, field, hint]) => (
-                    <div key={field} style={{ display: "flex", alignItems: "center", padding: "12px 0", borderBottom: "1px solid #F8F8F8" }}>
+                    <div key={field} style={{ display: "flex", alignItems: "center", padding: "12px 0", borderBottom: "1px solid rgba(0,70,73,0.08)" }}>
                       <div style={{ minWidth: "220px" }}>
                         <span style={{ color: "#2A3F4F", fontSize: "14px", fontWeight: "600" }}>{label}</span>
-                        {modeEdition && <p style={{ color: "#aaa", fontSize: "11px", marginTop: "2px" }}>{hint}</p>}
+                        {modeEdition && <p style={{ color: "#90A4AE", fontSize: "11px", marginTop: "2px" }}>{hint}</p>}
                       </div>
                       {modeEdition ? (
                         <input value={pro?.[field] ?? ''} onChange={(e) => handleChange(field, e.target.value)}
                           placeholder={hint}
-                          style={{ flex: 1, border: "1px solid #B7D7E8", borderRadius: "8px", padding: "8px 14px", fontSize: "14px", color: "#2A3F4F", outline: "none" }} />
+                          style={{ flex: 1, border: "1px solid rgba(0,70,73,0.14)", borderRadius: "14px", padding: "8px 14px", fontSize: "14px", color: "#2A3F4F", outline: "none" }} />
                       ) : (
-                        <span style={{ color: "#2A3F4F", fontSize: "14px" }}>{pro?.[field] || <em style={{ color: "#aaa" }}>Non renseigné</em>}</span>
+                        <span style={{ color: "#2A3F4F", fontSize: "14px" }}>{pro?.[field] || <em style={{ color: "#90A4AE" }}>Non renseigné</em>}</span>
                       )}
                     </div>
                   ))}
-                  <div style={{ display: "flex", alignItems: "center", padding: "12px 0", borderBottom: "1px solid #F8F8F8" }}>
+                  <div style={{ display: "flex", alignItems: "center", padding: "12px 0", borderBottom: "1px solid rgba(0,70,73,0.08)" }}>
                     <div style={{ minWidth: "220px" }}>
                       <span style={{ color: "#2A3F4F", fontSize: "14px", fontWeight: "600" }}>Prise de RDV via Rêvade</span>
-                      {modeEdition && <p style={{ color: "#aaa", fontSize: "11px", marginTop: "2px" }}>Les patients peuvent demander un créneau depuis l'app</p>}
+                      {modeEdition && <p style={{ color: "#90A4AE", fontSize: "11px", marginTop: "2px" }}>Les patients peuvent demander un créneau depuis l'app</p>}
                     </div>
                     {modeEdition ? (
                       <label style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
@@ -270,12 +271,12 @@ export default function Profil() {
                 </div>
 
                 {/* Visibilité annuaire */}
-                <div style={{ padding: "20px 0 8px", borderTop: "1px solid #F0F0F0", marginTop: "8px" }}>
-                  <p style={{ color: "#004649", fontSize: "14px", fontWeight: "700", marginBottom: "12px" }}>👁️ Visibilité</p>
+                <div style={{ padding: "20px 0 8px", borderTop: "1px solid rgba(0,70,73,0.08)", marginTop: "8px" }}>
+                  <p style={{ color: "#004649", fontWeight: "500", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: "8px" }}>Visibilité</p>
                   <div style={{ display: "flex", alignItems: "center", padding: "12px 0" }}>
                     <div style={{ minWidth: "220px" }}>
                       <span style={{ color: "#2A3F4F", fontSize: "14px", fontWeight: "600" }}>Apparaître dans l'annuaire</span>
-                      {modeEdition && <p style={{ color: "#aaa", fontSize: "11px", marginTop: "2px" }}>Les patients peuvent vous trouver dans la liste des professionnels Rêvade</p>}
+                      {modeEdition && <p style={{ color: "#90A4AE", fontSize: "11px", marginTop: "2px" }}>Les patients peuvent vous trouver dans la liste des professionnels Rêvade</p>}
                     </div>
                     {modeEdition ? (
                       <label style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
@@ -296,30 +297,30 @@ export default function Profil() {
             {/* PARAMÈTRES */}
             {section === "parametres" && (
               <div style={cardStyle}>
-                <h2 style={{ color: "#004649", fontWeight: "700", fontSize: "18px", marginBottom: "32px" }}>Paramètres du compte</h2>
-                <div onClick={() => setShowPasswordModal(true)} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 0", borderBottom: "1px solid #F0F0F0", cursor: "pointer" }}>
+                <h2 style={{ color: "#004649", fontWeight: "600", fontSize: "20px", letterSpacing: "-0.01em", marginBottom: "32px" }}>Paramètres du compte</h2>
+                <div onClick={() => setShowPasswordModal(true)} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 0", borderBottom: "1px solid rgba(0,70,73,0.08)", cursor: "pointer" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-                    <span style={{ fontSize: "22px" }}>🔒</span>
+                    <span style={{ width: "44px", height: "44px", borderRadius: "14px", background: "#EAF3F8", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "20px" }}>🔒</span>
                     <div>
                       <p style={{ color: "#2A3F4F", fontWeight: "600", fontSize: "14px" }}>Changer le mot de passe</p>
-                      <p style={{ color: "#aaa", fontSize: "13px", marginTop: "2px" }}>Modifier votre mot de passe de connexion</p>
+                      <p style={{ color: "#90A4AE", fontSize: "13px", marginTop: "2px" }}>Modifier votre mot de passe de connexion</p>
                     </div>
                   </div>
-                  <span style={{ color: "#aaa", fontSize: "18px" }}>›</span>
+                  <span style={{ color: "#90A4AE", fontSize: "18px" }}>›</span>
                 </div>
                 {[
                   { label: "Langue", desc: "Français", icon: "🌍" },
                   { label: "Confidentialité", desc: "Gérer vos données personnelles", icon: "🛡️" },
                 ].map((item, i) => (
-                  <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 0", borderBottom: "1px solid #F0F0F0", cursor: "pointer" }}>
+                  <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 0", borderBottom: "1px solid rgba(0,70,73,0.08)", cursor: "pointer" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-                      <span style={{ fontSize: "22px" }}>{item.icon}</span>
+                      <span style={{ width: "44px", height: "44px", borderRadius: "14px", background: "#EAF3F8", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "20px" }}>{item.icon}</span>
                       <div>
                         <p style={{ color: "#2A3F4F", fontWeight: "600", fontSize: "14px" }}>{item.label}</p>
-                        <p style={{ color: "#aaa", fontSize: "13px", marginTop: "2px" }}>{item.desc}</p>
+                        <p style={{ color: "#90A4AE", fontSize: "13px", marginTop: "2px" }}>{item.desc}</p>
                       </div>
                     </div>
-                    <span style={{ color: "#aaa", fontSize: "18px" }}>›</span>
+                    <span style={{ color: "#90A4AE", fontSize: "18px" }}>›</span>
                   </div>
                 ))}
               </div>
@@ -332,9 +333,9 @@ export default function Profil() {
                 {/* Calendrier */}
                 <div style={{ ...cardStyle, padding: "32px", minWidth: "400px" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
-                    <button onClick={moisPrecedent} style={{ background: "none", border: "none", color: "#2A3F4F", fontSize: "18px", cursor: "pointer" }}>◀</button>
+                    <button onClick={moisPrecedent} style={{ width: "38px", height: "38px", borderRadius: "50%", background: "#EAF3F8", border: "none", color: "#004649", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg></button>
                     <span style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "16px" }}>{moisNoms[moisActuel]} {anneeActuelle}</span>
-                    <button onClick={moisSuivant} style={{ background: "none", border: "none", color: "#2A3F4F", fontSize: "18px", cursor: "pointer" }}>▶</button>
+                    <button onClick={moisSuivant} style={{ width: "38px", height: "38px", borderRadius: "50%", background: "#EAF3F8", border: "none", color: "#004649", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg></button>
                   </div>
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: "4px", marginBottom: "8px" }}>
                     {joursNoms.map((j) => (
@@ -353,8 +354,8 @@ export default function Profil() {
                           textAlign: "center", padding: "10px 4px", borderRadius: "50px", cursor: "pointer",
                           background: estSelectionne
                             ? "linear-gradient(135deg, #004649 0%, #00363A 100%)"
-                            : estAujourdhui ? "#DFF0EA" : "transparent",
-                          color: estSelectionne ? "white" : "#2A3F4F",
+                            : estAujourdhui ? "#DCEEE6" : "transparent",
+                          color: estSelectionne ? "#F4EDE4" : "#2A3F4F",
                           fontWeight: estSelectionne || estAujourdhui ? "700" : "400",
                           fontSize: "14px", position: "relative",
                           boxShadow: estSelectionne ? "0 4px 8px rgba(0,70,73,0.3)" : "none",
@@ -370,8 +371,7 @@ export default function Profil() {
                 {/* RDV du jour */}
                 <div style={{ flex: 1, ...cardStyle, padding: "32px" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
-                    <p style={{ color: "#004649", fontWeight: "700", fontSize: "16px" }}>
-                      📅 {jourSelectionne ? `${parseInt(jourSelectionne.split("-")[2])} ${moisNoms[parseInt(jourSelectionne.split("-")[1])-1]} ${jourSelectionne.split("-")[0]}` : "Sélectionnez un jour"}
+                    <p style={{ color: "#004649", fontWeight: "500", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase" }}>{jourSelectionne ? `${parseInt(jourSelectionne.split("-")[2])} ${moisNoms[parseInt(jourSelectionne.split("-")[1])-1]} ${jourSelectionne.split("-")[0]}` : "Sélectionnez un jour"}
                     </p>
                     <button
                       onClick={() => { setNouveauRdv({ ...nouveauRdv, date: jourSelectionne }); setShowModalRdv(true); }}
@@ -381,9 +381,9 @@ export default function Profil() {
                   </div>
 
                   {rdvJour.length === 0 ? (
-                    <p style={{ color: "#aaa", fontSize: "14px", fontStyle: "italic" }}>Aucun rendez-vous ce jour</p>
+                    <p style={{ color: "#90A4AE", fontSize: "14px", fontStyle: "italic" }}>Aucun rendez-vous ce jour</p>
                   ) : rdvJour.map((rdv, i) => (
-                    <div key={i} style={{ display: "flex", alignItems: "center", gap: "20px", padding: "16px 20px", background: "linear-gradient(135deg, #F5F9F8 0%, #E8F5EF 100%)", borderRadius: "12px", marginBottom: "12px", borderLeft: "4px solid #004649", boxShadow: "0 2px 8px rgba(0,70,73,0.08)" }}>
+                    <div key={i} style={{ display: "flex", alignItems: "center", gap: "20px", padding: "16px 20px", background: "#F1F8F5", borderRadius: "20px", marginBottom: "12px", borderLeft: "4px solid #004649", boxShadow: "0 2px 8px rgba(0,70,73,0.08)" }}>
                       <span style={{ color: "#004649", fontWeight: "700", fontSize: "14px", minWidth: "60px" }}>{rdv.heure}</span>
                       <div>
                         <p style={{ color: "#2A3F4F", fontWeight: "600", fontSize: "14px" }}>{rdv.patient}</p>
@@ -393,7 +393,7 @@ export default function Profil() {
                   ))}
 
                   {/* Lien Doctolib */}
-                  <div style={{ marginTop: "24px", padding: "16px 20px", background: "linear-gradient(135deg, #f0f8ff 0%, #e8f4fd 100%)", borderRadius: "12px", border: "1px solid #B7D7E8", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <div style={{ marginTop: "24px", padding: "16px 20px", background: "#EAF3F8", borderRadius: "20px", border: "none", flexWrap: "wrap", gap: "12px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
                       <span style={{ fontSize: "22px" }}>🩺</span>
                       <div>
@@ -401,7 +401,7 @@ export default function Profil() {
                         <p style={{ color: "#5A6B72", fontSize: "12px" }}>Importez vos rendez-vous automatiquement</p>
                       </div>
                     </div>
-                    <a href="https://www.doctolib.fr" target="_blank" rel="noopener noreferrer" style={{ background: "linear-gradient(135deg, #0596DE 0%, #0476B0 100%)", color: "white", borderRadius: "10px", padding: "8px 16px", fontSize: "13px", fontWeight: "600", textDecoration: "none", boxShadow: "0 4px 8px rgba(5,150,222,0.3)" }}>
+                    <a href="https://www.doctolib.fr" target="_blank" rel="noopener noreferrer" style={{ background: "#004649", color: "#F4EDE4", borderRadius: "50px", padding: "8px 16px", fontSize: "13px", fontWeight: "600", textDecoration: "none", boxShadow: "0 6px 16px rgba(0,70,73,0.2)" }}>
                       Connecter
                     </a>
                   </div>
@@ -412,51 +412,56 @@ export default function Profil() {
 
         ) : (
           <div>
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginBottom: "48px", position: "relative" }}>
-              <button onClick={() => setSection("annuaire")} style={{ position: "absolute", right: 0, top: 0, background: "linear-gradient(135deg, #004649 0%, #00363A 100%)", color: "#F4EDE4", borderRadius: "50px", padding: "12px 24px", fontSize: "14px", fontWeight: "600", border: "none", cursor: "pointer", boxShadow: "0 4px 8px rgba(0,70,73,0.3)" }}>
+            <section style={{ position: "relative", overflow: "hidden", background: "#004649", borderRadius: "28px", padding: "40px", marginBottom: "28px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "24px", flexWrap: "wrap", boxShadow: "0 24px 60px rgba(0,70,73,0.18)" }}>
+              <div aria-hidden="true" style={{ position: "absolute", inset: 0, pointerEvents: "none", background: "radial-gradient(circle at 85% 0%, rgba(183,215,232,0.28), transparent 45%), radial-gradient(circle at 0% 100%, rgba(165,201,185,0.22), transparent 40%)" }} />
+              <div style={{ position: "relative", display: "flex", alignItems: "center", gap: "22px" }}>
+                <div style={{ width: "84px", height: "84px", borderRadius: "28px", background: "linear-gradient(135deg, #A5C9B9 0%, #B7D7E8 100%)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <span style={{ color: "#004649", fontWeight: "700", fontSize: "28px" }}>
+                    {`${(pro?.prenom?.[0] ?? '').toUpperCase()}${(pro?.nom?.[0] ?? '').toUpperCase()}`}
+                  </span>
+                </div>
+                <div>
+                  <p style={{ color: "#A5C9B9", fontWeight: "500", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: "8px" }}>Mon profil</p>
+                  <h1 style={{ color: "#F4EDE4", fontWeight: "600", fontSize: "32px", letterSpacing: "-0.02em", lineHeight: 1.15 }}>{pro?.prenom} {pro?.nom}</h1>
+                  <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginTop: "10px" }}>
+                    {[pro?.specialite, pro?.email].filter(Boolean).map((t) => (
+                      <span key={t} style={{ color: "rgba(244,237,228,0.85)", fontSize: "12px", background: "rgba(244,237,228,0.10)", border: "1px solid rgba(244,237,228,0.16)", borderRadius: "50px", padding: "4px 12px" }}>{t}</span>
+                    ))}
+                    <span style={{ color: "#004649", fontSize: "12px", fontWeight: "600", background: "#A5C9B9", borderRadius: "50px", padding: "4px 12px" }}>✓ Professionnel certifié</span>
+                  </div>
+                </div>
+              </div>
+              <button onClick={() => setSection("annuaire")} style={{ position: "relative", background: "linear-gradient(135deg, #A5C9B9, #B7D7E8)", color: "#004649", borderRadius: "50px", padding: "12px 24px", fontSize: "14px", fontWeight: "600", border: "none", cursor: "pointer", boxShadow: "0 8px 20px rgba(0,0,0,0.18)" }}>
                 ✏️ Modifier le profil
               </button>
-
-              <div style={{ width: "100px", height: "100px", borderRadius: "50%", background: "linear-gradient(135deg, #004649 0%, #00363A 100%)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "16px", boxShadow: "0 8px 20px rgba(0,70,73,0.25), inset 0 1px 0 rgba(255,255,255,0.15)", flexShrink: 0 }}>
-                <span style={{ color: "white", fontWeight: "700", fontSize: "32px", letterSpacing: "1px" }}>
-                  {`${(pro?.prenom?.[0] ?? '').toUpperCase()}${(pro?.nom?.[0] ?? '').toUpperCase()}`}
-                </span>
-              </div>
-
-              <p style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "20px", marginBottom: "4px" }}>{pro?.prenom} {pro?.nom}</p>
-              <p style={{ color: "#5A6B72", fontSize: "14px", marginBottom: "4px" }}>{pro?.email}</p>
-              <p style={{ color: "#5A6B72", fontSize: "14px" }}>{pro?.specialite}</p>
-              <div style={{ marginTop: "12px", background: "linear-gradient(135deg, #004649 0%, #00363A 100%)", color: "white", borderRadius: "999px", padding: "6px 16px", fontSize: "13px", fontWeight: "600", boxShadow: "0 4px 8px rgba(0,70,73,0.3)" }}>
-                ✓ Professionnel certifié
-              </div>
-            </div>
+            </section>
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "16px", marginBottom: "24px" }}>
               {sections.map((s) => (
-                <div key={s.id} onClick={() => setSection(s.id)} style={{ background: "white", borderRadius: "24px", padding: "28px 24px", boxShadow: "0 10px 30px rgba(0,70,73,0.06)", cursor: "pointer", display: "flex", alignItems: "center", gap: "16px", border: "1.5px solid #E8EEF2", transition: "all 0.15s ease" }}
-                  onMouseEnter={e => { e.currentTarget.style.border = "1.5px solid #A5C9B9"; e.currentTarget.style.boxShadow = "0 8px 20px rgba(0,70,73,0.1)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
-                  onMouseLeave={e => { e.currentTarget.style.border = "1.5px solid #E8EEF2"; e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.06)"; e.currentTarget.style.transform = "translateY(0)"; }}>
-                  <div style={{ width: "44px", height: "44px", borderRadius: "12px", background: "linear-gradient(135deg, #E8F5EF 0%, #C8E6D4 100%)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                <div key={s.id} onClick={() => setSection(s.id)} style={{ background: "white", borderRadius: "24px", padding: "26px", boxShadow: "0 8px 24px rgba(0,70,73,0.05)", cursor: "pointer", display: "flex", alignItems: "center", gap: "16px", border: "1px solid rgba(0,70,73,0.08)", transition: "all 0.15s ease" }}
+                  onMouseEnter={e => { e.currentTarget.style.border = "1px solid rgba(0,70,73,0.22)"; e.currentTarget.style.boxShadow = "0 24px 50px rgba(0,70,73,0.14)"; e.currentTarget.style.transform = "translateY(-3px)"; }}
+                  onMouseLeave={e => { e.currentTarget.style.border = "1px solid rgba(0,70,73,0.08)"; e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,70,73,0.05)"; e.currentTarget.style.transform = "translateY(0)"; }}>
+                  <div style={{ width: "52px", height: "52px", borderRadius: "16px", background: "#DCEEE6", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                     <span style={{ fontSize: "22px" }}>{s.icon}</span>
                   </div>
-                  <span style={{ color: "#2A3F4F", fontWeight: "600", fontSize: "14px", flex: 1 }}>{s.label}</span>
+                  <span style={{ color: "#004649", fontWeight: "600", fontSize: "16px", flex: 1 }}>{s.label}</span>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B0BEC5" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
                 </div>
               ))}
             </div>
 
             {/* Déconnexion */}
-            <div style={{ background: "white", borderRadius: "24px", border: "1.5px solid #FFE0DE", padding: "8px 4px" }}>
-              <button onClick={handleLogout} style={{ width: "100%", background: "none", border: "none", display: "flex", alignItems: "center", gap: "14px", padding: "16px 20px", cursor: "pointer", borderRadius: "12px" }}
+            <div style={{ background: "white", borderRadius: "24px", border: "1px solid #FFE0DE", padding: "8px 4px" }}>
+              <button onClick={handleLogout} style={{ width: "100%", background: "none", border: "none", display: "flex", alignItems: "center", gap: "14px", padding: "16px 20px", cursor: "pointer", borderRadius: "20px" }}
                 onMouseEnter={e => e.currentTarget.style.background = "#FFF5F4"}
                 onMouseLeave={e => e.currentTarget.style.background = "none"}>
-                <div style={{ width: "36px", height: "36px", borderRadius: "10px", background: "#FFF0EE", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <div style={{ width: "40px", height: "40px", borderRadius: "14px", background: "#FFF0EE", display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E53935" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                 </div>
                 <span style={{ color: "#E53935", fontWeight: "600", fontSize: "14px" }}>Se déconnecter</span>
               </button>
               <button onClick={() => setShowDeleteModal(true)} style={{ width: "100%", background: "none", border: "none", display: "flex", alignItems: "center", gap: "14px", padding: "12px 20px", cursor: "pointer", borderTop: "1px solid #FFF0EE" }}>
-                <span style={{ color: "#bbb", fontSize: "12px", paddingLeft: "50px" }}>Supprimer mon compte</span>
+                <span style={{ color: "#B0BEC5", fontSize: "12px", paddingLeft: "50px" }}>Supprimer mon compte</span>
               </button>
             </div>
           </div>
@@ -474,7 +479,7 @@ export default function Profil() {
                 type="password" value={newPassword}
                 onChange={(e) => { setNewPassword(e.target.value); setPasswordStatus(null); }}
                 placeholder="Minimum 8 caractères"
-                style={{ border: "1px solid #B7D7E8", borderRadius: "12px", padding: "12px 16px", fontSize: "14px", outline: "none", color: "#2A3F4F" }}
+                style={{ border: "1px solid rgba(0,70,73,0.14)", borderRadius: "14px", padding: "12px 16px", fontSize: "14px", outline: "none", color: "#2A3F4F" }}
               />
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
@@ -537,19 +542,19 @@ export default function Profil() {
             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
               <label style={{ color: "#2A3F4F", fontSize: "13px", fontWeight: "600" }}>Date</label>
               <input type="date" value={nouveauRdv.date} onChange={(e) => setNouveauRdv({ ...nouveauRdv, date: e.target.value })}
-                style={{ border: "1px solid #B7D7E8", borderRadius: "12px", padding: "12px 16px", fontSize: "14px", outline: "none", color: "#2A3F4F" }} />
+                style={{ border: "1px solid rgba(0,70,73,0.14)", borderRadius: "14px", padding: "12px 16px", fontSize: "14px", outline: "none", color: "#2A3F4F" }} />
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
               <label style={{ color: "#2A3F4F", fontSize: "13px", fontWeight: "600" }}>Heure</label>
               <input type="time" value={nouveauRdv.heure} onChange={(e) => setNouveauRdv({ ...nouveauRdv, heure: e.target.value })}
-                style={{ border: "1px solid #B7D7E8", borderRadius: "12px", padding: "12px 16px", fontSize: "14px", outline: "none", color: "#2A3F4F" }} />
+                style={{ border: "1px solid rgba(0,70,73,0.14)", borderRadius: "14px", padding: "12px 16px", fontSize: "14px", outline: "none", color: "#2A3F4F" }} />
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
               <label style={{ color: "#2A3F4F", fontSize: "13px", fontWeight: "600" }}>Patient</label>
               <select value={nouveauRdv.patient} onChange={(e) => setNouveauRdv({ ...nouveauRdv, patient: e.target.value })}
-                style={{ border: "1px solid #B7D7E8", borderRadius: "12px", padding: "12px 16px", fontSize: "14px", outline: "none", color: "#2A3F4F", backgroundColor: "white" }}>
+                style={{ border: "1px solid rgba(0,70,73,0.14)", borderRadius: "14px", padding: "12px 16px", fontSize: "14px", outline: "none", color: "#2A3F4F", backgroundColor: "white" }}>
                 <option value="">Sélectionner un patient</option>
                 {patientsListe.map((p) => <option key={p} value={p}>{p}</option>)}
               </select>
@@ -558,7 +563,7 @@ export default function Profil() {
             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
               <label style={{ color: "#2A3F4F", fontSize: "13px", fontWeight: "600" }}>Motif</label>
               <select value={nouveauRdv.type} onChange={(e) => setNouveauRdv({ ...nouveauRdv, type: e.target.value })}
-                style={{ border: "1px solid #B7D7E8", borderRadius: "12px", padding: "12px 16px", fontSize: "14px", outline: "none", color: "#2A3F4F", backgroundColor: "white" }}>
+                style={{ border: "1px solid rgba(0,70,73,0.14)", borderRadius: "14px", padding: "12px 16px", fontSize: "14px", outline: "none", color: "#2A3F4F", backgroundColor: "white" }}>
                 <option value="">Sélectionner un motif</option>
                 {motifsList.map((m) => <option key={m} value={m}>{m}</option>)}
               </select>

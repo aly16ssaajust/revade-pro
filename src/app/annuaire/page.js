@@ -5,6 +5,7 @@ import Image from "next/image";
 import { supabase } from "@/lib/supabase";
 import { useProProfile } from "@/lib/useProProfile";
 import Navbar from "@/components/Navbar";
+import PageHeader from "@/components/PageHeader";
 
 const categories = [
   {
@@ -99,29 +100,21 @@ export default function Annuaire() {
       <div style={{ padding: "40px 48px 72px", maxWidth: "1280px", margin: "0 auto" }}>
 
         {/* En-tête */}
-        <div style={{ marginBottom: "32px" }}>
-          <h1 style={{ color: "#004649", fontWeight: "600", fontSize: "32px", letterSpacing: "-0.02em", marginBottom: "8px" }}>
-            📞 Annuaire professionnel
-          </h1>
-          <p style={{ color: "#5A6B72", fontSize: "14px" }}>
-            Professionnels Rêvade et ressources utiles pour accompagner vos patients
-          </p>
-        </div>
+        <PageHeader eyebrow="Réseau" title="Annuaire professionnel" subtitle="Professionnels Rêvade et ressources utiles pour accompagner vos patients" />
 
         {/* Professionnels Rêvade */}
         {professionals.length > 0 && (
           <div style={{ marginBottom: "40px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "16px" }}>
-              <span style={{ fontSize: "22px" }}>🩺</span>
-              <h2 style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "16px" }}>Professionnels certifiés Rêvade</h2>
-              <span style={{ background: "linear-gradient(135deg, #004649, #00363A)", color: "white", borderRadius: "999px", padding: "2px 10px", fontSize: "11px", fontWeight: "600" }}>✓ Certifiés</span>
+              <h2 style={{ color: "#004649", fontWeight: "500", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase" }}>Professionnels certifiés Rêvade</h2>
+              <span style={{ background: "linear-gradient(135deg, #004649, #00363A)", color: "#F4EDE4", borderRadius: "999px", padding: "2px 10px", fontSize: "11px", fontWeight: "600" }}>✓ Certifiés</span>
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "16px" }}>
               {professionals.map((pro) => (
-                <div key={pro.id} style={{ background: "linear-gradient(135deg, #F0F9F7 0%, #E8F5EF 100%)", borderRadius: "16px", padding: "24px", border: "1px solid #A5C9B9", boxShadow: "0 4px 12px rgba(0,70,73,0.08)" }}>
+                <div key={pro.id} style={{ background: "#FFFFFF", borderRadius: "24px", padding: "24px", border: "1px solid rgba(0,70,73,0.08)", boxShadow: "0 8px 24px rgba(0,70,73,0.05)" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "14px", marginBottom: "12px" }}>
-                    <div style={{ width: "48px", height: "48px", borderRadius: "50%", background: "linear-gradient(135deg, #004649, #00363A)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                      <span style={{ color: "white", fontWeight: "700", fontSize: "18px" }}>{(pro.prenom?.[0] ?? "D").toUpperCase()}</span>
+                    <div style={{ width: "52px", height: "52px", borderRadius: "18px", background: "linear-gradient(135deg, #A5C9B9 0%, #B7D7E8 100%)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                      <span style={{ color: "#004649", fontWeight: "700", fontSize: "18px" }}>{(pro.prenom?.[0] ?? "D").toUpperCase()}</span>
                     </div>
                     <div>
                       <p style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "15px" }}>Dr. {pro.prenom} {pro.nom}</p>
@@ -132,17 +125,17 @@ export default function Annuaire() {
                   <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
                     {pro.booking_email && (
                       <a href={`mailto:${pro.booking_email}`} style={{ textDecoration: "none" }}>
-                        <div style={{ background: "#E8F0FB", color: "#1565C0", borderRadius: "8px", padding: "6px 12px", fontSize: "12px", fontWeight: "600" }}>✉ Email</div>
+                        <div style={{ background: "#D6E9F3", color: "#004649", borderRadius: "50px", padding: "6px 12px", fontSize: "12px", fontWeight: "600" }}>✉ Email</div>
                       </a>
                     )}
                     {pro.booking_phone && (
                       <a href={`tel:${pro.booking_phone}`} style={{ textDecoration: "none" }}>
-                        <div style={{ background: "#E8F5E9", color: "#2E7D32", borderRadius: "8px", padding: "6px 12px", fontSize: "12px", fontWeight: "600" }}>📞 {pro.booking_phone}</div>
+                        <div style={{ background: "#DCEEE6", color: "#004649", borderRadius: "50px", padding: "6px 12px", fontSize: "12px", fontWeight: "600" }}>📞 {pro.booking_phone}</div>
                       </a>
                     )}
                     {pro.doctolib_url && (
                       <a href={pro.doctolib_url.startsWith("http") ? pro.doctolib_url : `https://${pro.doctolib_url}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
-                        <div style={{ background: "#E3F2FD", color: "#0277BD", borderRadius: "8px", padding: "6px 12px", fontSize: "12px", fontWeight: "600" }}>🩺 Doctolib</div>
+                        <div style={{ background: "#F4EDE4", color: "#004649", borderRadius: "50px", padding: "6px 12px", fontSize: "12px", fontWeight: "600" }}>🩺 Doctolib</div>
                       </a>
                     )}
                   </div>
@@ -152,19 +145,19 @@ export default function Annuaire() {
           </div>
         )}
 
-        <div style={{ borderTop: "1px solid #E8E8E8", paddingTop: "32px", marginBottom: "32px" }}>
-          <h2 style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "16px", marginBottom: "16px" }}>📋 Ressources et contacts utiles</h2>
+        <div style={{ paddingTop: "16px", marginBottom: "16px" }}>
+          <h2 style={{ color: "#004649", fontWeight: "500", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: "16px" }}>Ressources et contacts utiles</h2>
         </div>
 
         {/* Barre de recherche */}
         <div style={{
           background: "#FFFFFF",
-          borderRadius: "24px", padding: "14px 20px", marginBottom: "32px",
+          borderRadius: "50px", padding: "12px 22px", marginBottom: "24px",
           boxShadow: "0 10px 30px rgba(0,70,73,0.06)",
           border: "1px solid rgba(0,70,73,0.10)",
           display: "flex", alignItems: "center", gap: "12px",
         }}>
-          <span style={{ fontSize: "18px" }}>🔍</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5A6B72" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
           <input
             type="text" placeholder="Rechercher un contact, une ressource..."
             value={recherche} onChange={(e) => setRecherche(e.target.value)}
@@ -182,14 +175,13 @@ export default function Annuaire() {
               onClick={() => setCategorieActive(null)}
               style={{
                 padding: "8px 16px", borderRadius: "999px", fontSize: "13px", fontWeight: "600",
-                cursor: "pointer", border: "none",
+                cursor: "pointer",
                 background: categorieActive === null
                   ? "linear-gradient(135deg, #004649 0%, #00363A 100%)"
-                  : "linear-gradient(135deg, #ffffff 0%, #EAF3F8 100%)",
-                color: categorieActive === null ? "white" : "#2A3F4F",
-                boxShadow: categorieActive === null
-                  ? "0 4px 8px rgba(0,70,73,0.3)"
-                  : "0 2px 4px rgba(0,0,0,0.08)",
+                  : "#FFFFFF",
+                color: categorieActive === null ? "#F4EDE4" : "#004649",
+                border: categorieActive === null ? "1px solid #004649" : "1px solid rgba(0,70,73,0.12)",
+                boxShadow: "none",
               }}>
               Tout voir
             </button>
@@ -199,14 +191,13 @@ export default function Annuaire() {
                 onClick={() => setCategorieActive(categorieActive === cat.id ? null : cat.id)}
                 style={{
                   padding: "8px 16px", borderRadius: "999px", fontSize: "13px", fontWeight: "600",
-                  cursor: "pointer", border: "none",
+                  cursor: "pointer",
                   background: categorieActive === cat.id
                     ? "linear-gradient(135deg, #004649 0%, #00363A 100%)"
-                    : "linear-gradient(135deg, #ffffff 0%, #EAF3F8 100%)",
-                  color: categorieActive === cat.id ? "white" : "#2A3F4F",
-                  boxShadow: categorieActive === cat.id
-                    ? "0 4px 8px rgba(0,70,73,0.3)"
-                    : "0 2px 4px rgba(0,0,0,0.08)",
+                    : "#FFFFFF",
+                  color: categorieActive === cat.id ? "#F4EDE4" : "#004649",
+                  border: categorieActive === cat.id ? "1px solid #004649" : "1px solid rgba(0,70,73,0.12)",
+                  boxShadow: "none",
                 }}>
                 {cat.icon} {cat.nom}
               </button>
@@ -231,10 +222,10 @@ export default function Annuaire() {
               <div key={cat.id}>
                 <div style={{ marginBottom: "16px" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: cat.note ? "6px" : "0" }}>
-                    <span style={{ fontSize: "22px" }}>{cat.icon}</span>
-                    <h2 style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "16px" }}>{cat.nom}</h2>
+                    <span style={{ width: "40px", height: "40px", borderRadius: "14px", background: "#FFFFFF", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "18px" }}>{cat.icon}</span>
+                    <h2 style={{ color: "#004649", fontWeight: "500", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase" }}>{cat.nom}</h2>
                   </div>
-                  {cat.note && <p style={{ color: "#5A6B72", fontSize: "13px", fontStyle: "italic", margin: "0 0 0 38px" }}>{cat.note}</p>}
+                  {cat.note && <p style={{ color: "#5A6B72", fontSize: "13px", fontStyle: "italic", margin: "0 0 0 50px" }}>{cat.note}</p>}
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))", gap: "16px" }}>
                   {cat.contacts.map((contact, i) => (
@@ -260,8 +251,8 @@ function ContactCard({ contact, hovered, setHovered, showCategorie }) {
         background: "#FFFFFF",
         borderRadius: "24px", padding: "24px",
         boxShadow: hovered === key
-          ? "0 8px 24px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.9)"
-          : "0 4px 12px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.9)",
+          ? "0 8px 24px rgba(0,0,0,0.12)"
+          : "0 4px 12px rgba(0,0,0,0.06)",
         border: "1px solid rgba(0,70,73,0.10)",
         transform: hovered === key ? "translateY(-2px)" : "translateY(0)",
         transition: "all 0.2s ease",
@@ -274,10 +265,10 @@ function ContactCard({ contact, hovered, setHovered, showCategorie }) {
       )}
 
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "10px" }}>
-        <p style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "15px", flex: 1 }}>{contact.nom}</p>
+        <p style={{ color: "#004649", fontWeight: "600", fontSize: "15px", flex: 1 }}>{contact.nom}</p>
         {contact.gratuit && (
           <span style={{
-            background: "linear-gradient(135deg, #E8F5EF 0%, #C8E6D4 100%)",
+            background: "#DCEEE6",
             color: "#004649", borderRadius: "999px", padding: "3px 10px",
             fontSize: "11px", fontWeight: "600", marginLeft: "8px", flexShrink: 0,
           }}>Gratuit</span>
@@ -291,9 +282,9 @@ function ContactCard({ contact, hovered, setHovered, showCategorie }) {
           <a href={`tel:${contact.tel}`} style={{ textDecoration: "none" }}>
             <div style={{
               background: "linear-gradient(135deg, #004649 0%, #00363A 100%)",
-              color: "white", borderRadius: "10px", padding: "8px 16px",
+              color: "#F4EDE4", borderRadius: "50px", padding: "9px 18px",
               fontSize: "13px", fontWeight: "600",
-              boxShadow: "0 4px 8px rgba(0,70,73,0.25)",
+              boxShadow: "0 6px 16px rgba(0,70,73,0.2)",
               display: "flex", alignItems: "center", gap: "6px",
             }}>
               📞 {contact.tel}
@@ -303,12 +294,10 @@ function ContactCard({ contact, hovered, setHovered, showCategorie }) {
         {contact.site && (
           <a href={contact.site} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
             <div style={{
-              background: contact.pdf ? "linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%)" : "linear-gradient(135deg, #EAF3F8 0%, #e8edf2 100%)",
-              color: contact.pdf ? "#E65100" : "#2A3F4F", borderRadius: "10px", padding: "8px 16px",
+              background: contact.pdf ? "#FFF6EC" : "#EAF3F8",
+              color: contact.pdf ? "#E65100" : "#004649", borderRadius: "50px", padding: "9px 18px",
               fontSize: "13px", fontWeight: "600",
-              boxShadow: "0 2px 6px rgba(0,0,0,0.08)",
               display: "flex", alignItems: "center", gap: "6px",
-              border: "1px solid rgba(0,70,73,0.10)",
             }}>
               {contact.pdf ? "📄 Télécharger PDF" : "🌐 Site web"}
             </div>

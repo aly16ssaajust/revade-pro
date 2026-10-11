@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
+import PageHeader from "@/components/PageHeader";
 import { useProProfile } from "@/lib/useProProfile";
 import { supabase } from "@/lib/supabase";
 import { showToast } from "@/lib/toast";
@@ -66,9 +67,9 @@ const BECK_COLS = [
 ];
 
 const inputStyle = {
-  width: "100%", border: "1px solid #B7D7E8", borderRadius: "10px",
+  width: "100%", border: "1px solid rgba(0,70,73,0.14)", borderRadius: "14px",
   padding: "10px 14px", fontSize: "14px", color: "#2A3F4F", outline: "none",
-  backgroundColor: "#FAFAFA", boxSizing: "border-box", fontFamily: "inherit",
+  backgroundColor: "#F7FAFC", boxSizing: "border-box", fontFamily: "inherit",
 };
 
 /* ════════════════════════════════════════════════════════════════════ */
@@ -149,7 +150,7 @@ export default function Outils() {
       <div style={{ background: "#F8FAFC", border: "1.5px solid #E4ECF2", borderRadius: "14px", padding: "16px 20px", display: "flex", alignItems: "center", gap: "12px", flexWrap: "wrap" }}>
         <span style={{ fontSize: "13px", color: "#5A6B72", fontWeight: "600", flexShrink: 0 }}>👤 Enregistrer pour :</span>
         <select value={selectedPatient} onChange={e => { setSelectedPatient(e.target.value); setSavedTest(false); }}
-          style={{ flex: 1, minWidth: "180px", border: "1px solid #B7D7E8", borderRadius: "8px", padding: "8px 12px", fontSize: "13px", color: "#2A3F4F", outline: "none", backgroundColor: "white" }}>
+          style={{ flex: 1, minWidth: "180px", border: "1px solid rgba(0,70,73,0.14)", borderRadius: "14px", padding: "8px 12px", fontSize: "13px", color: "#2A3F4F", outline: "none", backgroundColor: "white" }}>
           <option value="">— Sélectionner un patient —</option>
           {patients.map(p => <option key={p.id} value={p.id}>{p.prenom} {p.nom}</option>)}
         </select>
@@ -175,13 +176,10 @@ export default function Outils() {
     <div style={{ minHeight: "100vh", backgroundColor: "#EAF3F8" }}>
       <Navbar proId={pro?.id} />
       <div style={{ padding: "40px 48px 72px", maxWidth: "1280px", margin: "0 auto" }}>
-        <div style={{ marginBottom: "36px" }}>
-          <h1 style={{ color: "#004649", fontWeight: "600", fontSize: "32px", letterSpacing: "-0.02em", marginBottom: "6px" }}>🛠 Outils cliniques</h1>
-          <p style={{ color: "#5A6B72", fontSize: "14px" }}>Tests validés et ressources de formation pour vos consultations</p>
-        </div>
+        <PageHeader eyebrow="Pratique clinique" title="Outils cliniques" subtitle="Tests validés et ressources de formation pour vos consultations" />
 
-        <h2 style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "16px", marginBottom: "16px" }}>📋 Tests & Évaluations</h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(290px, 1fr))", gap: "16px", marginBottom: "48px" }}>
+        <h2 style={{ color: "#004649", fontWeight: "500", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: "16px" }}>Tests & Évaluations</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "20px", marginBottom: "48px" }}>
           <TestCard icon="🧠" title="Test HAD" subtitle="Hospital Anxiety and Depression Scale"
             desc="Évalue l'anxiété et la dépression — 14 questions, scores A et D de 0 à 21"
             tags={["Anxiété", "Dépression"]} onOpen={() => openModal("had", () => setHadRep({}))} />
@@ -193,25 +191,25 @@ export default function Outils() {
             tags={["Tabac", "Motivation"]} onOpen={() => openModal("horn", () => setHornRep({}))} />
         </div>
 
-        <h2 style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "16px", marginBottom: "16px" }}>🎓 Formations gratuites</h2>
+        <h2 style={{ color: "#004649", fontWeight: "500", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: "16px" }}>Formations gratuites</h2>
         <a href="https://www.fun-mooc.fr/courses/course-v1:u-paris+37021+session03/about" target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
-          <div style={{ background: "linear-gradient(135deg,#E8F5EF,#D0EDE0)", border: "1.5px solid #A5C9B9", borderRadius: "20px", padding: "28px 32px", display: "flex", gap: "20px", alignItems: "flex-start", boxShadow: "0 4px 16px rgba(0,70,73,0.08)", cursor: "pointer" }}
+          <div style={{ position: "relative", overflow: "hidden", background: "#004649", border: "none", borderRadius: "28px", padding: "32px 36px", display: "flex", gap: "24px", alignItems: "flex-start", boxShadow: "0 24px 60px rgba(0,70,73,0.18)", cursor: "pointer" }}
             onMouseEnter={e => e.currentTarget.style.transform = "translateY(-2px)"}
             onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
-            <div style={{ fontSize: "40px", flexShrink: 0 }}>🎓</div>
+            <div style={{ width: "64px", height: "64px", borderRadius: "20px", background: "rgba(244,237,228,0.10)", border: "1px solid rgba(244,237,228,0.16)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "30px", flexShrink: 0 }}>🎓</div>
             <div style={{ flex: 1 }}>
               <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap", marginBottom: "6px" }}>
-                <p style={{ color: "#004649", fontWeight: "700", fontSize: "16px", margin: 0 }}>MOOC — Aide à l'arrêt du tabac</p>
-                <span style={{ background: "#004649", color: "white", borderRadius: "999px", padding: "2px 10px", fontSize: "11px", fontWeight: "700" }}>GRATUIT</span>
+                <p style={{ color: "#F4EDE4", fontWeight: "600", fontSize: "18px", margin: 0 }}>MOOC — Aide à l'arrêt du tabac</p>
+                <span style={{ background: "#A5C9B9", color: "#004649", borderRadius: "999px", padding: "3px 12px", fontSize: "11px", fontWeight: "700" }}>GRATUIT</span>
               </div>
-              <p style={{ color: "#2A3F4F", fontSize: "13px", marginBottom: "10px", lineHeight: "1.6" }}>La Société Francophone de Tabacologie met à disposition ce MOOC pour vous aider à prendre en charge le sevrage tabagique. Déjà <strong>8 000 inscrits</strong>.</p>
+              <p style={{ color: "rgba(244,237,228,0.78)", fontSize: "13px", marginBottom: "14px", lineHeight: "1.7" }}>La Société Francophone de Tabacologie met à disposition ce MOOC pour vous aider à prendre en charge le sevrage tabagique. Déjà <strong>8 000 inscrits</strong>.</p>
               <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
                 {["#MOOC","#SevrageTabagique","SFT","Université de Paris"].map(t => (
-                  <span key={t} style={{ background: "rgba(0,70,73,0.1)", color: "#004649", borderRadius: "999px", padding: "3px 10px", fontSize: "12px", fontWeight: "600" }}>{t}</span>
+                  <span key={t} style={{ background: "rgba(244,237,228,0.10)", color: "#F4EDE4", border: "1px solid rgba(244,237,228,0.16)", borderRadius: "999px", padding: "3px 12px", fontSize: "12px", fontWeight: "500" }}>{t}</span>
                 ))}
               </div>
             </div>
-            <div style={{ background: "linear-gradient(135deg,#004649, #00363A)", color: "white", borderRadius: "12px", padding: "10px 18px", fontSize: "13px", fontWeight: "700", flexShrink: 0, alignSelf: "center" }}>Accéder →</div>
+            <div style={{ background: "linear-gradient(135deg, #A5C9B9, #B7D7E8)", color: "#004649", borderRadius: "50px", padding: "12px 22px", fontSize: "14px", fontWeight: "600", flexShrink: 0, alignSelf: "center", whiteSpace: "nowrap" }}>Accéder →</div>
           </div>
         </a>
       </div>
@@ -380,15 +378,15 @@ function TestCard({ icon, title, subtitle, desc, tags, onOpen }) {
   const [hovered, setHovered] = useState(false);
   return (
     <div onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
-      style={{ background: "#FFFFFF", borderRadius: "24px", padding: "28px", boxShadow: hovered ? "0 12px 32px rgba(0,0,0,0.12)" : "0 4px 16px rgba(0,0,0,0.06)", border: "1px solid rgba(0,70,73,0.10)", transform: hovered ? "translateY(-3px)" : "translateY(0)", transition: "all 0.2s ease", display: "flex", flexDirection: "column", gap: "12px" }}>
-      <div style={{ fontSize: "36px" }}>{icon}</div>
+      style={{ background: "#FFFFFF", borderRadius: "24px", padding: "28px", boxShadow: hovered ? "0 24px 50px rgba(0,70,73,0.14)" : "0 8px 24px rgba(0,70,73,0.05)", border: hovered ? "1px solid rgba(0,70,73,0.22)" : "1px solid rgba(0,70,73,0.08)", transform: hovered ? "translateY(-3px)" : "translateY(0)", transition: "all 0.2s ease", display: "flex", flexDirection: "column", gap: "12px" }}>
+      <div style={{ width: "56px", height: "56px", borderRadius: "18px", background: "#EAF3F8", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "28px" }}>{icon}</div>
       <div>
-        <p style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "16px", marginBottom: "3px" }}>{title}</p>
+        <p style={{ color: "#004649", fontWeight: "600", fontSize: "17px", marginBottom: "3px" }}>{title}</p>
         <p style={{ color: "#90A4AE", fontSize: "12px" }}>{subtitle}</p>
       </div>
       <p style={{ color: "#5A6B72", fontSize: "13px", lineHeight: "1.6", flex: 1 }}>{desc}</p>
       <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
-        {tags.map(t => <span key={t} style={{ background: "#E8F5EF", color: "#004649", borderRadius: "999px", padding: "3px 10px", fontSize: "11px", fontWeight: "600" }}>{t}</span>)}
+        {tags.map(t => <span key={t} style={{ background: "#DCEEE6", color: "#004649", borderRadius: "999px", padding: "3px 10px", fontSize: "11px", fontWeight: "600" }}>{t}</span>)}
       </div>
       <button onClick={onOpen} style={{ padding: "11px", borderRadius: "50px", border: "none", background: "linear-gradient(135deg,#004649, #00363A)", color: "#F4EDE4", fontWeight: "700", fontSize: "14px", cursor: "pointer", boxShadow: "0 4px 8px rgba(0,70,73,0.3)" }}>
         Lancer le test →

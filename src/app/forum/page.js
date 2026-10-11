@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { useProProfile } from "@/lib/useProProfile";
 import Navbar from "@/components/Navbar";
+import PageHeader from "@/components/PageHeader";
 
 const CATEGORIE_CONFIG = {
   temoignages: { nom: "Témoignages", icon: "💬" },
@@ -33,7 +34,7 @@ function formatDate(isoString) {
 const cardStyle = {
   background: "#FFFFFF",
   borderRadius: "20px", padding: "32px",
-  boxShadow: "0 8px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)",
+  boxShadow: "0 8px 24px rgba(0,70,73,0.05)",
   marginBottom: "20px",
 };
 
@@ -244,8 +245,8 @@ function ForumContent() {
 
   const BadgePro = () => (
     <span style={{
-      background: "linear-gradient(135deg, #004649 0%, #00363A 100%)",
-      color: "white", borderRadius: "999px", padding: "2px 10px",
+      background: "#DCEEE6",
+      color: "#004649", borderRadius: "999px", padding: "3px 10px",
       fontSize: "11px", fontWeight: "600",
     }}>✓ Professionnel certifié</span>
   );
@@ -260,14 +261,14 @@ function ForumContent() {
           onClick={() => { setPostOuvert(null); setCommentaires([]); }}
           style={{ background: "none", border: "none", padding: 0, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "10px", marginBottom: "24px" }}
         >
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", borderRadius: "10px", background: "white", border: "1.5px solid #B7D7E8", boxShadow: "0 2px 6px rgba(0,0,0,0.06)" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "40px", height: "40px", borderRadius: "50%", background: "white", border: "1px solid rgba(0,70,73,0.12)" }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2A3F4F" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="15 18 9 12 15 6" />
             </svg>
           </div>
           <div>
-            <p style={{ margin: 0, fontSize: "11px", color: "#90A4AE", fontWeight: "500", letterSpacing: "0.3px" }}>DISCUSSIONS</p>
-            <p style={{ margin: 0, fontSize: "15px", color: "#2A3F4F", fontWeight: "700" }}>{postOuvert.titre}</p>
+            <p style={{ margin: 0, fontSize: "11px", color: "#004649", fontWeight: "500", letterSpacing: "0.18em" }}>DISCUSSIONS</p>
+            <p style={{ margin: 0, fontSize: "15px", color: "#004649", fontWeight: "600" }}>{postOuvert.titre}</p>
           </div>
         </button>
 
@@ -289,18 +290,16 @@ function ForumContent() {
           <p style={{ color: "#5A6B72", fontSize: "14px" }}>Chargement des commentaires...</p>
         ) : commentaires.map((msg, i) => (
           <div key={i} style={{
-            background: msg.is_pro
-              ? "linear-gradient(135deg, #F0F9F7 0%, #E4F5F1 100%)"
-              : "#FFFFFF",
-            borderRadius: "16px", padding: "24px",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.9)",
+            background: msg.is_pro ? "#F1F8F5" : "#FFFFFF",
+            borderRadius: "24px", padding: "24px",
+            border: "1px solid rgba(0,70,73,0.08)",
+            boxShadow: "0 8px 24px rgba(0,70,73,0.05)",
             marginBottom: "12px",
-            borderLeft: msg.is_pro ? "4px solid #004649" : "none",
-          }}>
+                      }}>
             <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px", flexWrap: "wrap" }}>
               <span style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "14px" }}>{msg.pseudo}</span>
               {msg.is_pro && <BadgePro />}
-              <span style={{ color: "#aaa", fontSize: "12px", marginLeft: "auto" }}>{formatDate(msg.created_at)}</span>
+              <span style={{ color: "#90A4AE", fontSize: "12px", marginLeft: "auto" }}>{formatDate(msg.created_at)}</span>
             </div>
             <p style={{ color: "#2A3F4F", fontSize: "14px", lineHeight: "1.6" }}>{msg.contenu}</p>
           </div>
@@ -316,7 +315,7 @@ function ForumContent() {
             onChange={(e) => setNouveauMessage(e.target.value)}
             placeholder="Écrire un message..."
             rows={4}
-            style={{ width: "100%", border: "1px solid #B7D7E8", borderRadius: "12px", padding: "14px", fontSize: "14px", color: "#2A3F4F", outline: "none", resize: "none", backgroundColor: "#FAFAFA", boxSizing: "border-box" }}
+            style={{ width: "100%", border: "1px solid rgba(0,70,73,0.14)", borderRadius: "14px", padding: "14px", fontSize: "14px", color: "#2A3F4F", outline: "none", resize: "none", backgroundColor: "#F7FAFC", boxSizing: "border-box" }}
           />
           <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "12px" }}>
             <button
@@ -342,29 +341,29 @@ function ForumContent() {
         onClick={() => setCategorieOuverte(null)}
         style={{ background: "none", border: "none", padding: 0, cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "10px", marginBottom: "24px" }}
       >
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", borderRadius: "10px", background: "white", border: "1.5px solid #B7D7E8", boxShadow: "0 2px 6px rgba(0,0,0,0.06)" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "40px", height: "40px", borderRadius: "50%", background: "white", border: "1px solid rgba(0,70,73,0.12)" }}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2A3F4F" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="15 18 9 12 15 6" />
           </svg>
         </div>
         <div>
-          <p style={{ margin: 0, fontSize: "11px", color: "#90A4AE", fontWeight: "500", letterSpacing: "0.3px" }}>CATÉGORIES</p>
-          <p style={{ margin: 0, fontSize: "15px", color: "#2A3F4F", fontWeight: "700" }}>{categorieIcon(categorieOuverte)} {categorieLabel(categorieOuverte)}</p>
+          <p style={{ margin: 0, fontSize: "11px", color: "#004649", fontWeight: "500", letterSpacing: "0.18em" }}>CATÉGORIES</p>
+          <p style={{ margin: 0, fontSize: "15px", color: "#004649", fontWeight: "600" }}>{categorieIcon(categorieOuverte)} {categorieLabel(categorieOuverte)}</p>
         </div>
       </button>
       <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
         {postsInCategorie.length === 0 ? (
-          <p style={{ color: "#aaa", fontSize: "14px", fontStyle: "italic" }}>Aucune discussion dans cette catégorie</p>
+          <p style={{ color: "#90A4AE", fontSize: "14px", fontStyle: "italic" }}>Aucune discussion dans cette catégorie</p>
         ) : postsInCategorie.map((post) => (
           <div key={post.id} onClick={() => openPost(post)} style={{
-            background: "linear-gradient(135deg, #FDFAF4 0%, #F5F0E8 100%)",
-            borderRadius: "16px", padding: "24px 28px",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8)",
-            cursor: "pointer", border: "1px solid rgba(255,255,255,0.6)",
+            background: "#FFFFFF",
+            borderRadius: "24px", padding: "24px 28px",
+            boxShadow: "0 8px 24px rgba(0,70,73,0.05)",
+            cursor: "pointer", border: "1px solid rgba(0,70,73,0.08)",
           }}>
-            <p style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "15px", marginBottom: "6px" }}>{post.titre}</p>
+            <p style={{ color: "#004649", fontWeight: "600", fontSize: "16px", marginBottom: "6px" }}>{post.titre}</p>
             <p style={{ color: "#5A6B72", fontSize: "13px", marginBottom: "10px" }}>par {post.pseudo}, le {formatDate(post.created_at)}</p>
-            <p style={{ color: "#555", fontSize: "13px", fontStyle: "italic", lineHeight: "1.5", marginBottom: "16px" }}>« {post.contenu} »</p>
+            <p style={{ color: "#5A6B72", fontSize: "13px", fontStyle: "italic", lineHeight: "1.5", marginBottom: "16px" }}>« {post.contenu} »</p>
             <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
               <span style={{ color: "#E07B39", fontSize: "13px" }}>❤️ {post.likes_count || 0}</span>
               <span style={{ color: "#5A6B72", fontSize: "13px" }}>💬 {post.comments_count || 0} réponses</span>
@@ -386,12 +385,13 @@ function ForumContent() {
           renderListeDiscussions()
         ) : (
           <div>
-            <div style={{ display: "flex", borderBottom: "2px solid #DFF0EA", marginBottom: "32px", gap: "40px" }}>
+            <PageHeader eyebrow="Échanges" title={onglet === "messagerie" ? "Messagerie" : "Forum"} subtitle={onglet === "messagerie" ? "Échangez en privé avec vos patients" : "Discussions de la communauté Rêvade"} />
+            <div style={{ display: "inline-flex", flexWrap: "wrap", gap: "4px", padding: "6px", background: "#FFFFFF", borderRadius: "50px", border: "1px solid rgba(0,70,73,0.08)", boxShadow: "0 8px 24px rgba(0,70,73,0.05)", marginBottom: "28px" }}>
               {["categories", "messages", "messagerie"].map((o) => {
-                const labels = { categories: "Catégories", messages: "Derniers messages", messagerie: "💬 Messagerie patients" };
+                const labels = { categories: "Catégories", messages: "Derniers messages", messagerie: "Messagerie patients" };
                 const actif = onglet === o;
                 return (
-                  <button key={o} onClick={() => setOnglet(o)} style={{ padding: "12px 0", fontSize: "15px", fontWeight: actif ? "700" : "400", color: "#2A3F4F", background: "none", border: "none", cursor: "pointer", borderBottom: actif ? "3px solid #004649" : "3px solid transparent", marginBottom: "-2px", whiteSpace: "nowrap" }}>
+                  <button key={o} onClick={() => setOnglet(o)} style={{ padding: "10px 20px", fontSize: "14px", fontWeight: actif ? "600" : "500", color: actif ? "#F4EDE4" : "#5A6B72", background: actif ? "#004649" : "transparent", border: "none", borderRadius: "50px", cursor: "pointer", transition: "all 0.2s ease" }}>
                     {labels[o]}
                   </button>
                 );
@@ -405,20 +405,20 @@ function ForumContent() {
                 {onglet === "categories" && (
                   <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                     {categories.length === 0 ? (
-                      <p style={{ color: "#aaa", fontSize: "14px", fontStyle: "italic" }}>Aucune discussion pour le moment</p>
+                      <p style={{ color: "#90A4AE", fontSize: "14px", fontStyle: "italic" }}>Aucune discussion pour le moment</p>
                     ) : categories.map((cat) => (
                       <div key={cat.id} onClick={() => setCategorieOuverte(cat.id)} style={{
-                        background: "linear-gradient(135deg, #ffffff 0%, #EAF3F8 100%)",
-                        borderRadius: "16px", padding: "24px 32px",
-                        boxShadow: "0 10px 30px rgba(0,70,73,0.06)",
+                        background: "#FFFFFF",
+                        borderRadius: "24px", padding: "22px 28px",
+                        boxShadow: "0 8px 24px rgba(0,70,73,0.05)",
                         display: "flex", alignItems: "center", justifyContent: "space-between",
-                        cursor: "pointer", border: "1px solid rgba(255,255,255,0.6)",
+                        cursor: "pointer", border: "1px solid rgba(0,70,73,0.08)",
                       }}>
                         <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-                          <span style={{ fontSize: "28px" }}>{cat.icon}</span>
-                          <span style={{ color: "#2A3F4F", fontWeight: "600", fontSize: "15px" }}>{cat.nom}</span>
+                          <span style={{ width: "48px", height: "48px", borderRadius: "16px", background: "#EAF3F8", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: "22px" }}>{cat.icon}</span>
+                          <span style={{ color: "#004649", fontWeight: "600", fontSize: "16px" }}>{cat.nom}</span>
                         </div>
-                        <span style={{ color: "#5A6B72", fontSize: "13px" }}>{cat.nbSujets} sujet{cat.nbSujets > 1 ? "s" : ""} →</span>
+                        <span style={{ color: "#004649", fontSize: "13px", fontWeight: "600", background: "#EAF3F8", borderRadius: "50px", padding: "6px 14px" }}>{cat.nbSujets} sujet{cat.nbSujets > 1 ? "s" : ""} →</span>
                       </div>
                     ))}
                   </div>
@@ -427,20 +427,20 @@ function ForumContent() {
                 {onglet === "messages" && (
                   <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                     {posts.length === 0 ? (
-                      <p style={{ color: "#aaa", fontSize: "14px", fontStyle: "italic" }}>Aucun message pour le moment</p>
+                      <p style={{ color: "#90A4AE", fontSize: "14px", fontStyle: "italic" }}>Aucun message pour le moment</p>
                     ) : posts.map((post) => (
                       <div key={post.id} onClick={() => openPost(post)} style={{
-                        background: "linear-gradient(135deg, #FDFAF4 0%, #F5F0E8 100%)",
-                        borderRadius: "16px", padding: "24px 28px",
-                        boxShadow: "0 4px 12px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8)",
-                        cursor: "pointer", border: "1px solid rgba(255,255,255,0.6)",
+                        background: "#FFFFFF",
+                        borderRadius: "24px", padding: "24px 28px",
+                        boxShadow: "0 8px 24px rgba(0,70,73,0.05)",
+                        cursor: "pointer", border: "1px solid rgba(0,70,73,0.08)",
                       }}>
                         <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
-                          <span style={{ fontSize: "13px", color: "#5A6B72" }}>{categorieIcon(post.categorie)} {categorieLabel(post.categorie)}</span>
+                          <span style={{ fontSize: "12px", color: "#004649", background: "#EAF3F8", borderRadius: "50px", padding: "4px 12px" }}>{categorieIcon(post.categorie)} {categorieLabel(post.categorie)}</span>
                         </div>
-                        <p style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "15px", marginBottom: "6px" }}>{post.titre}</p>
+                        <p style={{ color: "#004649", fontWeight: "600", fontSize: "16px", marginBottom: "6px" }}>{post.titre}</p>
                         <p style={{ color: "#5A6B72", fontSize: "13px", marginBottom: "10px" }}>par {post.pseudo}, le {formatDate(post.created_at)}</p>
-                        <p style={{ color: "#555", fontSize: "13px", fontStyle: "italic", lineHeight: "1.5", marginBottom: "16px" }}>« {post.contenu} »</p>
+                        <p style={{ color: "#5A6B72", fontSize: "13px", fontStyle: "italic", lineHeight: "1.5", marginBottom: "16px" }}>« {post.contenu} »</p>
                         <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
                           <span style={{ color: "#E07B39", fontSize: "13px" }}>❤️ {post.likes_count || 0}</span>
                           <span style={{ color: "#5A6B72", fontSize: "13px" }}>💬 {post.comments_count || 0} réponses</span>
@@ -453,12 +453,12 @@ function ForumContent() {
                 {onglet === "messagerie" && (
                   <div style={{ display: "flex", gap: "24px", minHeight: "520px" }}>
                     {/* Patient list */}
-                    <div style={{ width: "220px", flexShrink: 0, display: "flex", flexDirection: "column", gap: "8px" }}>
-                      <p style={{ color: "#5A6B72", fontSize: "12px", fontWeight: "700", letterSpacing: "0.5px", marginBottom: "4px", textTransform: "uppercase" }}>Mes patients</p>
+                    <div style={{ width: "240px", flexShrink: 0, display: "flex", flexDirection: "column", gap: "8px" }}>
+                      <p style={{ color: "#004649", fontWeight: "500", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: "6px" }}>Mes patients</p>
                       {patientsMsg.length === 0 ? (
-                        <p style={{ color: "#aaa", fontSize: "13px", fontStyle: "italic" }}>Aucun patient lié</p>
+                        <p style={{ color: "#90A4AE", fontSize: "13px", fontStyle: "italic" }}>Aucun patient lié</p>
                       ) : patientsMsg.map((p) => (
-                        <button key={p.id} onClick={() => selectPatient(p)} style={{ textAlign: "left", padding: "12px 14px", borderRadius: "50px", border: "none", cursor: "pointer", background: patientSel?.id === p.id ? "linear-gradient(135deg, #004649, #00363A)" : "linear-gradient(135deg, #ffffff, #EAF3F8)", color: patientSel?.id === p.id ? "white" : "#2A3F4F", fontWeight: "600", fontSize: "14px", boxShadow: "0 2px 6px rgba(0,0,0,0.08)" }}>
+                        <button key={p.id} onClick={() => selectPatient(p)} style={{ textAlign: "left", padding: "12px 14px", borderRadius: "50px", border: "none", cursor: "pointer", background: patientSel?.id === p.id ? "linear-gradient(135deg, #004649, #00363A)" : "linear-gradient(135deg, #ffffff, #EAF3F8)", color: patientSel?.id === p.id ? "white" : "#2A3F4F", fontWeight: "600", fontSize: "14px", boxShadow: "0 8px 24px rgba(0,70,73,0.05)" }}>
                           {p.prenom} {p.nom}
                         </button>
                       ))}
@@ -467,28 +467,28 @@ function ForumContent() {
                     {/* Thread */}
                     <div style={{ flex: 1, display: "flex", flexDirection: "column", background: "#FFFFFF", borderRadius: "24px", boxShadow: "0 8px 24px rgba(0,70,73,0.06)", overflow: "hidden" }}>
                       {!patientSel ? (
-                        <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: "12px", color: "#aaa" }}>
+                        <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: "12px", color: "#90A4AE" }}>
                           <span style={{ fontSize: "40px" }}>💬</span>
                           <p style={{ fontSize: "14px" }}>Sélectionnez un patient pour démarrer la messagerie</p>
                         </div>
                       ) : (
                         <>
                           {/* Thread header */}
-                          <div style={{ padding: "16px 20px", borderBottom: "1px solid #F0F0F0", background: "linear-gradient(135deg, #F8FAFB, #EAF3F8)" }}>
+                          <div style={{ padding: "18px 24px", borderBottom: "1px solid rgba(0,70,73,0.08)", background: "#FFFFFF" }}>
                             <p style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "15px" }}>{patientSel.prenom} {patientSel.nom}</p>
                           </div>
 
                           {/* Messages */}
                           <div style={{ flex: 1, overflowY: "auto", padding: "20px", display: "flex", flexDirection: "column", gap: "10px", maxHeight: "340px" }}>
                             {loadingThread ? (
-                              <p style={{ color: "#aaa", fontSize: "13px", textAlign: "center" }}>Chargement…</p>
+                              <p style={{ color: "#90A4AE", fontSize: "13px", textAlign: "center" }}>Chargement…</p>
                             ) : thread.length === 0 ? (
-                              <p style={{ color: "#aaa", fontSize: "13px", textAlign: "center", marginTop: "40px" }}>Aucun message — commencez la conversation</p>
+                              <p style={{ color: "#90A4AE", fontSize: "13px", textAlign: "center", marginTop: "40px" }}>Aucun message — commencez la conversation</p>
                             ) : thread.map((msg) => {
                               const isPro = msg.sender_type === "pro";
                               return (
                                 <div key={msg.id} style={{ display: "flex", justifyContent: isPro ? "flex-end" : "flex-start" }}>
-                                  <div style={{ maxWidth: "70%", padding: "10px 14px", borderRadius: isPro ? "16px 16px 4px 16px" : "16px 16px 16px 4px", background: isPro ? "linear-gradient(135deg, #004649, #00363A)" : "white", color: isPro ? "white" : "#2A3F4F", boxShadow: "0 2px 6px rgba(0,0,0,0.08)", fontSize: "14px", lineHeight: "1.5" }}>
+                                  <div style={{ maxWidth: "70%", padding: "10px 14px", borderRadius: isPro ? "16px 16px 4px 16px" : "16px 16px 16px 4px", background: isPro ? "#004649" : "#EAF3F8", color: isPro ? "#F4EDE4" : "#2A3F4F", boxShadow: "0 8px 24px rgba(0,70,73,0.05)", fontSize: "14px", lineHeight: "1.5" }}>
                                     <p style={{ margin: 0 }}>{msg.content}</p>
                                     <p style={{ margin: "4px 0 0", fontSize: "11px", opacity: 0.7, textAlign: "right" }}>{formatMsgTime(msg.created_at)}</p>
                                   </div>
@@ -499,14 +499,14 @@ function ForumContent() {
                           </div>
 
                           {/* Input */}
-                          <div style={{ padding: "14px 20px", borderTop: "1px solid #F0F0F0", display: "flex", gap: "10px", alignItems: "flex-end" }}>
+                          <div style={{ padding: "14px 20px", borderTop: "1px solid rgba(0,70,73,0.08)", display: "flex", gap: "10px", alignItems: "flex-end" }}>
                             <textarea
                               value={msgContent}
                               onChange={(e) => setMsgContent(e.target.value)}
                               onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMsg(); } }}
                               placeholder="Écrire un message…"
                               rows={2}
-                              style={{ flex: 1, border: "1px solid #E0E0E0", borderRadius: "12px", padding: "10px 14px", fontSize: "14px", outline: "none", resize: "none", color: "#2A3F4F", fontFamily: "inherit", lineHeight: "1.5" }}
+                              style={{ flex: 1, border: "1px solid rgba(0,70,73,0.12)", borderRadius: "22px", padding: "11px 18px", fontSize: "14px", outline: "none", resize: "none", background: "#F7FAFC", color: "#2A3F4F", fontFamily: "inherit", lineHeight: "1.5" }}
                             />
                             <button
                               onClick={sendMsg}
