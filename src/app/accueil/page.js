@@ -27,7 +27,6 @@ export default function Accueil() {
   const [nbPatients, setNbPatients] = useState("…");
   const [nbRdvMois, setNbRdvMois] = useState("…");
   const [nbMessages, setNbMessages] = useState("…");
-  const [activiteRecente, setActiviteRecente] = useState([]);
   const [loadingStats, setLoadingStats] = useState(true);
 
   useEffect(() => {
@@ -68,75 +67,11 @@ export default function Accueil() {
         .select("*", { count: "exact", head: true })
         .eq("user_id", pro.id);
       setNbMessages(messages ?? 0);
-
-      // Activité récente
-      const activites = [];
-
-      // Dernier patient ajouté
-      const { data: derniersPatients } = await supabase
-        .from("patient_professional_links")
-        .select("patient_id, created_at")
-        .eq("professional_id", pro.id)
-        .order("created_at", { ascending: false })
-        .limit(2);
-
-      for (const lien of derniersPatients ?? []) {
-        const { data: profil } = await supabase
-          .from("profiles")
-          .select("prenom, nom, pseudo")
-          .eq("id", lien.patient_id)
-          .single();
-        const nom = profil ? `${profil.prenom ?? ""} ${profil.nom ?? ""}`.trim() || profil.pseudo : "Patient";
-        activites.push({ icon: "👥", texte: "Patient suivi", detail: nom, ts: new Date(lien.created_at) });
-      }
-
-      // Derniers messages forum du pro
-      const { data: derniersMessages } = await supabase
-        .from("forum_comments")
-        .select("contenu, created_at, post_id")
-        .eq("user_id", pro.id)
-        .order("created_at", { ascending: false })
-        .limit(2);
-
-      for (const msg of derniersMessages ?? []) {
-        const { data: post } = await supabase
-          .from("forum_posts")
-          .select("titre")
-          .eq("id", msg.post_id)
-          .single();
-        activites.push({ icon: "💬", texte: "Message envoyé", detail: post?.titre ?? "Publication", ts: new Date(msg.created_at) });
-      }
-
-      // Derniers RDV
-      const { data: derniersRdv } = await supabase
-        .from("appointments")
-        .select("patient_name, date_heure, motif, statut")
-        .eq("professional_id", pro.id)
-        .order("created_at", { ascending: false })
-        .limit(2);
-
-      for (const rdv of derniersRdv ?? []) {
-        const icon = rdv.statut === "en_attente" ? "⏳" : "📅";
-        const label = rdv.statut === "en_attente" ? "Demande de RDV" : "Rendez-vous";
-        activites.push({ icon, texte: label, detail: `${rdv.patient_name} — ${rdv.motif || ""}`, ts: new Date(rdv.date_heure) });
-      }
-
-      // Tri par date décroissante
-      activites.sort((a, b) => b.ts - a.ts);
-      setActiviteRecente(activites.slice(0, 5));
     } catch (e) {
       console.error(e);
       showToast("Impossible de charger les statistiques", 'error');
     }
     setLoadingStats(false);
-  }
-
-  function tempsRelatif(ts) {
-    const diff = (Date.now() - ts.getTime()) / 1000;
-    if (diff < 3600) return `Il y a ${Math.floor(diff / 60)} min`;
-    if (diff < 86400) return `Il y a ${Math.floor(diff / 3600)} h`;
-    if (diff < 172800) return "Hier";
-    return `Il y a ${Math.floor(diff / 86400)} jours`;
   }
 
   const stats = [
@@ -202,7 +137,7 @@ export default function Accueil() {
           {/* Accès rapide */}
           <div style={{ flex: "1 1 600px" }}>
             <p style={eyebrow}>Accès rapide</p>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: "18px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px" }}>
               {tuiles.map((t) => {
                 const h = hovered === t.id;
                 return (
@@ -236,30 +171,6 @@ export default function Accueil() {
                   </Link>
                 );
               })}
-            </div>
-          </div>
-
-          {/* Activité récente */}
-          <div style={{ flex: "0 1 340px", minWidth: "300px" }}>
-            <p style={eyebrow}>Activité récente</p>
-            <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "8px 24px", border: "1px solid rgba(0,70,73,0.08)", boxShadow: "0 8px 24px rgba(0,70,73,0.05)" }}>
-              {loadingStats ? (
-                <p style={{ color: "#90A4AE", fontSize: "13px", textAlign: "center", padding: "24px 0" }}>Chargement…</p>
-              ) : activiteRecente.length === 0 ? (
-                <div style={{ textAlign: "center", padding: "32px 0" }}>
-                  <div style={{ fontSize: "28px", marginBottom: "8px" }}>🌙</div>
-                  <p style={{ color: "#5A6B72", fontSize: "13px" }}>Aucune activité récente</p>
-                </div>
-              ) : activiteRecente.map((a, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "center", gap: "14px", padding: "16px 0", borderBottom: i < activiteRecente.length - 1 ? "1px solid rgba(0,70,73,0.08)" : "none" }}>
-                  <div style={{ width: "40px", height: "40px", borderRadius: "14px", background: "#EAF3F8", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: "17px" }}>{a.icon}</div>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{ color: "#2A3F4F", fontSize: "13px", fontWeight: "600", marginBottom: "2px" }}>{a.texte}</p>
-                    <p style={{ color: "#5A6B72", fontSize: "12px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{a.detail}</p>
-                  </div>
-                  <span style={{ color: "#90A4AE", fontSize: "11px", whiteSpace: "nowrap" }}>{tempsRelatif(a.ts)}</span>
-                </div>
-              ))}
             </div>
           </div>
         </div>
