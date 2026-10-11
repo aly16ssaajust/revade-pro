@@ -795,46 +795,43 @@ export default function FichePatient() {
 
         {/* STATISTIQUES */}
         {onglet === "statistiques" && (
-          <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
-            <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "24px", boxShadow: "0 10px 30px rgba(0,70,73,0.06)" }}>
-              <p style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "15px", marginBottom: "8px" }}>Sessions vapotage</p>
-              <p style={{ color: "#5A6B72", fontSize: "13px" }}>
-                {sessions.length === 0
-                  ? "Aucune session enregistrée"
-                  : `${sessions.length} session${sessions.length > 1 ? "s" : ""} synchronisée${sessions.length > 1 ? "s" : ""}`}
-              </p>
-            </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "18px" }}>
               {[
-                { label: "Moments par jour", value: stats.momentParJour, icon: "📅" },
-                { label: "Durée moyenne d'une taff", value: stats.dureeMoyenneTaff, icon: "⏱️" },
-                { label: "Temps de session moyen", value: stats.tempsSessionMoyen, icon: "🕐" },
+                { label: "Sessions synchronisées", value: sessions.length, icon: "📲", tint: "#D6E9F3" },
+                { label: "Sessions par jour", value: stats.momentParJour, icon: "📅", tint: "#DCEEE6" },
+                { label: "Durée moyenne d'une taffe", value: stats.dureeMoyenneTaff, icon: "⏱️", tint: "#F4EDE4" },
+                { label: "Temps de session moyen", value: stats.tempsSessionMoyen, icon: "🕐", tint: "#D6E9F3" },
               ].map((stat) => (
-                <div key={stat.label} style={{ background: "linear-gradient(135deg, #E8F5EF 0%, #D0EDE0 100%)", borderRadius: "16px", padding: "24px", boxShadow: "0 4px 12px rgba(0,70,73,0.1), inset 0 1px 0 rgba(255,255,255,0.8)", display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
-                  <span style={{ fontSize: "28px" }}>{stat.icon}</span>
-                  <p style={{ color: "#004649", fontWeight: "700", fontSize: "22px" }}>{stat.value}</p>
-                  <p style={{ color: "#2A3F4F", fontSize: "13px", textAlign: "center" }}>{stat.label}</p>
+                <div key={stat.label} style={{ background: "#FFFFFF", borderRadius: "24px", padding: "24px", border: "1px solid rgba(0,70,73,0.08)", boxShadow: "0 8px 24px rgba(0,70,73,0.05)", display: "flex", flexDirection: "column", gap: "16px" }}>
+                  <div style={{ width: "44px", height: "44px", borderRadius: "14px", background: stat.tint, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px" }}>{stat.icon}</div>
+                  <div>
+                    <p style={{ color: "#004649", fontWeight: "600", fontSize: "28px", letterSpacing: "-0.02em", lineHeight: 1.1 }}>{stat.value}</p>
+                    <p style={{ color: "#5A6B72", fontSize: "13px", marginTop: "6px" }}>{stat.label}</p>
+                  </div>
                 </div>
               ))}
             </div>
-            <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "32px", boxShadow: "0 8px 24px rgba(0,70,73,0.06)" }}>
-              <p style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "16px", marginBottom: "20px" }}>Journal de bord</p>
-              <div style={{ display: "flex", borderBottom: "2px solid #F0F0F0", marginBottom: "24px", gap: "32px" }}>
+            <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "32px", border: "1px solid rgba(0,70,73,0.08)", boxShadow: "0 8px 24px rgba(0,70,73,0.05)" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "16px", flexWrap: "wrap", marginBottom: "24px" }}>
+              <p style={{ color: "#004649", fontWeight: "500", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase" }}>Journal de bord</p>
+              <div style={{ display: "inline-flex", gap: "4px", padding: "5px", background: "#EAF3F8", borderRadius: "50px" }}>
                 {["humeur", "substituts"].map((s) => {
                   const actif = sousOngletStats === s;
                   return (
-                    <button key={s} onClick={() => setSousOngletStats(s)} style={{ padding: "8px 0", fontSize: "14px", fontWeight: actif ? "700" : "400", color: "#2A3F4F", background: "none", border: "none", cursor: "pointer", borderBottom: actif ? "3px solid #004649" : "3px solid transparent", marginBottom: "-2px" }}>
+                    <button key={s} onClick={() => setSousOngletStats(s)} style={{ padding: "8px 18px", fontSize: "13px", fontWeight: actif ? "600" : "500", color: actif ? "#F4EDE4" : "#5A6B72", background: actif ? "#004649" : "transparent", border: "none", borderRadius: "50px", cursor: "pointer", transition: "all 0.2s ease" }}>
                       {s === "humeur" ? "Humeur" : "Substituts"}
                     </button>
                   );
                 })}
               </div>
+              </div>
               {sousOngletStats === "humeur" && (
-                <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "14px" }}>
                   {journalEntries.length === 0 ? (
                     <p style={{ color: "#90A4AE", fontSize: "14px", fontStyle: "italic" }}>Aucune entrée d&apos;humeur</p>
                   ) : journalEntries.map((h, i) => (
-                    <div key={i} style={{ border: "1px solid rgba(0,70,73,0.08)", borderRadius: "16px", padding: "20px 24px", display: "flex", flexDirection: "column", gap: "10px" }}>
+                    <div key={i} style={{ background: "#F7FAFC", border: "1px solid rgba(0,70,73,0.08)", borderRadius: "20px", padding: "20px 22px", display: "flex", flexDirection: "column", gap: "10px" }}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                         <span style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "15px" }}>
                           {new Date(h.date).toLocaleDateString("fr-FR", { day: "numeric", month: "long" })}
@@ -846,7 +843,7 @@ export default function FichePatient() {
                         <span style={{ color: "#5A6B72", fontSize: "13px" }}>Manque :</span>
                         <div style={{ display: "flex", gap: "4px" }}>
                           {Array.from({ length: 10 }, (_, j) => (
-                            <div key={j} style={{ width: "12px", height: "12px", borderRadius: "50%", backgroundColor: j < h.craving ? "#E07B39" : "#E0E0E0" }} />
+                            <div key={j} style={{ width: "12px", height: "12px", borderRadius: "50%", backgroundColor: j < h.craving ? "#E07B39" : "rgba(0,70,73,0.10)" }} />
                           ))}
                         </div>
                       </div>
@@ -856,11 +853,11 @@ export default function FichePatient() {
                 </div>
               )}
               {sousOngletStats === "substituts" && (
-                <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "14px" }}>
                   {substitutEntries.length === 0 ? (
                     <p style={{ color: "#90A4AE", fontSize: "14px", fontStyle: "italic" }}>Aucun substitut renseigné</p>
                   ) : substitutEntries.map((s, i) => (
-                    <div key={i} style={{ border: "1.5px solid #B7D7E8", borderRadius: "16px", padding: "20px 24px", display: "flex", flexDirection: "column", gap: "8px" }}>
+                    <div key={i} style={{ background: "#F7FAFC", border: "1px solid rgba(0,70,73,0.08)", borderRadius: "20px", padding: "20px 22px", display: "flex", flexDirection: "column", gap: "8px" }}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                           <span>🕐</span>
@@ -868,7 +865,7 @@ export default function FichePatient() {
                             {new Date(s.date).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })}
                           </span>
                         </div>
-                        <span style={{ border: "1px solid #B7D7E8", borderRadius: "8px", padding: "4px 14px", fontSize: "13px", color: "#2A3F4F" }}>{s.forme}</span>
+                        <span style={{ background: "#D6E9F3", borderRadius: "50px", padding: "4px 14px", fontSize: "12px", fontWeight: "600", color: "#004649" }}>{s.forme}</span>
                       </div>
                       <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "#5A6B72", fontSize: "13px" }}>
                         <span>💬</span><span>{s.moment}</span>
@@ -886,41 +883,44 @@ export default function FichePatient() {
 
         {/* PARAMÈTRES */}
         {onglet === "parametres" && (
-          <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "40px", boxShadow: "0 8px 24px rgba(0,70,73,0.06)" }}>
-            <div style={{ display: "flex", gap: "60px", alignItems: "flex-start" }}>
-              <div style={{ background: "linear-gradient(135deg, #f0f0f0 0%, #e8e8e8 100%)", borderRadius: "16px", padding: "20px", width: "180px", minHeight: "220px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                <Image src="/vape.png" alt="Vape" width={140} height={200} style={{ objectFit: "contain" }} />
+          <div style={{ display: "grid", gridTemplateColumns: "minmax(300px, 1fr) minmax(360px, 1.5fr)", gap: "24px", alignItems: "start" }}>
+
+            {/* Matériel */}
+            <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "32px", border: "1px solid rgba(0,70,73,0.08)", boxShadow: "0 8px 24px rgba(0,70,73,0.05)" }}>
+              <p style={{ color: "#004649", fontWeight: "500", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: "20px" }}>Matériel</p>
+              <div style={{ background: "#EAF3F8", borderRadius: "20px", padding: "20px", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "20px" }}>
+                <Image src="/vape.png" alt="Vape" width={120} height={170} style={{ objectFit: "contain" }} />
               </div>
-              <div style={{ flex: 1, display: "flex", gap: "60px" }}>
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
-                  <p style={{ color: "#2A3F4F", fontWeight: "600", fontSize: "14px" }}>Puissance</p>
-                  <span style={{ fontSize: "28px" }}>⚡</span>
-                  <p style={{ color: "#2A3F4F", fontSize: "14px", fontWeight: "600" }}>—</p>
-                  <div style={{ width: "8px", height: "120px", background: "linear-gradient(180deg, #004649 0%, #DFF0EA 100%)", borderRadius: "4px" }}></div>
+              {[
+                { label: "Puissance", icon: "⚡", value: "—" },
+                { label: "Nicotine", icon: "🧪", value: lastNicotine },
+              ].map((r) => (
+                <div key={r.label} style={{ display: "flex", alignItems: "center", gap: "14px", padding: "14px 0", borderTop: "1px solid rgba(0,70,73,0.08)" }}>
+                  <div style={{ width: "40px", height: "40px", borderRadius: "14px", background: "#F4EDE4", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "18px" }}>{r.icon}</div>
+                  <span style={{ flex: 1, color: "#5A6B72", fontSize: "13px" }}>{r.label}</span>
+                  <span style={{ color: "#004649", fontWeight: "600", fontSize: "15px" }}>{r.value}</span>
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
-                  <p style={{ color: "#2A3F4F", fontWeight: "600", fontSize: "14px" }}>Nicotine</p>
-                  <span style={{ fontSize: "28px" }}>🧪</span>
-                  <p style={{ color: "#2A3F4F", fontSize: "14px", fontWeight: "600" }}>{lastNicotine}</p>
-                  <div style={{ width: "8px", height: "120px", background: "linear-gradient(180deg, #004649 0%, #DFF0EA 100%)", borderRadius: "4px" }}></div>
-                </div>
-                <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "16px" }}>
-                  <p style={{ color: "#2A3F4F", fontWeight: "600", fontSize: "14px" }}>Plan de sevrage</p>
-                  {moments.length === 0 ? (
-                    <p style={{ color: "#90A4AE", fontSize: "14px", fontStyle: "italic" }}>Aucun moment configuré</p>
-                  ) : moments.map((m, i) => (
-                    <div key={i} style={{ background: "linear-gradient(135deg, #F5F9F8 0%, #E8F5EF 100%)", border: "1px solid #DFF0EA", borderRadius: "16px", padding: "16px 24px", display: "flex", justifyContent: "space-between", alignItems: "center", boxShadow: "0 2px 8px rgba(0,70,73,0.08)" }}>
-                      <div>
-                        <span style={{ color: "#2A3F4F", fontWeight: "600", fontSize: "15px" }}>{m.name}</span>
-                        <br /><span style={{ color: "#5A6B72", fontSize: "13px" }}>Bouffées autorisées</span>
-                      </div>
-                      <div style={{ background: "linear-gradient(135deg, #004649 0%, #00363A 100%)", borderRadius: "12px", padding: "8px 20px", boxShadow: "0 4px 8px rgba(0,70,73,0.3)" }}>
-                        <span style={{ color: "white", fontWeight: "700", fontSize: "18px" }}>{m.puffs}</span>
-                      </div>
+              ))}
+            </div>
+
+            {/* Plan de sevrage */}
+            <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "32px", border: "1px solid rgba(0,70,73,0.08)", boxShadow: "0 8px 24px rgba(0,70,73,0.05)" }}>
+              <p style={{ color: "#004649", fontWeight: "500", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: "6px" }}>Plan de sevrage</p>
+              <p style={{ color: "#90A4AE", fontSize: "12px", marginBottom: "20px" }}>Bouffées autorisées par moment de la journée</p>
+              {moments.length === 0 ? (
+                <p style={{ color: "#90A4AE", fontSize: "14px", fontStyle: "italic" }}>Aucun moment configuré</p>
+              ) : (
+                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                  {moments.map((m, i) => (
+                    <div key={i} style={{ background: "#F7FAFC", border: "1px solid rgba(0,70,73,0.08)", borderRadius: "20px", padding: "14px 16px 14px 22px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "16px" }}>
+                      <span style={{ color: "#004649", fontWeight: "600", fontSize: "15px" }}>{m.name}</span>
+                      <span style={{ background: "#004649", color: "#F4EDE4", borderRadius: "50px", padding: "6px 16px", fontWeight: "600", fontSize: "15px", whiteSpace: "nowrap" }}>
+                        {m.puffs} <span style={{ fontWeight: "400", fontSize: "12px", opacity: 0.75 }}>bouffées</span>
+                      </span>
                     </div>
                   ))}
                 </div>
-              </div>
+              )}
             </div>
           </div>
         )}
@@ -941,7 +941,7 @@ export default function FichePatient() {
 
             {/* Objectif et motivations du patient */}
             <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "32px", boxShadow: "0 8px 24px rgba(0,70,73,0.06)" }}>
-              <p style={{ color: "#004649", fontWeight: "700", fontSize: "16px", marginBottom: "4px" }}>🎯 Objectif et motivations du patient</p>
+              <p style={{ color: "#004649", fontWeight: "500", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: "4px" }}>Objectif et motivations du patient</p>
               <p style={{ color: "#90A4AE", fontSize: "13px", marginBottom: "20px" }}>Renseigné lors de l'entretien motivationnel. Ces informations orientent le plan de sevrage.</p>
 
               {/* Objectif de sevrage */}
@@ -952,7 +952,7 @@ export default function FichePatient() {
                     const sel = recommandations.objectif_sevrage === opt;
                     return (
                       <button key={opt} onClick={() => setRecommandations(prev => ({ ...prev, objectif_sevrage: sel ? "" : opt }))}
-                        style={{ padding: "8px 16px", borderRadius: "20px", border: `1.5px solid ${sel ? "#004649" : "#E4ECF2"}`, background: sel ? "#004649" : "white", color: sel ? "white" : "#2A3F4F", fontSize: "13px", fontWeight: sel ? "700" : "500", cursor: "pointer", transition: "all 0.15s" }}>
+                        style={{ padding: "8px 16px", borderRadius: "50px", border: `1px solid ${sel ? "#004649" : "rgba(0,70,73,0.15)"}`, background: sel ? "#004649" : "white", color: sel ? "#F4EDE4" : "#2A3F4F", fontSize: "13px", fontWeight: sel ? "600" : "500", cursor: "pointer", transition: "all 0.15s" }}>
                         {opt}
                       </button>
                     );
@@ -980,7 +980,7 @@ export default function FichePatient() {
                         const next = sel ? motifs.filter(m => m !== key) : [...motifs, key];
                         setRecommandations(prev => ({ ...prev, motivations_arret: next }));
                       }}
-                        style={{ padding: "8px 14px", borderRadius: "20px", border: `1.5px solid ${sel ? "#004649" : "#E4ECF2"}`, background: sel ? "#E8F5EF" : "white", color: sel ? "#004649" : "#5A6B72", fontSize: "13px", fontWeight: sel ? "700" : "500", cursor: "pointer", transition: "all 0.15s" }}>
+                        style={{ padding: "8px 14px", borderRadius: "50px", border: `1px solid ${sel ? "#A5C9B9" : "rgba(0,70,73,0.15)"}`, background: sel ? "#DCEEE6" : "white", color: sel ? "#004649" : "#5A6B72", fontSize: "13px", fontWeight: sel ? "600" : "500", cursor: "pointer", transition: "all 0.15s" }}>
                         {label}
                       </button>
                     );
@@ -994,30 +994,30 @@ export default function FichePatient() {
                 <textarea value={recommandations.barrieres_arret || ""} onChange={(e) => setRecommandations(prev => ({ ...prev, barrieres_arret: e.target.value }))}
                   placeholder="Ex : Stress professionnel important, entourage fumeur, peur de prendre du poids, gestion des situations sociales…"
                   rows={3}
-                  style={{ width: "100%", border: "1px solid #B7D7E8", borderRadius: "12px", padding: "14px", fontSize: "14px", color: "#2A3F4F", outline: "none", resize: "vertical", backgroundColor: "#FAFAFA", boxSizing: "border-box" }} />
+                  style={{ width: "100%", border: "1px solid rgba(0,70,73,0.12)", borderRadius: "16px", padding: "14px 16px", fontSize: "14px", color: "#2A3F4F", outline: "none", resize: "vertical", backgroundColor: "#F7FAFC", boxSizing: "border-box" }} />
               </div>
             </div>
 
             {/* Recommandations libres */}
             <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "32px", boxShadow: "0 8px 24px rgba(0,70,73,0.06)" }}>
-              <p style={{ color: "#004649", fontWeight: "700", fontSize: "16px", marginBottom: "8px" }}>📝 Recommandations thérapeutiques</p>
+              <p style={{ color: "#004649", fontWeight: "500", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: "8px" }}>Recommandations thérapeutiques</p>
               <p style={{ color: "#90A4AE", fontSize: "13px", marginBottom: "16px" }}>Rédigez librement vos recommandations, conseils, plan de soins et points de vigilance.</p>
               <textarea value={recommandations.notes || ""} onChange={(e) => setRecommandations(prev => ({ ...prev, notes: e.target.value }))}
                 placeholder={"Ex : Arrêt total recommandé dès le 15/06. Initier substitution nicotinique en bithérapie (patch + forme orale). Revoir dans 4 semaines. Orienter vers soutien psychologique si besoin."}
                 rows={6}
-                style={{ width: "100%", border: "1px solid #B7D7E8", borderRadius: "12px", padding: "16px", fontSize: "14px", color: "#2A3F4F", outline: "none", resize: "vertical", backgroundColor: "#FAFAFA", boxSizing: "border-box", lineHeight: "1.7" }} />
+                style={{ width: "100%", border: "1px solid rgba(0,70,73,0.12)", borderRadius: "16px", padding: "16px", fontSize: "14px", color: "#2A3F4F", outline: "none", resize: "vertical", backgroundColor: "#F7FAFC", boxSizing: "border-box", lineHeight: "1.7" }} />
             </div>
 
             {/* Plan TSN */}
             <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "32px", boxShadow: "0 8px 24px rgba(0,70,73,0.06)" }}>
-              <p style={{ color: "#004649", fontWeight: "700", fontSize: "16px", marginBottom: "6px" }}>💊 Plan de substitution nicotinique (TSN)</p>
+              <p style={{ color: "#004649", fontWeight: "500", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: "6px" }}>Plan de substitution nicotinique (TSN)</p>
               <p style={{ color: "#90A4AE", fontSize: "13px", marginBottom: "20px" }}>Cochez les produits prescrits et sélectionnez la dose. Plusieurs produits peuvent être combinés (bithérapie).</p>
               <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                 {TSN.map(p => {
                   const actif = !!recommandations[`tsn_${p.id}`];
                   const dose = recommandations[`tsn_dose_${p.id}`] || "";
                   return (
-                    <div key={p.id} style={{ display: "flex", alignItems: "center", gap: "14px", padding: "14px 18px", background: actif ? "linear-gradient(135deg, #E8F5EF, #D4EDE0)" : "#F8FAFC", borderRadius: "14px", border: `1.5px solid ${actif ? "#004649" : "#E4ECF2"}`, transition: "all 0.15s" }}>
+                    <div key={p.id} style={{ display: "flex", alignItems: "center", gap: "14px", padding: "14px 18px", background: actif ? "#DCEEE6" : "#F7FAFC", borderRadius: "18px", border: `1px solid ${actif ? "#A5C9B9" : "rgba(0,70,73,0.08)"}`, transition: "all 0.15s" }}>
                       <input type="checkbox" checked={actif}
                         onChange={() => setRecommandations(prev => ({ ...prev, [`tsn_${p.id}`]: !actif, [`tsn_dose_${p.id}`]: !actif ? "" : prev[`tsn_dose_${p.id}`] }))}
                         style={{ width: "18px", height: "18px", accentColor: "#004649", flexShrink: 0, cursor: "pointer" }} />
@@ -1039,13 +1039,13 @@ export default function FichePatient() {
                 <textarea value={recommandations.posologie || ""} onChange={(e) => setRecommandations(prev => ({ ...prev, posologie: e.target.value }))}
                   placeholder="Ex : 1 patch 21mg/24h le matin + gomme 4mg à la demande (max 15/jour) — durée 12 semaines puis décroissance"
                   rows={3}
-                  style={{ width: "100%", border: "1px solid #B7D7E8", borderRadius: "12px", padding: "14px", fontSize: "14px", color: "#2A3F4F", outline: "none", resize: "vertical", backgroundColor: "#FAFAFA", boxSizing: "border-box" }} />
+                  style={{ width: "100%", border: "1px solid rgba(0,70,73,0.12)", borderRadius: "16px", padding: "14px 16px", fontSize: "14px", color: "#2A3F4F", outline: "none", resize: "vertical", backgroundColor: "#F7FAFC", boxSizing: "border-box" }} />
               </div>
             </div>
 
             {/* Suivi */}
             <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "32px", boxShadow: "0 8px 24px rgba(0,70,73,0.06)" }}>
-              <p style={{ color: "#004649", fontWeight: "700", fontSize: "16px", marginBottom: "20px" }}>🗓️ Suivi du traitement</p>
+              <p style={{ color: "#004649", fontWeight: "500", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: "20px" }}>Suivi du traitement</p>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
                 <div>
                   <p style={{ color: "#2A3F4F", fontWeight: "600", fontSize: "13px", marginBottom: "8px" }}>Durée prévue du traitement</p>
@@ -1083,14 +1083,14 @@ export default function FichePatient() {
               <button onClick={() => setShowOrdonTSN(true)} style={{ background: "linear-gradient(135deg, #004649 0%, #00363A 100%)", color: "#F4EDE4", borderRadius: "999px", padding: "10px 24px", fontSize: "13px", fontWeight: "600", border: "none", cursor: "pointer", boxShadow: "0 4px 8px rgba(0,70,73,0.3)", display: "flex", alignItems: "center", gap: "8px" }}>
                 💊 Ordon TSN
               </button>
-              <button onClick={() => setShowDossierInitial(true)} style={{ background: "linear-gradient(135deg, #1565C0 0%, #1976D2 100%)", color: "white", borderRadius: "999px", padding: "10px 24px", fontSize: "13px", fontWeight: "600", border: "none", cursor: "pointer", boxShadow: "0 4px 8px rgba(21,101,192,0.3)", display: "flex", alignItems: "center", gap: "8px" }}>
+              <button onClick={() => setShowDossierInitial(true)} style={{ background: "linear-gradient(135deg, #A5C9B9, #B7D7E8)", color: "#004649", borderRadius: "999px", padding: "10px 24px", fontSize: "13px", fontWeight: "600", border: "none", cursor: "pointer", boxShadow: "0 4px 12px rgba(0,70,73,0.15)", display: "flex", alignItems: "center", gap: "8px" }}>
                 📋 Dossier consultation initiale
               </button>
-              <button onClick={() => setShowNotes(true)} style={{ background: "linear-gradient(135deg, #ffffff 0%, #EAF3F8 100%)", color: "#004649", borderRadius: "999px", padding: "10px 24px", fontSize: "13px", fontWeight: "600", border: "1.5px solid #004649", cursor: "pointer" }}>
+              <button onClick={() => setShowNotes(true)} style={{ background: "#FFFFFF", color: "#004649", borderRadius: "999px", padding: "10px 24px", fontSize: "13px", fontWeight: "600", border: "1px solid rgba(0,70,73,0.20)", cursor: "pointer" }}>
                 ✏️ Note de consultation
               </button>
               <input type="file" ref={fileInputRef} onChange={handleImport} multiple style={{ display: "none" }} />
-              <button onClick={() => fileInputRef.current.click()} style={{ background: "linear-gradient(135deg, #EAF3F8 0%, #e8edf2 100%)", color: "#004649", borderRadius: "999px", padding: "10px 24px", fontSize: "13px", fontWeight: "600", border: "1.5px solid #A5C9B9", cursor: "pointer" }}>
+              <button onClick={() => fileInputRef.current.click()} style={{ background: "transparent", color: "#004649", borderRadius: "999px", padding: "10px 24px", fontSize: "13px", fontWeight: "600", border: "1.5px dashed rgba(0,70,73,0.30)", cursor: "pointer" }}>
                 + Importer
               </button>
             </div>
@@ -1099,28 +1099,28 @@ export default function FichePatient() {
             {documents.length === 0 ? (
               <p style={{ color: "#90A4AE", fontSize: "14px", fontStyle: "italic" }}>Aucun document pour l&apos;instant</p>
             ) : (
-              <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))", gap: "14px" }}>
                 {documents.map((doc, i) => (
-                  <div key={i} style={{ display: "flex", alignItems: "center", gap: "14px", padding: "14px 18px", background: "#FFFFFF", borderRadius: "12px", boxShadow: "0 2px 8px rgba(0,0,0,0.06)", border: "1px solid rgba(0,70,73,0.08)" }}>
-                    <span style={{ fontSize: "22px", flexShrink: 0 }}>{docIcon(doc.type)}</span>
-                    <span style={{ flex: 1, color: "#2A3F4F", fontSize: "14px", fontWeight: "500" }}>{doc.nom}</span>
+                  <div key={i} style={{ display: "flex", alignItems: "center", gap: "14px", padding: "16px 18px", background: "#FFFFFF", borderRadius: "20px", boxShadow: "0 8px 24px rgba(0,70,73,0.05)", border: "1px solid rgba(0,70,73,0.08)" }}>
+                    <div style={{ width: "44px", height: "44px", borderRadius: "14px", background: "#EAF3F8", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px", flexShrink: 0 }}>{docIcon(doc.type)}</div>
+                    <span style={{ flex: 1, minWidth: 0, color: "#004649", fontSize: "14px", fontWeight: "600", overflowWrap: "anywhere" }}>{doc.nom}</span>
                     {doc.type === "dossier_initial" ? (
-                      <button onClick={() => setShowDossierInitial(true)} style={{ color: "#004649", fontSize: "13px", fontWeight: "600", background: "#E8F5EF", borderRadius: "8px", padding: "6px 14px", border: "1px solid #A5C9B9", whiteSpace: "nowrap", flexShrink: 0, cursor: "pointer" }}>
+                      <button onClick={() => setShowDossierInitial(true)} style={{ color: "#004649", fontSize: "13px", fontWeight: "600", background: "#DCEEE6", borderRadius: "50px", padding: "7px 14px", border: "none", whiteSpace: "nowrap", flexShrink: 0, cursor: "pointer" }}>
                         Ouvrir ↗
                       </button>
                     ) : doc.type?.startsWith("test_") ? (
-                      <button onClick={() => setOpenedTest({ id: doc.id, type: doc.testType, nom: doc.nom })} style={{ color: "#004649", fontSize: "13px", fontWeight: "600", background: "#E8F5EF", borderRadius: "8px", padding: "6px 14px", border: "1px solid #A5C9B9", whiteSpace: "nowrap", flexShrink: 0, cursor: "pointer" }}>
+                      <button onClick={() => setOpenedTest({ id: doc.id, type: doc.testType, nom: doc.nom })} style={{ color: "#004649", fontSize: "13px", fontWeight: "600", background: "#DCEEE6", borderRadius: "50px", padding: "7px 14px", border: "none", whiteSpace: "nowrap", flexShrink: 0, cursor: "pointer" }}>
                         Ouvrir ↗
                       </button>
                     ) : doc.file_url ? (
-                      <a href={doc.file_url} target="_blank" rel="noopener noreferrer" style={{ color: "#004649", fontSize: "13px", fontWeight: "600", textDecoration: "none", background: "#E8F5EF", borderRadius: "8px", padding: "6px 14px", border: "1px solid #A5C9B9", whiteSpace: "nowrap", flexShrink: 0 }}>
+                      <a href={doc.file_url} target="_blank" rel="noopener noreferrer" style={{ color: "#004649", fontSize: "13px", fontWeight: "600", textDecoration: "none", background: "#DCEEE6", borderRadius: "50px", padding: "7px 14px", border: "none", whiteSpace: "nowrap", flexShrink: 0 }}>
                         Ouvrir ↗
                       </a>
                     ) : (
                       <span style={{ color: "#ccc", fontSize: "12px", flexShrink: 0 }}>Texte</span>
                     )}
                     {doc.type !== "dossier_initial" && (
-                      <button onClick={() => supprimerDocument(doc)} style={{ background: "none", border: "1px solid #FFCDD2", borderRadius: "8px", padding: "6px 10px", fontSize: "13px", color: "#C62828", cursor: "pointer", flexShrink: 0 }} title="Supprimer">🗑️</button>
+                      <button onClick={() => supprimerDocument(doc)} style={{ background: "#FFF5F5", border: "none", borderRadius: "50%", width: "34px", height: "34px", fontSize: "13px", color: "#C62828", cursor: "pointer", flexShrink: 0 }} title="Supprimer">🗑️</button>
                     )}
                   </div>
                 ))}
@@ -1135,13 +1135,13 @@ export default function FichePatient() {
         const patientInitials = `${(patient.prenom || "")[0] || ""}${(patient.nom || "")[0] || ""}`.toUpperCase();
         const proInitials = `${(pro?.prenom || "")[0] || ""}${(pro?.nom || "")[0] || ""}`.toUpperCase();
         return (
-          <div style={{ maxWidth: "760px", margin: "0 auto", marginTop: "-20px" }}>
-          <div style={{ display: "flex", flexDirection: "column", height: "620px", borderRadius: "20px", overflow: "hidden", border: "1.5px solid #E4ECF2", boxShadow: "0 8px 32px rgba(0,0,0,0.07)" }}>
+          <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 48px 72px", marginTop: "-44px" }}>
+          <div style={{ display: "flex", flexDirection: "column", height: "640px", borderRadius: "24px", overflow: "hidden", border: "1px solid rgba(0,70,73,0.08)", boxShadow: "0 8px 24px rgba(0,70,73,0.05)" }}>
 
             {/* Header */}
-            <div style={{ background: "white", padding: "16px 24px", display: "flex", alignItems: "center", gap: "14px", borderBottom: "1px solid #EEF3F7" }}>
-              <div style={{ width: "44px", height: "44px", borderRadius: "50%", background: "linear-gradient(135deg, #004649, #00363A)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, boxShadow: "0 2px 8px rgba(0,70,73,0.25)" }}>
-                <span style={{ color: "white", fontWeight: "700", fontSize: "15px" }}>{patientInitials}</span>
+            <div style={{ background: "white", padding: "18px 24px", display: "flex", alignItems: "center", gap: "14px", borderBottom: "1px solid rgba(0,70,73,0.08)" }}>
+              <div style={{ width: "44px", height: "44px", borderRadius: "16px", background: "linear-gradient(135deg, #A5C9B9, #B7D7E8)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                <span style={{ color: "#004649", fontWeight: "700", fontSize: "15px" }}>{patientInitials}</span>
               </div>
               <div style={{ flex: 1 }}>
                 <p style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "15px", margin: 0 }}>{nomComplet}</p>
@@ -1150,7 +1150,7 @@ export default function FichePatient() {
             </div>
 
             {/* Zone messages */}
-            <div ref={threadScrollRef} style={{ flex: 1, overflowY: "auto", padding: "20px 24px", display: "flex", flexDirection: "column", gap: "14px", background: "#F4F8FB" }}>
+            <div ref={threadScrollRef} style={{ flex: 1, overflowY: "auto", padding: "20px 24px", display: "flex", flexDirection: "column", gap: "14px", background: "#F3F8FB" }}>
               {threadLoading ? (
                 <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
                   <p style={{ color: "#90A4AE", fontSize: "14px" }}>Chargement…</p>
@@ -1179,25 +1179,25 @@ export default function FichePatient() {
                 return (
                   <div key={i} style={{ display: "flex", justifyContent: isPro ? "flex-end" : "flex-start", alignItems: "flex-end", gap: "8px" }}>
                     {!isPro && (
-                      <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "linear-gradient(135deg, #455A64, #5A6B72)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                        <span style={{ color: "white", fontWeight: "700", fontSize: "11px" }}>{patientInitials}</span>
+                      <div style={{ width: "32px", height: "32px", borderRadius: "12px", background: "linear-gradient(135deg, #A5C9B9, #B7D7E8)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                        <span style={{ color: "#004649", fontWeight: "700", fontSize: "11px" }}>{patientInitials}</span>
                       </div>
                     )}
                     <div style={{ maxWidth: "65%" }}>
                       <div style={{
                         padding: "11px 15px",
                         borderRadius: isPro ? "18px 18px 4px 18px" : "18px 18px 18px 4px",
-                        background: isPro ? "linear-gradient(135deg, #004649, #00363A)" : "white",
-                        boxShadow: isPro ? "0 4px 14px rgba(0,70,73,0.22)" : "0 2px 8px rgba(0,0,0,0.06)",
-                        border: isPro ? "none" : "1px solid #E8EEF4",
+                        background: isPro ? "#004649" : "white",
+                        boxShadow: isPro ? "0 6px 16px rgba(0,70,73,0.18)" : "0 2px 8px rgba(0,70,73,0.05)",
+                        border: isPro ? "none" : "1px solid rgba(0,70,73,0.08)",
                       }}>
-                        <p style={{ color: isPro ? "white" : "#2A3F4F", fontSize: "14px", lineHeight: "1.5", margin: 0, whiteSpace: "pre-wrap" }}>{msg.content}</p>
+                        <p style={{ color: isPro ? "#F4EDE4" : "#2A3F4F", fontSize: "14px", lineHeight: "1.5", margin: 0, whiteSpace: "pre-wrap" }}>{msg.content}</p>
                       </div>
                       <p style={{ color: "#B0BEC5", fontSize: "11px", margin: "4px 6px 0", textAlign: isPro ? "right" : "left" }}>{time}</p>
                     </div>
                     {isPro && (
-                      <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: "linear-gradient(135deg, #004649, #00363A)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, boxShadow: "0 2px 6px rgba(0,70,73,0.2)" }}>
-                        <span style={{ color: "white", fontWeight: "700", fontSize: "11px" }}>{proInitials}</span>
+                      <div style={{ width: "32px", height: "32px", borderRadius: "12px", background: "#004649", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                        <span style={{ color: "#F4EDE4", fontWeight: "700", fontSize: "11px" }}>{proInitials}</span>
                       </div>
                     )}
                   </div>
@@ -1206,21 +1206,21 @@ export default function FichePatient() {
             </div>
 
             {/* Zone saisie */}
-            <div style={{ padding: "14px 20px", background: "white", borderTop: "1px solid #EEF3F7", display: "flex", alignItems: "flex-end", gap: "10px" }}>
+            <div style={{ padding: "14px 20px", background: "white", borderTop: "1px solid rgba(0,70,73,0.08)", display: "flex", alignItems: "center", gap: "10px" }}>
               <textarea
                 value={threadInput}
                 onChange={(e) => setThreadInput(e.target.value)}
                 onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendThreadMsg(); } }}
                 placeholder={`Message à ${patient.prenom}… (Entrée pour envoyer)`}
                 rows={1}
-                style={{ flex: 1, border: "1.5px solid #E4ECF2", borderRadius: "14px", padding: "11px 16px", fontSize: "14px", color: "#2A3F4F", outline: "none", resize: "none", fontFamily: "inherit", lineHeight: "1.5", background: "#F8FAFC" }}
+                style={{ flex: 1, border: "1px solid rgba(0,70,73,0.12)", borderRadius: "24px", padding: "12px 20px", fontSize: "14px", color: "#2A3F4F", outline: "none", resize: "none", fontFamily: "inherit", lineHeight: "1.5", background: "#F7FAFC" }}
               />
               <button
                 onClick={sendThreadMsg}
                 disabled={threadSending || !threadInput.trim()}
-                style={{ width: "46px", height: "46px", borderRadius: "50%", border: "none", flexShrink: 0, cursor: (threadSending || !threadInput.trim()) ? "default" : "pointer", background: (threadSending || !threadInput.trim()) ? "#E8EEF2" : "linear-gradient(135deg, #004649, #00363A)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: (threadSending || !threadInput.trim()) ? "none" : "0 4px 12px rgba(0,70,73,0.32)", transition: "all 0.15s ease" }}
+                style={{ width: "46px", height: "46px", borderRadius: "50%", border: "none", flexShrink: 0, cursor: (threadSending || !threadInput.trim()) ? "default" : "pointer", background: (threadSending || !threadInput.trim()) ? "#E8EEF2" : "#004649", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: (threadSending || !threadInput.trim()) ? "none" : "0 4px 12px rgba(0,70,73,0.32)", transition: "all 0.15s ease" }}
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={(threadSending || !threadInput.trim()) ? "#90A4AE" : "white"} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={(threadSending || !threadInput.trim()) ? "#90A4AE" : "#F4EDE4"} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" />
                 </svg>
               </button>
@@ -1263,7 +1263,7 @@ export default function FichePatient() {
                 onChange={e => setOrdonnancePrescription(e.target.value)}
                 placeholder={"Ex :\n- Patch nicotine 21 mg/24h, 1 patch/jour pendant 6 semaines\n- Gomme nicotine 4 mg, max 15/jour"}
                 rows={5}
-                style={{ width: "100%", border: "1px solid #B7D7E8", borderRadius: "12px", padding: "14px", fontSize: "14px", color: "#2A3F4F", outline: "none", resize: "vertical", backgroundColor: "#FAFAFA", boxSizing: "border-box", fontFamily: "inherit", lineHeight: "1.5" }}
+                style={{ width: "100%", border: "1px solid rgba(0,70,73,0.12)", borderRadius: "16px", padding: "14px 16px", fontSize: "14px", color: "#2A3F4F", outline: "none", resize: "vertical", backgroundColor: "#F7FAFC", boxSizing: "border-box", fontFamily: "inherit", lineHeight: "1.5" }}
               />
             </div>
 
@@ -1293,7 +1293,7 @@ export default function FichePatient() {
               </label>
               <textarea value={ordonnanceNotes} onChange={e => setOrdonnanceNotes(e.target.value)}
                 placeholder="Instructions particulières, mises en garde, conseils…" rows={3}
-                style={{ width: "100%", border: "1px solid #B7D7E8", borderRadius: "12px", padding: "14px", fontSize: "14px", color: "#2A3F4F", outline: "none", resize: "vertical", backgroundColor: "#FAFAFA", boxSizing: "border-box", fontFamily: "inherit" }} />
+                style={{ width: "100%", border: "1px solid rgba(0,70,73,0.12)", borderRadius: "16px", padding: "14px 16px", fontSize: "14px", color: "#2A3F4F", outline: "none", resize: "vertical", backgroundColor: "#F7FAFC", boxSizing: "border-box", fontFamily: "inherit" }} />
             </div>
 
             {/* Boutons */}
