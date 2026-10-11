@@ -171,7 +171,7 @@ export default function OrdonTSNModal({ open, onClose, patient, pro, patientId, 
 
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div>
-            <h2 style={{ color: "#004649", fontWeight: "700", fontSize: "20px", margin: 0 }}>💊 Ordon TSN</h2>
+            <h2 style={{ color: "#0B2F4B", fontWeight: "700", fontSize: "20px", margin: 0 }}>💊 Ordon TSN</h2>
             <p style={{ color: "#90A4AE", fontSize: "13px", margin: "4px 0 0 0" }}>Ordonnance — Substituts nicotiniques · {nomComplet}</p>
           </div>
           <button onClick={onClose} style={{ background: "none", border: "none", fontSize: "24px", cursor: "pointer", color: "#888" }}>×</button>
@@ -185,7 +185,7 @@ export default function OrdonTSNModal({ open, onClose, patient, pro, patientId, 
               const selected = selections[p.id] || [];
               const active = selected.length > 0;
               return (
-                <div key={p.id} style={{ border: `1.5px solid ${active ? "#004649" : "#E4ECF2"}`, borderRadius: "14px", padding: "14px 18px", background: active ? "#E8F5EF" : "white", transition: "all 0.12s" }}>
+                <div key={p.id} style={{ border: `1.5px solid ${active ? "#0B2F4B" : "#E4ECF2"}`, borderRadius: "14px", padding: "14px 18px", background: active ? "#E8F5EF" : "white", transition: "all 0.12s" }}>
                   <p style={{ fontWeight: "600", fontSize: "14px", color: "#2A3F4F", margin: "0 0 10px 0" }}>{p.label}</p>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
                     {p.doses.map(dose => {
@@ -193,7 +193,7 @@ export default function OrdonTSNModal({ open, onClose, patient, pro, patientId, 
                       return (
                         <button key={dose} type="button" onClick={() => toggleDose(p.id, dose)}
                           style={{ padding: "5px 14px", borderRadius: "999px", fontSize: "13px", fontWeight: sel ? "700" : "500", border: "none", cursor: "pointer",
-                            background: sel ? "linear-gradient(135deg,#004649, #00363A)" : "#EAF3F8",
+                            background: sel ? "linear-gradient(135deg,#0B2F4B, #072238)" : "#EAF3F8",
                             color: sel ? "white" : "#2A3F4F" }}>
                           {dose}
                         </button>
@@ -256,10 +256,10 @@ export default function OrdonTSNModal({ open, onClose, patient, pro, patientId, 
             Annuler
           </button>
           <button onClick={generer} disabled={generating || !buildPrescription().trim()}
-            style={{ padding: "12px 28px", borderRadius: "12px", border: "none",
-              background: (generating || !buildPrescription().trim()) ? "#90A4AE" : "linear-gradient(135deg,#004649, #00363A)",
-              color: "white", fontWeight: "600", cursor: (generating || !buildPrescription().trim()) ? "not-allowed" : "pointer",
-              fontSize: "14px", boxShadow: "0 4px 8px rgba(0,70,73,0.3)" }}>
+            style={{ padding: "12px 28px", borderRadius: "50px", border: "none",
+              background: (generating || !buildPrescription().trim()) ? "#90A4AE" : "linear-gradient(135deg,#0B2F4B, #072238)",
+              color: "#F4EDE4", fontWeight: "600", cursor: (generating || !buildPrescription().trim()) ? "not-allowed" : "pointer",
+              fontSize: "14px", boxShadow: "0 4px 8px rgba(11,47,75,0.3)" }}>
             {generating ? "Génération…" : "📄 Générer le PDF"}
           </button>
         </div>

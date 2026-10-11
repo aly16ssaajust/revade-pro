@@ -8,12 +8,12 @@ import Navbar from "@/components/Navbar";
 import { showToast } from "@/lib/toast";
 
 const tuiles = [
-  { id: "dashboard", label: "Fiches patients", icon: "👥", desc: "Gérez et consultez les dossiers de vos patients", href: "/dashboard", color: "linear-gradient(135deg, #E8F5EF 0%, #C8E6D4 100%)", shadow: "rgba(0,70,73,0.15)" },
-  { id: "agenda", label: "Agenda", icon: "📅", desc: "Gérez vos rendez-vous et votre planning", href: "/agenda", color: "linear-gradient(135deg, #E8F0F5 0%, #C8D8E6 100%)", shadow: "rgba(30,58,74,0.15)" },
-  { id: "forum", label: "Messagerie", icon: "💬", desc: "Échangez avec vos patients en privé", href: "/forum?tab=messagerie", color: "linear-gradient(135deg, #F0EBF8 0%, #DDD0F0 100%)", shadow: "rgba(80,50,140,0.15)" },
-  { id: "annuaire", label: "Annuaire", icon: "📞", desc: "Contacts utiles et ressources professionnelles", href: "/annuaire", color: "linear-gradient(135deg, #F5F0E8 0%, #E6D8C8 100%)", shadow: "rgba(180,120,0,0.15)" },
-  { id: "outils", label: "Outils", icon: "🛠", desc: "Tests cliniques HAD, Beck, Horn et formations MOOC", href: "/outils", color: "linear-gradient(135deg, #E8F4FD 0%, #C8DCF0 100%)", shadow: "rgba(21,101,192,0.15)" },
-  { id: "profil", label: "Profil", icon: "👤", desc: "Gérez vos informations et paramètres professionnels", href: "/profil", color: "linear-gradient(135deg, #FFF0F0 0%, #F0D8D8 100%)", shadow: "rgba(180,30,30,0.12)" },
+  { id: "dashboard", label: "Fiches patients", icon: "👥", desc: "Gérez et consultez les dossiers de vos patients", href: "/dashboard", color: "#FFFFFF", shadow: "rgba(11,47,75,0.08)" },
+  { id: "agenda", label: "Agenda", icon: "📅", desc: "Gérez vos rendez-vous et votre planning", href: "/agenda", color: "#B7D7E8", shadow: "rgba(11,47,75,0.08)" },
+  { id: "forum", label: "Messagerie", icon: "💬", desc: "Échangez avec vos patients en privé", href: "/forum?tab=messagerie", color: "#0B2F4B", dark: true, shadow: "rgba(11,47,75,0.08)" },
+  { id: "annuaire", label: "Annuaire", icon: "📞", desc: "Contacts utiles et ressources professionnelles", href: "/annuaire", color: "#FFFFFF", shadow: "rgba(11,47,75,0.08)" },
+  { id: "outils", label: "Outils", icon: "🛠", desc: "Tests cliniques HAD, Beck, Horn et formations MOOC", href: "/outils", color: "#B7D7E8", shadow: "rgba(11,47,75,0.08)" },
+  { id: "profil", label: "Profil", icon: "👤", desc: "Gérez vos informations et paramètres professionnels", href: "/profil", color: "#0B2F4B", dark: true, shadow: "rgba(11,47,75,0.08)" },
 ];
 
 export default function Accueil() {
@@ -137,19 +137,18 @@ export default function Accueil() {
 
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "#EAF3F8" }}>
-      <Navbar proId={pro?.id} />
+      <Navbar
+        proId={pro?.id}
+        eyebrow="Espace professionnel"
+        title={`Bonjour, ${pro ? pro.prenom : "…"}`}
+        subtitle="Bienvenue sur votre espace Rêvade. Retrouvez ici vos patients, vos rendez-vous et vos outils."
+      />
 
-      <div style={{ padding: "48px 80px", maxWidth: "1200px", margin: "0 auto" }}>
-        <div style={{ marginBottom: "48px", display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-          <div>
-            <h1 style={{ color: "#004649", fontWeight: "600", fontSize: "32px", letterSpacing: "-0.02em", marginBottom: "8px" }}>
-              Bonjour, {pro ? `${pro.prenom} ${pro.nom}` : "…"} 👋
-            </h1>
-            <p style={{ color: "#888", fontSize: "15px" }}>Bienvenue sur votre espace professionnel Rêvade</p>
-          </div>
+      <div style={{ padding: "40px 48px 64px", maxWidth: "1280px", margin: "0 auto" }}>
+        <div style={{ marginBottom: "32px", display: "flex", justifyContent: "flex-end" }}>
           <button onClick={loadStats} disabled={loadingStats} style={{
-            background: "white", border: "1.5px solid #B7D7E8", borderRadius: "12px",
-            padding: "10px 18px", fontSize: "13px", fontWeight: "600", color: "#004649",
+            background: "white", border: "1px solid rgba(11,47,75,0.12)", borderRadius: "50px",
+            padding: "10px 20px", fontSize: "13px", fontWeight: "600", color: "#0B2F4B",
             cursor: loadingStats ? "not-allowed" : "pointer", opacity: loadingStats ? 0.6 : 1,
             display: "flex", alignItems: "center", gap: "8px",
             boxShadow: "0 2px 6px rgba(0,0,0,0.06)",
@@ -165,34 +164,34 @@ export default function Accueil() {
         <div style={{ display: "flex", gap: "32px", alignItems: "flex-start" }}>
           <div style={{ flex: 1 }}>
             {/* Accès rapide */}
-            <p style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "15px", marginBottom: "20px", letterSpacing: "0.5px" }}>ACCÈS RAPIDE</p>
+            <p style={{ color: "#0B2F4B", fontWeight: "400", fontSize: "13px", marginBottom: "20px", letterSpacing: "0.18em", textTransform: "uppercase" }}>ACCÈS RAPIDE</p>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px" }}>
               {tuiles.map((t) => (
                 <Link key={t.id} href={t.href} style={{ textDecoration: "none" }}>
-                  <div onMouseEnter={() => setHovered(t.id)} onMouseLeave={() => setHovered(null)} style={{ background: t.color, borderRadius: "20px", padding: "32px 28px", cursor: "pointer", boxShadow: hovered === t.id ? `0 12px 30px ${t.shadow}` : `0 4px 12px ${t.shadow}`, border: "1px solid rgba(255,255,255,0.7)", transform: hovered === t.id ? "translateY(-4px)" : "translateY(0)", transition: "all 0.2s ease", display: "flex", flexDirection: "column", gap: "12px" }}>
+                  <div onMouseEnter={() => setHovered(t.id)} onMouseLeave={() => setHovered(null)} style={{ background: t.color, borderRadius: "24px", padding: "32px 28px", cursor: "pointer", boxShadow: hovered === t.id ? "0 24px 60px rgba(11,47,75,0.18)" : "0 20px 60px rgba(11,47,75,0.08)", border: "1px solid rgba(11,47,75,0.12)", height: "100%", transform: hovered === t.id ? "translateY(-4px)" : "translateY(0)", transition: "all 0.2s ease", display: "flex", flexDirection: "column", gap: "12px" }}>
                     <span style={{ fontSize: "36px" }}>{t.icon}</span>
                     <div>
-                      <p style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "17px", marginBottom: "6px" }}>{t.label}</p>
-                      <p style={{ color: "#888", fontSize: "13px", lineHeight: "1.5" }}>{t.desc}</p>
+                      <p style={{ color: t.dark ? "#F4EDE4" : "#0B2F4B", fontWeight: "600", fontSize: "18px", marginBottom: "6px" }}>{t.label}</p>
+                      <p style={{ color: t.dark ? "rgba(244,237,228,0.72)" : "#5A6B72", fontSize: "13px", fontWeight: "300", lineHeight: "1.6" }}>{t.desc}</p>
                     </div>
-                    <div style={{ color: "#004649", fontSize: "13px", fontWeight: "600" }}>Accéder →</div>
+                    <div style={{ color: t.dark ? "#A5C9B9" : "#0B2F4B", fontSize: "13px", fontWeight: "600" }}>Accéder →</div>
                   </div>
                 </Link>
               ))}
             </div>
 
             {/* Vue d'ensemble */}
-            <p style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "15px", marginBottom: "20px", marginTop: "40px", letterSpacing: "0.5px" }}>VUE D'ENSEMBLE</p>
+            <p style={{ color: "#0B2F4B", fontWeight: "400", fontSize: "13px", marginBottom: "20px", marginTop: "40px", letterSpacing: "0.18em", textTransform: "uppercase" }}>VUE D'ENSEMBLE</p>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px" }}>
               {[
                 { label: "Patients suivis", value: nbPatients, icon: "👥" },
                 { label: "RDV ce mois", value: nbRdvMois, icon: "📅" },
                 { label: "Messages échangés", value: nbMessages, icon: "💬" },
               ].map((stat) => (
-                <div key={stat.label} style={{ background: "linear-gradient(135deg, #ffffff 0%, #EAF3F8 100%)", borderRadius: "16px", padding: "24px", boxShadow: "0 4px 12px rgba(0,0,0,0.06)", border: "1px solid rgba(255,255,255,0.7)", display: "flex", alignItems: "center", gap: "16px" }}>
+                <div key={stat.label} style={{ background: "#FFFFFF", borderRadius: "24px", padding: "24px", boxShadow: "0 20px 60px rgba(11,47,75,0.08)", border: "1px solid rgba(11,47,75,0.12)", display: "flex", alignItems: "center", gap: "16px" }}>
                   <span style={{ fontSize: "28px" }}>{stat.icon}</span>
                   <div>
-                    <p style={{ color: "#004649", fontWeight: "700", fontSize: "24px" }}>{loadingStats ? "…" : stat.value}</p>
+                    <p style={{ color: "#0B2F4B", fontWeight: "700", fontStyle: "italic", fontSize: "30px", letterSpacing: "-0.02em" }}>{loadingStats ? "…" : stat.value}</p>
                     <p style={{ color: "#888", fontSize: "12px" }}>{stat.label}</p>
                   </div>
                 </div>
@@ -202,19 +201,19 @@ export default function Accueil() {
 
           {/* Activité récente */}
           <div style={{ width: "320px", flexShrink: 0 }}>
-            <p style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "15px", marginBottom: "20px", letterSpacing: "0.5px" }}>ACTIVITÉ RÉCENTE</p>
-            <div style={{ background: "#FFFFFF", borderRadius: "20px", padding: "24px", boxShadow: "0 8px 24px rgba(0,0,0,0.08)", border: "1px solid rgba(255,255,255,0.7)" }}>
+            <p style={{ color: "#0B2F4B", fontWeight: "400", fontSize: "13px", marginBottom: "20px", letterSpacing: "0.18em", textTransform: "uppercase" }}>ACTIVITÉ RÉCENTE</p>
+            <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "24px", boxShadow: "0 20px 60px rgba(11,47,75,0.08)", border: "1px solid rgba(11,47,75,0.12)" }}>
               {loadingStats ? (
                 <p style={{ color: "#aaa", fontSize: "13px", textAlign: "center" }}>Chargement…</p>
               ) : activiteRecente.length === 0 ? (
                 <p style={{ color: "#aaa", fontSize: "13px", textAlign: "center", fontStyle: "italic" }}>Aucune activité récente</p>
               ) : activiteRecente.map((a, i) => (
                 <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: "14px", padding: "16px 0", borderBottom: i < activiteRecente.length - 1 ? "1px solid #F0F0F0" : "none" }}>
-                  <div style={{ width: "36px", height: "36px", borderRadius: "10px", background: "linear-gradient(135deg, #E8F5EF 0%, #C8E6D4 100%)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: "16px" }}>{a.icon}</div>
+                  <div style={{ width: "36px", height: "36px", borderRadius: "10px", background: "#EAF3F8", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: "16px" }}>{a.icon}</div>
                   <div style={{ flex: 1 }}>
                     <p style={{ color: "#2A3F4F", fontSize: "13px", fontWeight: "600", marginBottom: "2px" }}>{a.texte}</p>
                     <p style={{ color: "#888", fontSize: "12px", marginBottom: "4px" }}>{a.detail}</p>
-                    <p style={{ color: "#B7D7E8", fontSize: "11px" }}>{tempsRelatif(a.ts)}</p>
+                    <p style={{ color: "#5A6B72", fontSize: "11px", fontWeight: "300" }}>{tempsRelatif(a.ts)}</p>
                   </div>
                 </div>
               ))}

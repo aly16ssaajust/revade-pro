@@ -9,7 +9,7 @@ const MOIS_NOMS = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","A
 const JOURS_NOMS = ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"];
 
 const STATUT_CONFIG = {
-  confirme: { label: "Confirmé", color: "#004649", bg: "#E8F5EF", border: "#A5C9B9" },
+  confirme: { label: "Confirmé", color: "#0B2F4B", bg: "#E8F5EF", border: "#A5C9B9" },
   en_attente: { label: "En attente", color: "#E65100", bg: "#FFF3E0", border: "#FFCC80" },
   annule: { label: "Annulé", color: "#C62828", bg: "#FFEBEE", border: "#EF9A9A" },
 };
@@ -168,21 +168,18 @@ export default function Agenda() {
 
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "#EAF3F8" }}>
-      <Navbar proId={pro?.id} />
+      <Navbar proId={pro?.id} eyebrow="Planning" title="Agenda" subtitle="Gérez vos rendez-vous et suivez les demandes de vos patients." />
 
-      <div style={{ padding: "40px 80px", maxWidth: "1200px", margin: "0 auto" }}>
+      <div style={{ padding: "40px 48px 64px", maxWidth: "1280px", margin: "0 auto", width: "100%" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "32px" }}>
-          <div>
-            <h1 style={{ color: "#004649", fontWeight: "600", fontSize: "32px", letterSpacing: "-0.02em", marginBottom: "6px" }}>📅 Agenda</h1>
-            <p style={{ color: "#888", fontSize: "14px" }}>Gérez vos rendez-vous et suivez les demandes de vos patients</p>
-          </div>
+          <div />
           <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
             {nbEnAttente > 0 && (
               <div style={{ background: "linear-gradient(135deg, #FFF3E0, #FFE0B2)", border: "1px solid #FFCC80", borderRadius: "10px", padding: "8px 16px", fontSize: "13px", fontWeight: "600", color: "#E65100" }}>
                 ⏳ {nbEnAttente} demande{nbEnAttente > 1 ? "s" : ""} en attente
               </div>
             )}
-            <button onClick={() => { setNouveauRdv({ ...nouveauRdv, date: jourSelectionne }); setShowModal(true); }} style={{ background: "linear-gradient(135deg, #004649 0%, #00363A 100%)", color: "white", borderRadius: "12px", padding: "10px 20px", fontSize: "14px", fontWeight: "600", border: "none", cursor: "pointer", boxShadow: "0 4px 8px rgba(0,70,73,0.3)" }}>
+            <button onClick={() => { setNouveauRdv({ ...nouveauRdv, date: jourSelectionne }); setShowModal(true); }} style={{ background: "linear-gradient(135deg, #0B2F4B 0%, #072238 100%)", color: "#F4EDE4", borderRadius: "50px", padding: "10px 20px", fontSize: "14px", fontWeight: "600", border: "none", cursor: "pointer", boxShadow: "0 4px 8px rgba(11,47,75,0.3)" }}>
               + Nouveau RDV
             </button>
           </div>
@@ -208,9 +205,9 @@ export default function Agenda() {
                 const estSel = jourSel === day && moisSel === moisActuel && anneeSel === anneeActuelle;
                 const estAujourd = day === today.getDate() && moisActuel === today.getMonth() && anneeActuelle === today.getFullYear();
                 return (
-                  <div key={day} onClick={() => setJourSelectionne(key)} style={{ textAlign: "center", padding: "10px 4px", borderRadius: "10px", cursor: "pointer", background: estSel ? "linear-gradient(135deg, #004649 0%, #00363A 100%)" : estAujourd ? "#DFF0EA" : "transparent", color: estSel ? "white" : "#2A3F4F", fontWeight: estSel || estAujourd ? "700" : "400", fontSize: "14px", position: "relative", boxShadow: estSel ? "0 4px 8px rgba(0,70,73,0.3)" : "none" }}>
+                  <div key={day} onClick={() => setJourSelectionne(key)} style={{ textAlign: "center", padding: "10px 4px", borderRadius: "50px", cursor: "pointer", background: estSel ? "linear-gradient(135deg, #0B2F4B 0%, #072238 100%)" : estAujourd ? "#DFF0EA" : "transparent", color: estSel ? "white" : "#2A3F4F", fontWeight: estSel || estAujourd ? "700" : "400", fontSize: "14px", position: "relative", boxShadow: estSel ? "0 4px 8px rgba(11,47,75,0.3)" : "none" }}>
                     {day}
-                    {aRdv && <div style={{ position: "absolute", bottom: "3px", left: "50%", transform: "translateX(-50%)", width: "5px", height: "5px", borderRadius: "50%", backgroundColor: aEnAttente ? "#E65100" : (estSel ? "white" : "#004649") }} />}
+                    {aRdv && <div style={{ position: "absolute", bottom: "3px", left: "50%", transform: "translateX(-50%)", width: "5px", height: "5px", borderRadius: "50%", backgroundColor: aEnAttente ? "#E65100" : (estSel ? "white" : "#0B2F4B") }} />}
                   </div>
                 );
               })}
@@ -220,7 +217,7 @@ export default function Agenda() {
           {/* RDV du jour */}
           <div style={{ flex: 1, ...cardStyle, padding: "32px" }}>
             <div style={{ marginBottom: "20px" }}>
-              <p style={{ color: "#004649", fontWeight: "700", fontSize: "16px" }}>
+              <p style={{ color: "#0B2F4B", fontWeight: "700", fontSize: "16px" }}>
                 📅 {jourSelectionne ? `${parseInt(jourSelectionne.split("-")[2])} ${MOIS_NOMS[parseInt(jourSelectionne.split("-")[1])-1]} ${jourSelectionne.split("-")[0]}` : "Sélectionnez un jour"}
               </p>
             </div>
@@ -238,7 +235,7 @@ export default function Agenda() {
               return (
                 <div key={rdv.id} style={{ display: "flex", alignItems: "flex-start", gap: "16px", padding: "16px 20px", background: cfg.bg, borderRadius: "12px", marginBottom: "12px", borderLeft: `4px solid ${cfg.border}`, boxShadow: "0 2px 8px rgba(0,0,0,0.06)" }}>
                   <div style={{ minWidth: "50px" }}>
-                    <p style={{ color: "#004649", fontWeight: "700", fontSize: "14px" }}>{formatHeure(rdv.date_heure)}</p>
+                    <p style={{ color: "#0B2F4B", fontWeight: "700", fontSize: "14px" }}>{formatHeure(rdv.date_heure)}</p>
                     <p style={{ color: "#888", fontSize: "11px" }}>{rdv.duree_minutes} min</p>
                   </div>
                   <div style={{ flex: 1 }}>
@@ -250,7 +247,7 @@ export default function Agenda() {
                         </code>
                         <button
                           onClick={() => { navigator.clipboard.writeText(rdv.patient_user_id); setCopiedId(rdv.id); setTimeout(() => setCopiedId(null), 1500); }}
-                          style={{ background: copiedId === rdv.id ? "#E8F5EF" : "#EEF2F7", border: `1px solid ${copiedId === rdv.id ? "#A5C9B9" : "#D0D9E2"}`, borderRadius: "5px", cursor: "pointer", padding: "2px 8px", fontSize: "10px", fontWeight: "600", color: copiedId === rdv.id ? "#004649" : "#5A6B72", transition: "all 0.2s", whiteSpace: "nowrap" }}>
+                          style={{ background: copiedId === rdv.id ? "#E8F5EF" : "#EEF2F7", border: `1px solid ${copiedId === rdv.id ? "#A5C9B9" : "#D0D9E2"}`, borderRadius: "5px", cursor: "pointer", padding: "2px 8px", fontSize: "10px", fontWeight: "600", color: copiedId === rdv.id ? "#0B2F4B" : "#5A6B72", transition: "all 0.2s", whiteSpace: "nowrap" }}>
                           {copiedId === rdv.id ? "✓ Copié" : "Copier"}
                         </button>
                       </div>
@@ -266,7 +263,7 @@ export default function Agenda() {
                   </div>
                   <div style={{ display: "flex", gap: "8px", flexShrink: 0 }}>
                     {rdv.statut === "en_attente" && (
-                      <button onClick={() => openActionModal(rdv, "confirme")} style={{ background: "linear-gradient(135deg, #004649, #00363A)", color: "white", border: "none", borderRadius: "8px", padding: "6px 12px", fontSize: "12px", fontWeight: "600", cursor: "pointer" }}>✓ Confirmer</button>
+                      <button onClick={() => openActionModal(rdv, "confirme")} style={{ background: "linear-gradient(135deg, #0B2F4B, #072238)", color: "#F4EDE4", border: "none", borderRadius: "50px", padding: "6px 12px", fontSize: "12px", fontWeight: "600", cursor: "pointer" }}>✓ Confirmer</button>
                     )}
                     {rdv.statut !== "annule" && (
                       <button onClick={() => openActionModal(rdv, "annule")} style={{ background: "white", color: "#888", border: "1px solid #E0E0E0", borderRadius: "8px", padding: "6px 12px", fontSize: "12px", cursor: "pointer" }}>Annuler</button>
@@ -314,7 +311,7 @@ export default function Agenda() {
       {showModal && (
         <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.3)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 50 }}>
           <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "48px", width: "500px", display: "flex", flexDirection: "column", gap: "18px", boxShadow: "0 20px 60px rgba(0,0,0,0.2)" }}>
-            <h2 style={{ color: "#004649", fontWeight: "700", fontSize: "20px", textAlign: "center" }}>Nouveau rendez-vous</h2>
+            <h2 style={{ color: "#0B2F4B", fontWeight: "700", fontSize: "20px", textAlign: "center" }}>Nouveau rendez-vous</h2>
 
             <div style={{ display: "flex", gap: "16px" }}>
               <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "6px" }}>
@@ -360,7 +357,7 @@ export default function Agenda() {
 
             <div style={{ display: "flex", gap: "12px", justifyContent: "center", marginTop: "8px" }}>
               <button onClick={() => setShowModal(false)} style={{ padding: "12px 32px", borderRadius: "12px", border: "1px solid #B7D7E8", backgroundColor: "white", color: "#2A3F4F", fontWeight: "600", cursor: "pointer", fontSize: "14px" }}>Annuler</button>
-              <button onClick={ajouterRdv} disabled={saving} style={{ padding: "12px 32px", borderRadius: "12px", border: "none", background: "linear-gradient(135deg, #004649 0%, #00363A 100%)", color: "white", fontWeight: "600", cursor: "pointer", fontSize: "14px", opacity: saving ? 0.7 : 1 }}>
+              <button onClick={ajouterRdv} disabled={saving} style={{ padding: "12px 32px", borderRadius: "50px", border: "none", background: "linear-gradient(135deg, #0B2F4B 0%, #072238 100%)", color: "#F4EDE4", fontWeight: "600", cursor: "pointer", fontSize: "14px", opacity: saving ? 0.7 : 1 }}>
                 {saving ? "Enregistrement…" : "Ajouter le RDV"}
               </button>
             </div>
@@ -374,7 +371,7 @@ export default function Agenda() {
           <div style={{ background: "#FFFFFF", borderRadius: "24px", padding: "40px", width: "460px", display: "flex", flexDirection: "column", gap: "20px", boxShadow: "0 20px 60px rgba(0,0,0,0.2)" }}>
             <div style={{ textAlign: "center" }}>
               <div style={{ fontSize: "36px", marginBottom: "8px" }}>{actionIsConfirm ? "✅" : "❌"}</div>
-              <h2 style={{ color: "#004649", fontWeight: "700", fontSize: "18px", marginBottom: "4px" }}>
+              <h2 style={{ color: "#0B2F4B", fontWeight: "700", fontSize: "18px", marginBottom: "4px" }}>
                 {actionIsConfirm ? "Confirmer le rendez-vous" : "Annuler le rendez-vous"}
               </h2>
               <p style={{ color: "#888", fontSize: "13px" }}>
@@ -409,7 +406,7 @@ export default function Agenda() {
               <button
                 onClick={executeAction}
                 disabled={saving}
-                style={{ padding: "12px 28px", borderRadius: "12px", border: "none", background: actionIsConfirm ? "linear-gradient(135deg, #004649 0%, #00363A 100%)" : "linear-gradient(135deg, #B71C1C, #E53935)", color: "white", fontWeight: "600", cursor: "pointer", fontSize: "14px", opacity: saving ? 0.7 : 1 }}>
+                style={{ padding: "12px 28px", borderRadius: "50px", border: "none", background: actionIsConfirm ? "linear-gradient(135deg, #0B2F4B 0%, #072238 100%)" : "linear-gradient(135deg, #B71C1C, #E53935)", color: "#F4EDE4", fontWeight: "600", cursor: "pointer", fontSize: "14px", opacity: saving ? 0.7 : 1 }}>
                 {saving ? "…" : actionIsConfirm ? "✓ Confirmer" : "Annuler le RDV"}
               </button>
             </div>

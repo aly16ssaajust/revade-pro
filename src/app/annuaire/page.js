@@ -94,19 +94,11 @@ export default function Annuaire() {
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "#EAF3F8" }}>
 
-      <Navbar proId={pro?.id} />
+      <Navbar proId={pro?.id} eyebrow="Réseau" title="Annuaire professionnel" subtitle="Professionnels Rêvade et ressources utiles pour accompagner vos patients." />
 
-      <div style={{ padding: "40px 80px", maxWidth: "1200px", margin: "0 auto" }}>
+      <div style={{ padding: "40px 48px 64px", maxWidth: "1280px", margin: "0 auto", width: "100%" }}>
 
         {/* En-tête */}
-        <div style={{ marginBottom: "32px" }}>
-          <h1 style={{ color: "#004649", fontWeight: "600", fontSize: "32px", letterSpacing: "-0.02em", marginBottom: "8px" }}>
-            📞 Annuaire professionnel
-          </h1>
-          <p style={{ color: "#888", fontSize: "14px" }}>
-            Professionnels Rêvade et ressources utiles pour accompagner vos patients
-          </p>
-        </div>
 
         {/* Professionnels Rêvade */}
         {professionals.length > 0 && (
@@ -114,18 +106,18 @@ export default function Annuaire() {
             <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "16px" }}>
               <span style={{ fontSize: "22px" }}>🩺</span>
               <h2 style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "16px" }}>Professionnels certifiés Rêvade</h2>
-              <span style={{ background: "linear-gradient(135deg, #004649, #00363A)", color: "white", borderRadius: "999px", padding: "2px 10px", fontSize: "11px", fontWeight: "600" }}>✓ Certifiés</span>
+              <span style={{ background: "linear-gradient(135deg, #0B2F4B, #072238)", color: "white", borderRadius: "999px", padding: "2px 10px", fontSize: "11px", fontWeight: "600" }}>✓ Certifiés</span>
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "16px" }}>
               {professionals.map((pro) => (
-                <div key={pro.id} style={{ background: "linear-gradient(135deg, #F0F9F7 0%, #E8F5EF 100%)", borderRadius: "16px", padding: "24px", border: "1px solid #A5C9B9", boxShadow: "0 4px 12px rgba(0,70,73,0.08)" }}>
+                <div key={pro.id} style={{ background: "linear-gradient(135deg, #F0F9F7 0%, #E8F5EF 100%)", borderRadius: "16px", padding: "24px", border: "1px solid #A5C9B9", boxShadow: "0 4px 12px rgba(11,47,75,0.08)" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "14px", marginBottom: "12px" }}>
-                    <div style={{ width: "48px", height: "48px", borderRadius: "50%", background: "linear-gradient(135deg, #004649, #00363A)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <div style={{ width: "48px", height: "48px", borderRadius: "50%", background: "linear-gradient(135deg, #0B2F4B, #072238)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                       <span style={{ color: "white", fontWeight: "700", fontSize: "18px" }}>{(pro.prenom?.[0] ?? "D").toUpperCase()}</span>
                     </div>
                     <div>
                       <p style={{ color: "#2A3F4F", fontWeight: "700", fontSize: "15px" }}>Dr. {pro.prenom} {pro.nom}</p>
-                      {pro.specialite && <p style={{ color: "#004649", fontSize: "13px", fontWeight: "500" }}>{pro.specialite}</p>}
+                      {pro.specialite && <p style={{ color: "#0B2F4B", fontSize: "13px", fontWeight: "500" }}>{pro.specialite}</p>}
                       {pro.cabinet && <p style={{ color: "#888", fontSize: "12px" }}>{pro.cabinet}{pro.adresse ? ` — ${pro.adresse}` : ""}</p>}
                     </div>
                   </div>
@@ -161,7 +153,7 @@ export default function Annuaire() {
           background: "#FFFFFF",
           borderRadius: "16px", padding: "14px 20px", marginBottom: "32px",
           boxShadow: "0 4px 12px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)",
-          border: "1px solid rgba(255,255,255,0.8)",
+          border: "1px solid rgba(11,47,75,0.10)",
           display: "flex", alignItems: "center", gap: "12px",
         }}>
           <span style={{ fontSize: "18px" }}>🔍</span>
@@ -184,11 +176,11 @@ export default function Annuaire() {
                 padding: "8px 16px", borderRadius: "999px", fontSize: "13px", fontWeight: "600",
                 cursor: "pointer", border: "none",
                 background: categorieActive === null
-                  ? "linear-gradient(135deg, #004649 0%, #00363A 100%)"
+                  ? "linear-gradient(135deg, #0B2F4B 0%, #072238 100%)"
                   : "linear-gradient(135deg, #ffffff 0%, #EAF3F8 100%)",
                 color: categorieActive === null ? "white" : "#2A3F4F",
                 boxShadow: categorieActive === null
-                  ? "0 4px 8px rgba(0,70,73,0.3)"
+                  ? "0 4px 8px rgba(11,47,75,0.3)"
                   : "0 2px 4px rgba(0,0,0,0.08)",
               }}>
               Tout voir
@@ -201,11 +193,11 @@ export default function Annuaire() {
                   padding: "8px 16px", borderRadius: "999px", fontSize: "13px", fontWeight: "600",
                   cursor: "pointer", border: "none",
                   background: categorieActive === cat.id
-                    ? "linear-gradient(135deg, #004649 0%, #00363A 100%)"
+                    ? "linear-gradient(135deg, #0B2F4B 0%, #072238 100%)"
                     : "linear-gradient(135deg, #ffffff 0%, #EAF3F8 100%)",
                   color: categorieActive === cat.id ? "white" : "#2A3F4F",
                   boxShadow: categorieActive === cat.id
-                    ? "0 4px 8px rgba(0,70,73,0.3)"
+                    ? "0 4px 8px rgba(11,47,75,0.3)"
                     : "0 2px 4px rgba(0,0,0,0.08)",
                 }}>
                 {cat.icon} {cat.nom}
@@ -262,7 +254,7 @@ function ContactCard({ contact, hovered, setHovered, showCategorie }) {
         boxShadow: hovered === key
           ? "0 8px 24px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.9)"
           : "0 4px 12px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.9)",
-        border: "1px solid rgba(255,255,255,0.7)",
+        border: "1px solid rgba(11,47,75,0.10)",
         transform: hovered === key ? "translateY(-2px)" : "translateY(0)",
         transition: "all 0.2s ease",
       }}>
@@ -278,7 +270,7 @@ function ContactCard({ contact, hovered, setHovered, showCategorie }) {
         {contact.gratuit && (
           <span style={{
             background: "linear-gradient(135deg, #E8F5EF 0%, #C8E6D4 100%)",
-            color: "#004649", borderRadius: "999px", padding: "3px 10px",
+            color: "#0B2F4B", borderRadius: "999px", padding: "3px 10px",
             fontSize: "11px", fontWeight: "600", marginLeft: "8px", flexShrink: 0,
           }}>Gratuit</span>
         )}
@@ -290,10 +282,10 @@ function ContactCard({ contact, hovered, setHovered, showCategorie }) {
         {contact.tel && (
           <a href={`tel:${contact.tel}`} style={{ textDecoration: "none" }}>
             <div style={{
-              background: "linear-gradient(135deg, #004649 0%, #00363A 100%)",
+              background: "linear-gradient(135deg, #0B2F4B 0%, #072238 100%)",
               color: "white", borderRadius: "10px", padding: "8px 16px",
               fontSize: "13px", fontWeight: "600",
-              boxShadow: "0 4px 8px rgba(0,70,73,0.25)",
+              boxShadow: "0 4px 8px rgba(11,47,75,0.25)",
               display: "flex", alignItems: "center", gap: "6px",
             }}>
               📞 {contact.tel}
@@ -308,7 +300,7 @@ function ContactCard({ contact, hovered, setHovered, showCategorie }) {
               fontSize: "13px", fontWeight: "600",
               boxShadow: "0 2px 6px rgba(0,0,0,0.08)",
               display: "flex", alignItems: "center", gap: "6px",
-              border: "1px solid rgba(255,255,255,0.8)",
+              border: "1px solid rgba(11,47,75,0.10)",
             }}>
               {contact.pdf ? "📄 Télécharger PDF" : "🌐 Site web"}
             </div>

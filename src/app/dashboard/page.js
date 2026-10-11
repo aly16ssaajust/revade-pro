@@ -91,14 +91,14 @@ export default function Dashboard() {
 
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "#EAF3F8" }}>
-      <Navbar proId={pro?.id} />
+      <Navbar proId={pro?.id} eyebrow="Suivi" title="Fiches patients" subtitle="Retrouvez les dossiers et l'évolution de chacun de vos patients." />
 
-      <div style={{ padding: "40px 60px" }}>
+      <div style={{ padding: "40px 48px 64px", maxWidth: "1280px", margin: "0 auto", width: "100%" }}>
         <div style={{
           background: "#FFFFFF",
           borderRadius: "16px", padding: "14px 20px", marginBottom: "32px",
           boxShadow: "0 4px 12px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)",
-          border: "1px solid rgba(255,255,255,0.8)",
+          border: "1px solid rgba(11,47,75,0.10)",
         }}>
           <input
             type="text" placeholder="Recherche ..."
@@ -124,7 +124,7 @@ export default function Dashboard() {
                       cursor: "pointer",
                       display: "flex", alignItems: "center", gap: "16px",
                       boxShadow: hovered === p.id
-                        ? "0 6px 20px rgba(0,70,73,0.12)"
+                        ? "0 6px 20px rgba(11,47,75,0.12)"
                         : "0 2px 8px rgba(0,0,0,0.06)",
                       border: hovered === p.id ? "1.5px solid #A5C9B9" : "1.5px solid #EEF2F5",
                       transform: hovered === p.id ? "translateX(4px)" : "translateX(0)",
@@ -132,7 +132,7 @@ export default function Dashboard() {
                     }}>
                     <div style={{
                       width: "44px", height: "44px", borderRadius: "50%", flexShrink: 0,
-                      background: "linear-gradient(135deg, #004649 0%, #00363A 100%)",
+                      background: "linear-gradient(135deg, #0B2F4B 0%, #072238 100%)",
                       display: "flex", alignItems: "center", justifyContent: "center",
                     }}>
                       <span style={{ color: "white", fontWeight: "700", fontSize: "15px" }}>{initiales}</span>
@@ -157,14 +157,14 @@ export default function Dashboard() {
                 borderRadius: "14px", padding: "14px 20px",
                 cursor: "pointer",
                 display: "flex", alignItems: "center", gap: "16px",
-                boxShadow: hovered === "add" ? "0 6px 20px rgba(0,70,73,0.1)" : "0 2px 8px rgba(0,0,0,0.06)",
-                border: hovered === "add" ? "1.5px dashed #004649" : "1.5px dashed #B7D7E8",
+                boxShadow: hovered === "add" ? "0 6px 20px rgba(11,47,75,0.1)" : "0 2px 8px rgba(0,0,0,0.06)",
+                border: hovered === "add" ? "1.5px dashed #0B2F4B" : "1.5px dashed #B7D7E8",
                 transition: "all 0.18s ease",
               }}>
               <div style={{ width: "44px", height: "44px", borderRadius: "50%", flexShrink: 0, background: "#E8F5EF", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <span style={{ color: "#004649", fontSize: "24px", fontWeight: "300", lineHeight: 1 }}>+</span>
+                <span style={{ color: "#0B2F4B", fontSize: "24px", fontWeight: "300", lineHeight: 1 }}>+</span>
               </div>
-              <span style={{ color: "#004649", fontSize: "14px", fontWeight: "600" }}>Ajouter une fiche patient</span>
+              <span style={{ color: "#0B2F4B", fontSize: "14px", fontWeight: "600" }}>Ajouter une fiche patient</span>
             </div>
           </div>
         )}
@@ -178,7 +178,7 @@ export default function Dashboard() {
             display: "flex", flexDirection: "column", gap: "20px",
             boxShadow: "0 20px 60px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.9)",
           }}>
-            <h2 style={{ color: "#004649", fontWeight: "700", fontSize: "20px", textAlign: "center" }}>Nouveau patient</h2>
+            <h2 style={{ color: "#0B2F4B", fontWeight: "700", fontSize: "20px", textAlign: "center" }}>Nouveau patient</h2>
             <p style={{ color: "#888", fontSize: "13px", textAlign: "center", margin: "-8px 0 0", lineHeight: "1.5" }}>
               Saisissez l&apos;identifiant unique du patient,<br />visible dans l&apos;application Rêvade → Profil
             </p>
@@ -205,11 +205,11 @@ export default function Dashboard() {
                 onClick={ajouterPatient}
                 disabled={loadingAdd || !codePatient.trim()}
                 style={{
-                  padding: "12px 32px", borderRadius: "12px", border: "none",
-                  background: (loadingAdd || !codePatient.trim()) ? "#90A4AE" : "linear-gradient(135deg, #004649 0%, #00363A 100%)",
-                  color: "white", fontWeight: "600",
+                  padding: "12px 32px", borderRadius: "50px", border: "none",
+                  background: (loadingAdd || !codePatient.trim()) ? "#90A4AE" : "linear-gradient(135deg, #0B2F4B 0%, #072238 100%)",
+                  color: "#F4EDE4", fontWeight: "600",
                   cursor: (loadingAdd || !codePatient.trim()) ? "not-allowed" : "pointer",
-                  fontSize: "14px", boxShadow: "0 4px 8px rgba(0,70,73,0.3)",
+                  fontSize: "14px", boxShadow: "0 4px 8px rgba(11,47,75,0.3)",
                 }}
               >{loadingAdd ? "Vérification..." : "Ajouter"}</button>
             </div>
