@@ -5,6 +5,7 @@ import { supabase } from "@/lib/supabase";
 import { useProProfile } from "@/lib/useProProfile";
 import Navbar from "@/components/Navbar";
 import PageHeader from "@/components/PageHeader";
+import CalendarSync from "@/components/CalendarSync";
 
 const MOIS_NOMS = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
 const JOURS_NOMS = ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"];
@@ -271,35 +272,7 @@ export default function Agenda() {
               );
             })}
 
-            {/* Synchronisation Doctolib */}
-            <div style={{ marginTop: "24px", padding: "16px 20px", background: "#EAF3F8", borderRadius: "20px", border: "none", flexWrap: "wrap", gap: "12px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                <span style={{ fontSize: "22px" }}>🩺</span>
-                <div>
-                  <p style={{ color: "#2A3F4F", fontWeight: "600", fontSize: "14px" }}>Synchroniser avec Doctolib</p>
-                  <p style={{ color: "#5A6B72", fontSize: "12px" }}>
-                    {pro?.doctolib_url
-                      ? "Accédez à votre agenda Doctolib et importez vos rendez-vous manuellement"
-                      : "Renseignez votre lien Doctolib dans votre profil pour activer cette option"}
-                  </p>
-                </div>
-              </div>
-              {pro?.doctolib_url ? (
-                <a
-                  href={pro.doctolib_url.startsWith("http") ? pro.doctolib_url : `https://${pro.doctolib_url}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ background: "#004649", color: "#F4EDE4", borderRadius: "50px", padding: "8px 16px", fontSize: "13px", fontWeight: "600", textDecoration: "none", boxShadow: "0 6px 16px rgba(0,70,73,0.2)", whiteSpace: "nowrap" }}>
-                  Ouvrir Doctolib →
-                </a>
-              ) : (
-                <Link href="/profil" style={{ textDecoration: "none" }}>
-                  <div style={{ background: "white", color: "#004649", border: "1px solid rgba(0,70,73,0.20)", borderRadius: "50px", padding: "9px 18px", fontSize: "13px", fontWeight: "600", whiteSpace: "nowrap" }}>
-                    Configurer →
-                  </div>
-                </Link>
-              )}
-            </div>
+            <CalendarSync proId={pro?.id} />
           </div>
         </div>
       </div>

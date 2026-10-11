@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { useProProfile } from "@/lib/useProProfile";
 import Navbar from "@/components/Navbar";
+import CalendarSync from "@/components/CalendarSync";
 import { showToast } from "@/lib/toast";
 
 const rdvData = {
@@ -392,19 +393,7 @@ export default function Profil() {
                     </div>
                   ))}
 
-                  {/* Lien Doctolib */}
-                  <div style={{ marginTop: "24px", padding: "16px 20px", background: "#EAF3F8", borderRadius: "20px", border: "none", flexWrap: "wrap", gap: "12px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                      <span style={{ fontSize: "22px" }}>🩺</span>
-                      <div>
-                        <p style={{ color: "#2A3F4F", fontWeight: "600", fontSize: "14px" }}>Synchroniser avec Doctolib</p>
-                        <p style={{ color: "#5A6B72", fontSize: "12px" }}>Importez vos rendez-vous automatiquement</p>
-                      </div>
-                    </div>
-                    <a href="https://www.doctolib.fr" target="_blank" rel="noopener noreferrer" style={{ background: "#004649", color: "#F4EDE4", borderRadius: "50px", padding: "8px 16px", fontSize: "13px", fontWeight: "600", textDecoration: "none", boxShadow: "0 6px 16px rgba(0,70,73,0.2)" }}>
-                      Connecter
-                    </a>
-                  </div>
+                  <CalendarSync proId={pro?.id} />
                 </div>
               </div>
             )}
