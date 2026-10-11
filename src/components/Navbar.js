@@ -10,7 +10,8 @@ const NAV_ITEMS = [
   { href: "/accueil", label: "Accueil" },
   { href: "/dashboard", label: "Fiches patients" },
   { href: "/agenda", label: "Agenda" },
-  { href: "/forum", label: "Messagerie", msgBadge: true },
+  { href: "/messagerie", label: "Messagerie", msgBadge: true },
+  { href: "/forum", label: "Forum" },
   { href: "/annuaire", label: "Annuaire" },
   { href: "/outils", label: "Outils" },
   { href: "/profil", label: "Profil" },
@@ -193,7 +194,7 @@ export default function Navbar({ proId }) {
 
   // Reset unread badge when on the messagerie page
   useEffect(() => {
-    if (pathname === "/forum") { setUnreadMsgs(0); setPendingMsgs([]); }
+    if (pathname === "/messagerie") { setUnreadMsgs(0); setPendingMsgs([]); }
   }, [pathname]);
 
   const hasPending = pendingRdv.length > 0 || cancelledRdv.length > 0;
@@ -269,7 +270,7 @@ export default function Navbar({ proId }) {
                         <div
                           key={msg.patientId}
                           onClick={() => {
-                            router.push(`/forum?tab=messagerie&patientId=${msg.patientId}`);
+                            router.push(`/messagerie?patientId=${msg.patientId}`);
                             setBellOpen(false);
                             setPendingMsgs((prev) => prev.filter((m) => m.patientId !== msg.patientId));
                             setUnreadMsgs((n) => Math.max(0, n - msg.count));

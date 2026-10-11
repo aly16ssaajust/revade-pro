@@ -9,10 +9,10 @@ import { showToast } from "@/lib/toast";
 const tuiles = [
   { id: "dashboard", label: "Fiches patients", icon: "👥", desc: "Dossiers, consommations et évolution de vos patients", href: "/dashboard", tint: "#DCEEE6" },
   { id: "agenda", label: "Agenda", icon: "📅", desc: "Rendez-vous, planning et demandes en attente", href: "/agenda", tint: "#D6E9F3" },
-  { id: "forum", label: "Messagerie", icon: "💬", desc: "Échangez avec vos patients en privé", href: "/forum?tab=messagerie", tint: "#F4EDE4" },
+  { id: "forum", label: "Messagerie", icon: "💬", desc: "Échangez avec vos patients en privé", href: "/messagerie", tint: "#F4EDE4" },
+  { id: "forum-communaute", label: "Forum", icon: "🗣️", desc: "Discussions de la communauté Rêvade", href: "/forum", tint: "#DCEEE6" },
   { id: "annuaire", label: "Annuaire", icon: "📞", desc: "Contacts utiles et ressources professionnelles", href: "/annuaire", tint: "#F4EDE4" },
   { id: "outils", label: "Outils cliniques", icon: "🛠", desc: "Tests HAD, Beck, Horn et formations MOOC", href: "/outils", tint: "#DCEEE6" },
-  { id: "profil", label: "Profil", icon: "👤", desc: "Vos informations et paramètres professionnels", href: "/profil", tint: "#D6E9F3" },
 ];
 
 const eyebrow = {
