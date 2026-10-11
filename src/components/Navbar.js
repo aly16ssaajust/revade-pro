@@ -10,8 +10,7 @@ const NAV_ITEMS = [
   { href: "/accueil", label: "Accueil" },
   { href: "/dashboard", label: "Fiches patients" },
   { href: "/agenda", label: "Agenda" },
-  { href: "/messagerie", label: "Messages privés", msgBadge: true },
-  { href: "/forum", label: "Forum" },
+  { href: "/messagerie", label: "Messagerie", msgBadge: true, also: ["/forum"] },
   { href: "/annuaire", label: "Annuaire" },
   { href: "/outils", label: "Outils" },
   { href: "/profil", label: "Profil" },
@@ -210,7 +209,7 @@ export default function Navbar({ proId }) {
         </Link>
         <div style={{ display: "flex", gap: "4px", alignItems: "center" }}>
           {NAV_ITEMS.filter((item) => item.href !== "/profil").map((item) => {
-            const actif = pathname === item.href || (item.href !== "/accueil" && pathname?.startsWith(item.href));
+            const actif = pathname === item.href || (item.href !== "/accueil" && pathname?.startsWith(item.href)) || (item.also || []).some((h) => pathname?.startsWith(h));
             const badge = item.msgBadge && unreadMsgs > 0 ? unreadMsgs : 0;
             return (
               <Link key={item.href} href={item.href} style={{ textDecoration: "none", position: "relative" }}>
