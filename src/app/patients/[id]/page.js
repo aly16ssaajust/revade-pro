@@ -10,6 +10,10 @@ import { showToast } from "@/lib/toast";
 import DossierInitialModal from "@/components/DossierInitialModal";
 import OrdonTSNModal from "@/components/OrdonTSNModal";
 import TestResultModal from "@/components/TestResultModal";
+import {
+  isDemoPatient, DEMO_PATIENT, DEMO_MOMENTS, DEMO_QUESTIONNAIRES, DEMO_SESSIONS, DEMO_PUFFS,
+  DEMO_JOURNAL, DEMO_SUBSTITUTS, DEMO_APPOINTMENTS, DEMO_RECOMMANDATIONS, DEMO_DOCUMENTS, DEMO_MESSAGES,
+} from "@/lib/demoPatient";
 
 
 const QUESTION_LABELS = {
@@ -147,6 +151,7 @@ export default function FichePatient() {
 
   async function deleteLink() {
     if (!pro) return;
+    if (isDemoPatient(id)) { showToast("Patient de démonstration : rien n'est supprimé"); router.push("/dashboard"); return; }
     setDeleting(true);
     await supabase
       .from("patient_professional_links")
@@ -158,6 +163,18 @@ export default function FichePatient() {
 
   useEffect(() => {
     if (!id) return;
+    if (isDemoPatient(id)) {
+      setPatient(DEMO_PATIENT);
+      setMoments(DEMO_MOMENTS);
+      setQuestionnaires(DEMO_QUESTIONNAIRES);
+      setSessions(DEMO_SESSIONS);
+      setPuffs(DEMO_PUFFS);
+      setJournalEntries(DEMO_JOURNAL);
+      setSubstitutEntries(DEMO_SUBSTITUTS);
+      setAppointments(DEMO_APPOINTMENTS);
+      setLoading(false);
+      return;
+    }
     async function loadData() {
       const [profileRes, momentsRes, questionnairesRes, sessionsRes, puffsRes, journalRes, substitutsRes, appointmentsRes] = await Promise.all([
         supabase.from("profiles").select("*").eq("id", id).single(),
@@ -279,6 +296,12 @@ export default function FichePatient() {
   // Load docs + recommendations from Supabase when pro is available
   useEffect(() => {
     if (!id || !pro) return;
+    if (isDemoPatient(id)) {
+      setRecommandations(DEMO_RECOMMANDATIONS);
+      setDocuments(DEMO_DOCUMENTS);
+      setDossierInitialExiste(true);
+      return;
+    }
     async function loadDocsAndReco() {
       const [recoRes, docsRes, dossierRes, testsRes] = await Promise.all([
         supabase.from("patient_recommendations").select("*").eq("patient_id", id).eq("pro_id", pro.id).maybeSingle(),
@@ -307,6 +330,10 @@ export default function FichePatient() {
 
   async function loadThread() {
     if (!pro || !id) return;
+    if (isDemoPatient(id)) {
+      setThreadMsgs((prev) => (prev.length ? prev : DEMO_MESSAGES));
+      return;
+    }
     setThreadLoading(true);
     const { data } = await supabase.from("pro_patient_messages")
       .select("*")
@@ -334,6 +361,7 @@ export default function FichePatient() {
     const tempMsg = { pro_id: pro.id, patient_id: id, sender_type: "pro", content: text, created_at: new Date().toISOString() };
     setThreadMsgs((prev) => [...prev, tempMsg]);
     setTimeout(() => { if (threadScrollRef.current) threadScrollRef.current.scrollTop = threadScrollRef.current.scrollHeight; }, 50);
+    if (isDemoPatient(id)) { setThreadSending(false); return; }
     await supabase.from("pro_patient_messages").insert({ pro_id: pro.id, patient_id: id, sender_type: "pro", content: text });
     setThreadSending(false);
     loadThread();
@@ -342,6 +370,7 @@ export default function FichePatient() {
   useEffect(() => {
     if (onglet !== "messages" || !pro || !id) return;
     loadThread();
+    if (isDemoPatient(id)) return;
     const ch = supabase
       .channel(`pro_thread_${pro.id}_${id}`)
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "pro_patient_messages", filter: `pro_id=eq.${pro.id}` }, () => loadThread())
@@ -353,6 +382,7 @@ export default function FichePatient() {
   async function supprimerDocument(doc) {
     if (!doc.id) return;
     if (!confirm(`Supprimer "${doc.nom}" ?`)) return;
+    if (isDemoPatient(id)) { setDocuments((prev) => prev.filter((d) => d.id !== doc.id)); return; }
     if (doc.source === "patient_tests") {
       await supabase.from("patient_tests").delete().eq("id", doc.id);
     } else {
@@ -376,6 +406,12 @@ export default function FichePatient() {
     if (!noteTexte.trim() || !pro) return;
     const date = new Date().toLocaleDateString("fr-FR");
     const nom = `Note consultation ${date}.txt`;
+    if (isDemoPatient(id)) {
+      setDocuments((prev) => [{ id: `demo_${Date.now()}`, nom, type: "note", file_url: null }, ...prev]);
+      showToast("Démo : note ajoutée (non enregistrée)");
+      setNoteTexte(""); setShowNotes(false); setOnglet("documents");
+      return;
+    }
     const { data: newDoc, error: noteErr } = await supabase.from("patient_documents").insert({
       patient_id: id, pro_id: pro.id, nom, contenu: noteTexte, type: "note",
     }).select().single();
@@ -392,6 +428,7 @@ export default function FichePatient() {
 
   const enregistrerRecommandations = async () => {
     if (!pro) return;
+    if (isDemoPatient(id)) { showToast("Démo : recommandations non enregistrées"); return; }
     setSavingReco(true);
     const { error } = await supabase.from("patient_recommendations").upsert(
       { patient_id: id, pro_id: pro.id, data: recommandations, updated_at: new Date().toISOString() },
@@ -578,6 +615,15 @@ export default function FichePatient() {
       <Navbar proId={pro?.id} />
 
       <div style={{ padding: "40px 48px 72px", maxWidth: "1280px", margin: "0 auto" }}>
+
+        {isDemoPatient(id) && (
+          <div style={{ display: "flex", alignItems: "center", gap: "12px", background: "#FFF6EC", border: "1px solid #FFD8A8", borderRadius: "20px", padding: "12px 18px", marginBottom: "18px" }}>
+            <span style={{ fontSize: "18px" }}>🧪</span>
+            <p style={{ color: "#8A4B00", fontSize: "13px", lineHeight: 1.5 }}>
+              <strong>Patient de démonstration</strong> — données fictives pour présenter le logiciel. Les modifications ne sont pas enregistrées.
+            </p>
+          </div>
+        )}
 
         {/* Retour */}
         <Link href="/dashboard" style={{ textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "8px", marginBottom: "20px", color: "#004649", fontSize: "13px", fontWeight: "600", background: "#FFFFFF", border: "1px solid rgba(0,70,73,0.10)", borderRadius: "50px", padding: "8px 16px 8px 12px" }}>

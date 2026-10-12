@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useProProfile } from "@/lib/useProProfile";
 import { supabase } from "@/lib/supabase";
 import Navbar from "@/components/Navbar";
+import { DEMO_PATIENT } from "@/lib/demoPatient";
 
 export default function Dashboard() {
   const { pro } = useProProfile();
@@ -45,11 +46,12 @@ export default function Dashboard() {
     setLoadingPatients(false);
   }
 
-  const patientsFiltres = patients
+  // Le patient de démonstration est toujours affiché en premier
+  const patientsFiltres = [{ ...DEMO_PATIENT, demo: true }, ...patients]
     .filter((p) =>
       `${p.prenom || ""} ${p.nom || ""}`.toLowerCase().includes(recherche.toLowerCase())
     )
-    .sort((a, b) => (a.nom || "").localeCompare(b.nom || ""));
+    .sort((a, b) => (b.demo ? 1 : 0) - (a.demo ? 1 : 0) || (a.nom || "").localeCompare(b.nom || ""));
 
   async function ajouterPatient() {
     const uuid = codePatient.trim();
@@ -103,7 +105,7 @@ export default function Dashboard() {
               Fiches patients
               {!loadingPatients && (
                 <span style={{ marginLeft: "12px", verticalAlign: "middle", fontSize: "13px", fontWeight: "600", color: "#004649", background: "#FFFFFF", border: "1px solid rgba(0,70,73,0.12)", borderRadius: "50px", padding: "4px 12px" }}>
-                  {patientsFiltres.length}
+                  {patientsFiltres.filter((p) => !p.demo).length}
                 </span>
               )}
             </h1>
@@ -131,9 +133,8 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {loadingPatients ? (
-          <p style={{ color: "#5A6B72", fontSize: "14px" }}>Chargement des patients...</p>
-        ) : (
+        {loadingPatients && <p style={{ color: "#5A6B72", fontSize: "14px", marginBottom: "16px" }}>Chargement des patients...</p>}
+        {(
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "18px" }}>
             {patientsFiltres.map((p) => {
               const initiales = `${(p.prenom || "")[0] || ""}${(p.nom || "")[0] || ""}`.toUpperCase();
@@ -161,7 +162,9 @@ export default function Dashboard() {
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <p style={{ margin: 0, color: "#004649", fontWeight: "600", fontSize: "15px", lineHeight: 1.35, overflowWrap: "anywhere" }}>{p.prenom} {p.nom}</p>
-                      <p style={{ margin: "3px 0 0", color: "#5A6B72", fontSize: "12px" }}>Voir la fiche</p>
+                      <p style={{ margin: "3px 0 0", color: "#5A6B72", fontSize: "12px" }}>
+                        {p.demo ? <span style={{ background: "#FFF6EC", color: "#E65100", borderRadius: "50px", padding: "2px 8px", fontWeight: "600" }}>🧪 Démo</span> : "Voir la fiche"}
+                      </p>
                     </div>
                     <div style={{
                       width: "34px", height: "34px", borderRadius: "50%", flexShrink: 0,
