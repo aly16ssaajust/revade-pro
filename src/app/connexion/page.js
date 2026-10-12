@@ -259,7 +259,7 @@ export default function Connexion() {
             <p style={{ textAlign: "center", fontSize: "13px", color: "#5A6B72", margin: 0 }}>
               Pas encore de compte pro ?{" "}
               <Link href="/inscription" style={{ color: "#004649", fontWeight: "600", textDecoration: "none" }}>
-                Créer un compte
+                Demander un accès
               </Link>
             </p>
           </form>
