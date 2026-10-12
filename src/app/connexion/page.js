@@ -46,43 +46,94 @@ export default function Connexion() {
 
   const inputStyle = {
     display: "flex", alignItems: "center", gap: "12px",
-    border: "1.5px solid #B7D7E8", borderRadius: "999px",
+    border: "1px solid rgba(0,70,73,0.14)", borderRadius: "999px",
     paddingTop: "14px", paddingBottom: "14px",
     paddingLeft: "20px", paddingRight: "20px",
-    background: "linear-gradient(135deg, #ffffff 0%, #f8fdff 100%)",
-    boxShadow: "inset 0 2px 4px rgba(0,0,0,0.04)",
+    background: "#F7FAFC",
   };
 
   return (
-    <main style={{
-      minHeight: "100vh",
-      background: "linear-gradient(135deg, #B7D7E8 0%, #D3E7F1 55%, #EAF3F8 100%)",
-      display: "flex", flexDirection: "column",
-    }}>
-      <div style={{ paddingLeft: "48px", paddingTop: "24px", paddingBottom: "24px" }}>
-        <Image src="/logo.png" alt="Rêvade" width={150} height={55} />
-      </div>
+    <main className="login-wrap" style={{ minHeight: "100vh", display: "flex", background: "#EAF3F8" }}>
+      <style>{`
+        .login-left, .login-right { flex: 1 1 0; min-width: 0; min-height: 100vh; }
+        @media (max-width: 900px) {
+          .login-wrap { flex-direction: column; }
+          .login-left, .login-right { min-height: auto; }
+          .login-right { order: 1; padding: 32px 16px !important; }
+          .login-left { order: 2; }
+          .login-pitch { padding: 32px 0 !important; }
+        }
+      `}</style>
 
-      <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", paddingBottom: "40px" }}>
+      {/* ── Panneau gauche : continuité avec revade.fr ── */}
+      <section className="login-left" style={{
+        position: "relative", overflow: "hidden",
+        background: "#004649", color: "#F4EDE4",
+        display: "flex", flexDirection: "column", justifyContent: "space-between",
+        padding: "36px clamp(28px, 5vw, 72px)",
+      }}>
+        <div aria-hidden="true" style={{ position: "absolute", inset: 0, pointerEvents: "none", background: "radial-gradient(ellipse 50% 45% at 15% 10%, rgba(183,215,232,0.20), transparent 70%), radial-gradient(ellipse 45% 50% at 90% 90%, rgba(165,201,185,0.16), transparent 70%)" }} />
+
+        <div style={{ position: "relative", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "16px", flexWrap: "wrap" }}>
+          <a href="https://revade.fr" style={{ display: "flex" }}>
+            <Image src="/logo-white.svg" alt="Rêvade" width={112} height={40} priority />
+          </a>
+          <a href="https://revade.fr" style={{ color: "rgba(244,237,228,0.75)", fontSize: "13px", fontWeight: "500", textDecoration: "none", border: "1px solid rgba(244,237,228,0.22)", borderRadius: "50px", padding: "8px 16px" }}>
+            ← Retour sur revade.fr
+          </a>
+        </div>
+
+        <div className="login-pitch" style={{ position: "relative", maxWidth: "520px", padding: "48px 0" }}>
+          <p style={{ color: "#A5C9B9", fontWeight: "300", fontSize: "13px", letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: "18px" }}>
+            Espace professionnels de santé
+          </p>
+          <h1 style={{ fontWeight: "700", fontSize: "clamp(32px, 3.6vw, 48px)", lineHeight: 1.12, letterSpacing: "-0.02em", color: "#F4EDE4", marginBottom: "18px" }}>
+            Accompagnez le sevrage de vos patients, au quotidien.
+          </h1>
+          <p style={{ color: "rgba(244,237,228,0.78)", fontSize: "16px", fontWeight: "300", lineHeight: 1.7, marginBottom: "28px" }}>
+            Retrouvez les données de vos patients issues de l&apos;app Rêvade, vos rendez-vous, vos échanges et vos outils cliniques.
+          </p>
+          <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+            {[
+              ["👥", "Suivi des consommations et de l'évolution de vos patients"],
+              ["📅", "Agenda et demandes de rendez-vous"],
+              ["🔒", "Messagerie privée et sécurisée"],
+            ].map(([icon, txt]) => (
+              <div key={txt} style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+                <span style={{ width: "40px", height: "40px", borderRadius: "14px", flexShrink: 0, background: "rgba(244,237,228,0.10)", border: "1px solid rgba(244,237,228,0.16)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "17px" }}>{icon}</span>
+                <span style={{ color: "rgba(244,237,228,0.88)", fontSize: "14px" }}>{txt}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <p style={{ position: "relative", color: "rgba(244,237,228,0.6)", fontSize: "13px" }}>
+          Vous êtes un particulier ?{" "}
+          <a href="https://revade.fr" style={{ color: "#A5C9B9", fontWeight: "600", textDecoration: "none" }}>Votre espace est sur l&apos;app Rêvade →</a>
+        </p>
+      </section>
+
+      {/* ── Panneau droit : connexion ── */}
+      <section className="login-right" style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "40px 24px", background: "linear-gradient(160deg, #B7D7E8 0%, #D3E7F1 50%, #EAF3F8 100%)" }}>
 
         {showReset ? (
           /* ── Formulaire de réinitialisation ── */
           <form onSubmit={handleReset} style={{
             background: "#FFFFFF",
-            borderRadius: "24px", width: "540px",
-            paddingTop: "52px", paddingBottom: "52px",
-            paddingLeft: "68px", paddingRight: "68px",
+            borderRadius: "28px", width: "100%", maxWidth: "460px",
+            paddingTop: "44px", paddingBottom: "44px",
+            paddingLeft: "44px", paddingRight: "44px",
             display: "flex", flexDirection: "column", gap: "22px",
-            boxShadow: "0 20px 60px rgba(0,70,73,0.10)",
+            boxShadow: "0 30px 70px rgba(0,70,73,0.14)",
             border: "1px solid rgba(0,70,73,0.12)",
           }}>
             <button type="button" onClick={() => { setShowReset(false); setResetStatus(null); setResetEmail(''); }}
               style={{ background: "none", border: "none", cursor: "pointer", color: "#004649", fontSize: "13px", fontWeight: "600", textAlign: "left", padding: 0, display: "flex", alignItems: "center", gap: "6px" }}>
               ← Retour
             </button>
-            <h1 style={{ color: "#004649", fontSize: "24px", fontWeight: "600", textAlign: "center", margin: 0 }}>
+            <h2 style={{ color: "#004649", fontSize: "24px", fontWeight: "600", textAlign: "center", margin: 0 }}>
               Mot de passe oublié
-            </h1>
+            </h2>
             <p style={{ color: "#5A6B72", fontSize: "13px", textAlign: "center", margin: 0, lineHeight: "1.6" }}>
               Saisissez votre email professionnel. Un lien de réinitialisation vous sera envoyé.
             </p>
@@ -138,19 +189,19 @@ export default function Connexion() {
           /* ── Formulaire de connexion ── */
           <form onSubmit={handleLogin} noValidate style={{
             background: "#FFFFFF",
-            borderRadius: "24px", width: "540px",
-            paddingTop: "52px", paddingBottom: "52px",
-            paddingLeft: "68px", paddingRight: "68px",
+            borderRadius: "28px", width: "100%", maxWidth: "460px",
+            paddingTop: "44px", paddingBottom: "44px",
+            paddingLeft: "44px", paddingRight: "44px",
             display: "flex", flexDirection: "column", gap: "22px",
-            boxShadow: "0 20px 60px rgba(0,70,73,0.10)",
+            boxShadow: "0 30px 70px rgba(0,70,73,0.14)",
             border: "1px solid rgba(0,70,73,0.12)",
           }}>
             <p style={{ color: "#5A6B72", fontSize: "12px", fontWeight: "400", letterSpacing: "0.18em", textTransform: "uppercase", textAlign: "center", margin: "0 0 -14px" }}>
-              Espace professionnels de santé
+              Espace adhérent pro
             </p>
-            <h1 style={{ color: "#004649", fontSize: "28px", fontWeight: "600", textAlign: "center", marginBottom: "8px" }}>
+            <h2 style={{ color: "#004649", fontSize: "28px", fontWeight: "600", textAlign: "center", marginBottom: "8px", letterSpacing: "-0.01em" }}>
               Connexion
-            </h1>
+            </h2>
 
             <div style={inputStyle}>
               <span style={{ color: "#004649" }}>
@@ -206,14 +257,14 @@ export default function Connexion() {
             </div>
 
             <p style={{ textAlign: "center", fontSize: "13px", color: "#5A6B72", margin: 0 }}>
-              Première connexion ?{" "}
+              Pas encore de compte pro ?{" "}
               <Link href="/inscription" style={{ color: "#004649", fontWeight: "600", textDecoration: "none" }}>
                 Créer un compte
               </Link>
             </p>
           </form>
         )}
-      </div>
+      </section>
     </main>
   );
 }
